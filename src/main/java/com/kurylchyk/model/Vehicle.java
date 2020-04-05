@@ -1,14 +1,26 @@
-package com.kurylchyk;
+package com.kurylchyk.model;
 
 public class Vehicle {
-    private String model;
     private String sort;
+    private String model;
     private String licencePlate;
+
+    public String getLicencePlate() {
+        return licencePlate;
+    }
+
+    public Vehicle(String sort, String model, String licencePlate){
+        this.sort = sort;
+        this.model = model;
+        this.licencePlate = licencePlate;
+    }
 
     @Override
     public String toString(){
         return model +" "+sort+"-\t"+licencePlate;
     }
+
+
 
     @Override
     public boolean equals(Object anotherVehicle){
