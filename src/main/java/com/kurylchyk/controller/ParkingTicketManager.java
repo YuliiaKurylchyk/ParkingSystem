@@ -6,12 +6,17 @@ import java.util.Scanner;
 
 import com.kurylchyk.model.Customer;
 import com.kurylchyk.model.ParkingPlace;
-import com.kurylchyk.model.Vehicle;
+import com.kurylchyk.model.exceptions.NoAvailableSlot;
+import com.kurylchyk.model.vehicles.Car;
+import com.kurylchyk.model.vehicles.Motorbike;
+import com.kurylchyk.model.vehicles.Truck;
+import com.kurylchyk.model.vehicles.Vehicle;
 
 public final class ParkingTicketManager {
 
     private static Scanner sc = new Scanner(System.in);
     private ArrayList<ParkingTicket> listOfTickets = new ArrayList<>();
+    private ParkingLot parkingLot = new ParkingLot();
 
     private Customer getCustomerInfo() {
         String name = "";
@@ -34,11 +39,15 @@ public final class ParkingTicketManager {
         return new Customer(name, surname, phoneNumber, email);
 
     }
-
     private Vehicle getVehicleInfo() {
+
+        String type ;
         String sort;
         String model;
         String licencePlate;
+
+        System.out.println("Choose the type of transport:");
+        type = sc.nextLine();
 
         System.out.println("Please, enter customer info : ");
         System.out.print("Sort: ");
@@ -51,38 +60,32 @@ public final class ParkingTicketManager {
         licencePlate = sc.nextLine();
         System.out.println("\n");
 
-        return new Vehicle(sort, model, licencePlate);
-    }
-
-    private ParkingPlace getParkingPlaceInfo() {
-
-        Random random = new Random(47);
-
-        int currentParkingPlace = 0;
-       generateAgain: do {
-           currentParkingPlace  = random.nextInt(100);
-           if(listOfTickets.size()==0){
-               break;
-           }
-
-            for (ParkingTicket parkingTicket : listOfTickets) {
-                if (parkingTicket.getParkingPlace() == currentParkingPlace) {
-                        continue generateAgain;
-                }else {
-                    break generateAgain;
-                }
-            }
-        }while(true);
-
-        return new ParkingPlace(currentParkingPlace);
+        if(type.equalsIgnoreCase("motorbike")) {
+           return  new Motorbike(sort, model, licencePlate);
+        }
+        if(type.equalsIgnoreCase("car")) {
+            return new Car(sort, model, licencePlate);
+        }
+        if (type.equalsIgnoreCase("truck")) {
+            return new Truck(sort,model,licencePlate,0);
+        }
+        else return null;
 
     }
+
+
+
 
     public void createParkingTicket(){
-
-        listOfTickets.add(new ParkingTicket(getVehicleInfo(),getParkingPlaceInfo(),getCustomerInfo()));
-
-
+        Vehicle vehicle = getVehicleInfo();
+        Customer customer = getCustomerInfo();
+        ParkingPlace parkingPlace;
+        try {
+            parkingPlace = parkingLot.getParkingPlace(vehicle);
+            listOfTickets.add(new ParkingTicket(vehicle, parkingPlace, customer));
+        }catch (NoAvailableSlot exception) {
+            System.out.println(exception);
+        }
 
     }
 
@@ -97,7 +100,7 @@ public final class ParkingTicketManager {
         ParkingTicket currentTicket = null;
 
         for(int index = 0; index< listOfTickets.size(); index++) {
-            if(listOfTickets.get(index).getVehicle().getLicencePlate().equals(plate)) {
+            if(listOfTickets.get(index).getVehicle().getRegistrationNumber().equals(plate)) {
                 currentTicket = listOfTickets.get(index);
                 listOfTickets.remove(index);
                 break;
@@ -117,7 +120,7 @@ public final class ParkingTicketManager {
         parkingTicketManager.createParkingTicket();
         parkingTicketManager.showAllAvailableTickets();
        try {
-           Thread.sleep(500000);
+           Thread.sleep(5000);
        }catch (InterruptedException ex){
            ex.printStackTrace();
        }

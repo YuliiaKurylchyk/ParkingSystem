@@ -1,6 +1,7 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.*;
+import com.kurylchyk.model.vehicles.Vehicle;
 
 public class ParkingTicket {
 
@@ -19,9 +20,6 @@ public class ParkingTicket {
 
     }
 
-    public int getParkingPlace() {
-        return parkingPlace.getPlaceNumber();
-    }
 
     public Vehicle getVehicle() {
         return vehicle;
@@ -31,14 +29,14 @@ public class ParkingTicket {
         timer.end();
 
         System.out.println("It is cost for you:");
-        System.out.println(payment.calculatePrice(timer.countOfHours(), TypeOfVehicle.PASSANGER_CAR));
+        System.out.println(payment.calculatePrice(timer.countOfHours(), parkingPlace.getSizeOfSlot()));
 
     }
 
     public String toString() {
 
         return "The vehicle: " + vehicle + "\n"
-                + "Place #" + parkingPlace.getPlaceNumber()
+                + "Place #" + parkingPlace.getSlotID()
                 + "Data and time :" + timer + "\n"
                 + "Customer: " + customer + "\n";
     }

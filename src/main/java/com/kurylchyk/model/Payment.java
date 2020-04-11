@@ -2,9 +2,22 @@ package com.kurylchyk.model;
 
 public class Payment {
 
-    private static double amount;
+    public  static double calculatePrice(int hours,SizeOfSlot sizeOfSlot){
 
-    public static double calculatePrice(int hours,TypeOfVehicle typeOfVehicle){
-        return hours* typeOfVehicle.getPrice();
+         double priceForHour = 0.0;
+         switch (sizeOfSlot) {
+             case SMALL:
+                 priceForHour = 15;
+                 break;
+             case MEDIUM:
+                 priceForHour = 25;
+                 break;
+             case LARGE:
+                 priceForHour = 35;
+                break;
+         }
+
+         return (priceForHour*=hours);
+
     }
 }
