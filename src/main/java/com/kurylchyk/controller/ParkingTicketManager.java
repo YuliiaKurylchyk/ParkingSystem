@@ -1,24 +1,26 @@
 package com.kurylchyk.controller;
 
-import java.util.ArrayList;
-import java.util.Random;
+
 import java.util.Scanner;
 
 import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingPlace;
-import com.kurylchyk.model.exceptions.NoAvailableSlot;
-import com.kurylchyk.model.vehicles.Car;
-import com.kurylchyk.model.vehicles.Motorbike;
-import com.kurylchyk.model.vehicles.Truck;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.ParkingLot;
+import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
+import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
+import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.exceptions.NoAvailableParkingPlaceException;
+import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
+import com.kurylchyk.model.vehicles.*;
 
 public final class ParkingTicketManager {
 
     private static Scanner sc = new Scanner(System.in);
-    private ArrayList<ParkingTicket> listOfTickets = new ArrayList<>();
     private ParkingLot parkingLot = new ParkingLot();
+    private static int countOfParkingTickets = 0;
+    private Remover remover  = new Remover();
 
-    private Customer getCustomerInfo() {
+    private Customer setCustomerInfo() {
         String name = "";
         String surname = "";
         String phoneNumber = "";
@@ -39,15 +41,20 @@ public final class ParkingTicketManager {
         return new Customer(name, surname, phoneNumber, email);
 
     }
-    private Vehicle getVehicleInfo() {
 
-        String type ;
+    private Vehicle setVehicleInfo() throws NoSuchTypeOfVehicleException {
+
+        TypeOfVehicle type;
         String sort;
         String model;
         String licencePlate;
 
         System.out.println("Choose the type of transport:");
-        type = sc.nextLine();
+        try {
+            type = TypeOfVehicle.valueOf(sc.nextLine().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new NoSuchTypeOfVehicleException("No such type of vehicle", ex);
+        }
 
         System.out.println("Please, enter customer info : ");
         System.out.print("Sort: ");
@@ -60,76 +67,81 @@ public final class ParkingTicketManager {
         licencePlate = sc.nextLine();
         System.out.println("\n");
 
-        if(type.equalsIgnoreCase("motorbike")) {
-           return  new Motorbike(sort, model, licencePlate);
+        switch (type) {
+            case MOTORBIKE:
+                return new Motorbike(sort, model, licencePlate);
+            case CAR:
+                return new Car(sort, model, licencePlate);
+            case TRUCK:
+                return new Truck(sort, model, licencePlate);
+            case BUS:
+                return  new Bus(sort,model,licencePlate);
         }
-        if(type.equalsIgnoreCase("car")) {
-            return new Car(sort, model, licencePlate);
-        }
-        if (type.equalsIgnoreCase("truck")) {
-            return new Truck(sort,model,licencePlate,0);
-        }
-        else return null;
-
+        return null;
     }
 
+    public void createParkingTicket() throws NoSuchTypeOfVehicleException {
+        Vehicle vehicle = setVehicleInfo();
 
-
-
-    public void createParkingTicket(){
-        Vehicle vehicle = getVehicleInfo();
-        Customer customer = getCustomerInfo();
-        ParkingPlace parkingPlace;
+        Customer customer = setCustomerInfo();
+        ParkingSlot parkingSlot;
         try {
-            parkingPlace = parkingLot.getParkingPlace(vehicle);
-            listOfTickets.add(new ParkingTicket(vehicle, parkingPlace, customer));
-        }catch (NoAvailableSlot exception) {
+            parkingSlot = parkingLot.getParkingPlace(vehicle);
+            ParkingTicketDB.addNewActiveTicket(new ParkingTicket(++countOfParkingTickets, vehicle, parkingSlot, customer));
+        } catch (NoAvailableParkingPlaceException exception) {
             System.out.println(exception);
         }
 
     }
 
-    public void showAllAvailableTickets(){
-        for(ParkingTicket ticket: listOfTickets) {
-            System.out.println(ticket);
-        }
+    public void showActiveTicket() {
+
+        ParkingTicketDB.showActiveTickets();
     }
 
-    public void deleteParkingTicket(String plate) {
+    public void showTicketsInDB() {
 
-        ParkingTicket currentTicket = null;
+        ParkingTicketDB.showUsedTickets();
+    }
 
-        for(int index = 0; index< listOfTickets.size(); index++) {
-            if(listOfTickets.get(index).getVehicle().getRegistrationNumber().equals(plate)) {
-                currentTicket = listOfTickets.get(index);
-                listOfTickets.remove(index);
-                break;
+    public void removeParkingTicket() {
+
+        System.out.println("Choose option how to remove: ");
+        System.out.println("1 - by registration number");
+        System.out.println("2 - by model and/or make of vehicle");
+        System.out.println("3 - surname");
+        System.out.println("4 - remove by parking ticket ID");
+        System.out.println("5  - back to menu");
+        Scanner sc = new Scanner(System.in);
+        ParkingTicket ticketToBeRemoved = null;
+
+
+        int answer = sc.nextInt();
+        try {
+            switch (answer) {
+                case 1:
+                    ticketToBeRemoved =remover.removeByRegistrationNumber();
+                    break;
+                case 2:
+                    ticketToBeRemoved = remover.removeByMakeAndModel();
+                    break;
+                case 3:
+                    ticketToBeRemoved = remover.removeBySurname();
+                    break;
+                case 4:
+                    ticketToBeRemoved = remover.removeByParkingTicketID();
+                    break;
+                case 5:
+                    return;
+
             }
+        } catch (NoSuchVehicleFoundException | NoSuchParkingTicketException exception) {
+            System.out.println(exception);
+            return;
         }
-        currentTicket.getPayment();
-        System.out.println("Removed successfully");
+
+        ParkingTicketDB.removeActiveTicket(ticketToBeRemoved);
     }
-
-    public static void main(String[] args) {
-
-        ParkingTicketManager parkingTicketManager = new ParkingTicketManager();
-        parkingTicketManager.createParkingTicket();
-        parkingTicketManager.showAllAvailableTickets();
-        parkingTicketManager.createParkingTicket();
-        parkingTicketManager.showAllAvailableTickets();
-        parkingTicketManager.createParkingTicket();
-        parkingTicketManager.showAllAvailableTickets();
-       try {
-           Thread.sleep(5000);
-       }catch (InterruptedException ex){
-           ex.printStackTrace();
-       }
-       parkingTicketManager.deleteParkingTicket("BK 0330 IM");
-       parkingTicketManager.showAllAvailableTickets();
-
-
-    }
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.kurylchyk.model;
+package com.kurylchyk.model.parkingSlots;
 
 public enum SizeOfSlot {
     SMALL,

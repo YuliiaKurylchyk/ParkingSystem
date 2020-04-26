@@ -1,8 +1,10 @@
 package com.kurylchyk.model;
 
+import com.kurylchyk.model.parkingSlots.SizeOfSlot;
+
 public class Payment {
 
-    public  static double calculatePrice(int hours,SizeOfSlot sizeOfSlot){
+    public  static double calculatePrice(long hours, SizeOfSlot sizeOfSlot){
 
          double priceForHour = 0.0;
          switch (sizeOfSlot) {

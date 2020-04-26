@@ -15,6 +15,10 @@ public class Customer {
         this.email = email;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
     @Override
     public String toString() {
         return name + " " + surname + " - " + phoneNumber;

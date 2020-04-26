@@ -3,7 +3,7 @@ package com.kurylchyk.model.vehicles;
 public class Car  extends  Vehicle{
 
     public Car(String sort, String model, String registrationNumber) {
-        super(sort, model, registrationNumber);
+        super(sort, model, registrationNumber,TypeOfVehicle.CAR);
     }
 
     @Override
