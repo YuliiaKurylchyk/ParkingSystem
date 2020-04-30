@@ -69,7 +69,7 @@ public class Finder {
     public ParkingTicket findByParkingID(HashSet<ParkingTicket> allTicket, String id) throws NoSuchParkingTicketException {
 
          for(ParkingTicket currentParkingTicket: allTicket) {
-             if(currentParkingTicket.getParkingTickedID().equals(id)){
+             if(currentParkingTicket.getParkingTicketID().equals(id)){
                  return currentParkingTicket;
              }
          }

@@ -7,6 +7,23 @@ public abstract class Vehicle {
     private String licencePlate;
     private TypeOfVehicle type;
 
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
+    }
+
+    public void setType(TypeOfVehicle type) {
+        this.type = type;
+    }
+
+    public Vehicle() {}
     public Vehicle(String make, String model, String licencePlate,TypeOfVehicle type) {
         this.make = make;
         this.model = model;

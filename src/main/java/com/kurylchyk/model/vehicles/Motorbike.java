@@ -7,6 +7,7 @@ public class Motorbike extends  Vehicle {
         super(sort, model, registrationNumber, TypeOfVehicle.MOTORBIKE);
     }
 
+    public Motorbike(){}
     @Override
     public boolean equals(Object anotherVehicle) {
         if (this == anotherVehicle) return true;

@@ -3,34 +3,18 @@ package com.kurylchyk.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashMap;
 
 public class TimeCheck {
 
-    private static LocalDateTime from;
-    private static LocalDateTime to;
 
-
-    public void start() {
-        from = LocalDateTime.now();
-    }
-
-    public void end() {
-        to = LocalDateTime.now();
+    public static  LocalDateTime getTime() {
+        return LocalDateTime.now();
     }
 
 
-    public String getStartTime(){
-        return from.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-    }
+    public static  long countOfHours(LocalDateTime from, LocalDateTime to) {
 
-    public String getEndTime(){
-        return to.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-    }
-
-    public long countOfHours() {
-        if (to == null) {
-            end();
-        }
         return ChronoUnit.HOURS.between(from, to);
     }
 

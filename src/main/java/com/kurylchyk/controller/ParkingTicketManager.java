@@ -34,11 +34,9 @@ public final class ParkingTicketManager {
         System.out.println("\n");
         System.out.print("Phone number :");
         phoneNumber = sc.nextLine();
-        System.out.println("Email: ");
-        email = sc.nextLine();
-        System.out.println("\n");
 
-        return new Customer(name, surname, phoneNumber, email);
+
+        return new Customer(name, surname, phoneNumber);
 
     }
 
@@ -87,7 +85,7 @@ public final class ParkingTicketManager {
         ParkingSlot parkingSlot;
         try {
             parkingSlot = parkingLot.getParkingPlace(vehicle);
-            ParkingTicketDB.addNewActiveTicket(new ParkingTicket(++countOfParkingTickets, vehicle, parkingSlot, customer));
+            ParkingTicketDB.addNewActiveTicket(new ParkingTicket(vehicle, parkingSlot, customer));
         } catch (NoAvailableParkingPlaceException exception) {
             System.out.println(exception);
         }

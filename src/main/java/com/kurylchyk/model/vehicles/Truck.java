@@ -10,6 +10,7 @@ public class Truck extends Vehicle {
     }
 
 
+    public Truck(){}
     @Override
     public boolean equals(Object anotherVehicle) {
         if (this == anotherVehicle) return true;

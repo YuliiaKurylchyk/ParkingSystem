@@ -3,7 +3,6 @@ package com.kurylchyk.controller;
 import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
 import com.kurylchyk.view.View;
 
-import java.sql.PreparedStatement;
 import java.util.Scanner;
 
 public class Controller {
@@ -51,8 +50,6 @@ public class Controller {
             controller.chooseOption();
 
         }
-
-
     }
 
 }

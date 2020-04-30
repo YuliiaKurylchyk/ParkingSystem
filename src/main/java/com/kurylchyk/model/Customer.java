@@ -5,14 +5,21 @@ public class Customer {
     private String name;
     private String surname;
     private String phoneNumber;
-    private String email; //null
 
 
-    public Customer(String name, String surname, String phoneNumber, String email) {
+    public Customer(String name, String surname, String phoneNumber) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
-        this.email = email;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getSurname() {
