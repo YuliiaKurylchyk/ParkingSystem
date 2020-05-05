@@ -18,8 +18,6 @@ public class Payment {
                  priceForHour = 35;
                 break;
          }
-
          return (priceForHour*=hours);
-
     }
 }

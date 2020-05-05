@@ -2,6 +2,7 @@ package com.kurylchyk.model;
 
 
 public class Customer {
+    private Integer customerID;
     private String name;
     private String surname;
     private String phoneNumber;
@@ -11,7 +12,17 @@ public class Customer {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
+    }
 
+    public Customer(Integer customerID,String name, String surname, String phoneNumber) {
+        this.customerID = customerID;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Integer getCustomerID() {
+        return customerID;
     }
 
     public String getName() {
@@ -25,7 +36,6 @@ public class Customer {
     public String getSurname() {
         return surname;
     }
-
     @Override
     public String toString() {
         return name + " " + surname + " - " + phoneNumber;

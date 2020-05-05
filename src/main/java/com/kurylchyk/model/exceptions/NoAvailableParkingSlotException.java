@@ -1,8 +1,8 @@
 package com.kurylchyk.model.exceptions;
 
-public class NoAvailableParkingPlaceException extends Exception{
+public class NoAvailableParkingSlotException extends Exception{
 
-    public NoAvailableParkingPlaceException(String message){
+    public NoAvailableParkingSlotException(String message){
         super(message);
     }
 

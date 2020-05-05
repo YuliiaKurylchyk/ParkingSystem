@@ -4,6 +4,7 @@ package com.kurylchyk.model;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.Vehicle;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class ParkingTicket {
@@ -14,13 +15,12 @@ public class ParkingTicket {
     private ParkingSlot parkingSlot;
     private LocalDateTime from_time;
     private LocalDateTime to_time;
-    private Payment payment = new Payment();
+    private BigDecimal cost;
     private String status;
 
     public void setParkingTicketID(Integer parkingTicketID) {
         this.parkingTicketID = parkingTicketID;
     }
-
 
     public ParkingTicket(Vehicle vehicle, ParkingSlot parkingSlot, Customer customer) {
 
@@ -42,8 +42,8 @@ public class ParkingTicket {
         this.vehicle = vehicle;
     }
 
-    public void setPayment(Payment payment) {
-        this.payment = payment;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public void setParkingSlot(ParkingSlot parkingSlot) {
@@ -78,11 +78,19 @@ public class ParkingTicket {
         return parkingSlot;
     }
 
-    public Double getPayment() {
+    public BigDecimal getCost() {
         to_time = TimeCheck.getTime();
-        return payment.calculatePrice(TimeCheck.countOfHours(from_time,to_time), parkingSlot.getSizeOfSlot());
+        cost = new BigDecimal(Payment.calculatePrice(TimeCheck.countOfHours(from_time,to_time), parkingSlot.getSizeOfSlot()));
+        return cost;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getFrom_time() {
+        return from_time;
+    }
 
     public String toString() {
 

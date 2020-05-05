@@ -1,179 +1,131 @@
 package com.kurylchyk.model;
 
+import com.kurylchyk.model.dao.ParkingSlotDao;
 import com.kurylchyk.model.parkingSlots.*;
-import com.kurylchyk.model.exceptions.NoAvailableParkingPlaceException;
+import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
 import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.vehicles.*;
+import com.sun.javafx.css.Size;
 
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ParkingLot {
 
-    @FunctionalInterface
-    private interface Removal{
-        void removeParkingPlace(LinkedList<? extends ParkingSlot> fromList, int countOfRemoval);
+    private ParkingSlotDao parkingSlotDao;
+    private Map<SizeOfSlot, Integer> numberOfSlot;
+
+    //зробити шоб одразу перевіряло чи є місця!!!
+
+    public ParkingLot() {
+        parkingSlotDao = new ParkingSlotDao();
+        numberOfSlot = new HashMap<>();
+        getNumberOfSlots();
+    }
+
+    private void getNumberOfSlots() {
+        int numberOfSmallSlots = parkingSlotDao.selectNumberOfSlot(SizeOfSlot.SMALL);
+        int numberOfMediumSlots = parkingSlotDao.selectNumberOfSlot(SizeOfSlot.MEDIUM);
+        int numberOfLargeSlots = parkingSlotDao.selectNumberOfSlot(SizeOfSlot.LARGE);
+
+        numberOfSlot.put(SizeOfSlot.SMALL, numberOfSmallSlots);
+        numberOfSlot.put(SizeOfSlot.MEDIUM, numberOfMediumSlots);
+        numberOfSlot.put(SizeOfSlot.LARGE, numberOfLargeSlots);
 
     }
 
-    @FunctionalInterface
-    private interface  Adder<T extends ParkingSlot>{
-        void addParkingPlace(LinkedList<T> toList,
-                             T parkingSlot ,
-                             int countOfAdding);
+    public ParkingSlot getParkingSlot(Vehicle vehicle) throws NoAvailableParkingSlotException, NoSuchTypeOfVehicleException {
 
-    }
-    //we cant use wildcard here because it is not allowed to set element while "? extends SomeClass"
-
-
-    private static final int MAX_NUMBER_OF_MOTORBIKE_SLOT = 1;
-    private static final int MAX_NUMBER_OF_CAR_SLOT = 5;
-    private static final int MAX_NUMBER_OF_TRUCK_SLOT = 4;
-
-    private LinkedList<SmallSlot> smallSlots;
-    private LinkedList<MediumSlot> mediumSlots;
-    private LinkedList<LargeSlot> largeSlots;
-
-    private Removal removal = (from, countOfRemoval) -> {
-        for(int index = 0; index<countOfRemoval; index++) {
-            from.removeFirst();
-        }
-    };
-
-    private Adder adder = (toList,parkingSlot,countOfAdding) -> {
-
-        for(int index =1; index<=countOfAdding; index++) {
-
-            toList.add(parkingSlot);
-        }
-    };
-
-    {
-        smallSlots = new LinkedList<>();
-        mediumSlots = new LinkedList<>();
-        largeSlots = new LinkedList<>();
-    }
-
-
-    {
-        smallSlots.add(new SmallSlot());
-
-        mediumSlots.add(new MediumSlot());
-        mediumSlots.add(new MediumSlot());
-        mediumSlots.add(new MediumSlot());
-        mediumSlots.add(new MediumSlot());
-        mediumSlots.add(new MediumSlot());
-
-
-        largeSlots.add(new LargeSlot());
-        largeSlots.add(new LargeSlot());
-        largeSlots.add(new LargeSlot());
-        largeSlots.add(new LargeSlot());
-    }
-
-    public ParkingSlot getParkingPlace(Vehicle vehicle) throws NoAvailableParkingPlaceException, NoSuchTypeOfVehicleException {
+        ParkingSlot parkingSlot = null;
 
         switch (vehicle.getTypeOfVehicle()) {
             case MOTORBIKE:
-              return  getSmallSlot();
+                parkingSlot = getSmallSlot();
+                break;
             case CAR:
-                return getMediumSlot();
+                parkingSlot = getMediumSlot();
+                break;
             case TRUCK:
             case BUS:
-               return getLargeSlot();
+                parkingSlot = getLargeSlot();
+                break;
             default:
                 throw new NoSuchTypeOfVehicleException("There is no vehicle type like ");
                 //what now should I do with it??
         }
+        return parkingSlot;
     }
 
-
-    public void returnParkingPlaceBack(ParkingSlot parkingSlot){
-
-        switch (parkingSlot.getSizeOfSlot()){
-            case SMALL:
-                smallSlots.add((SmallSlot) parkingSlot);
-                break;
-            case MEDIUM:
-                mediumSlots.add((MediumSlot) parkingSlot);
-                break;
-            case LARGE:
-                largeSlots.add((LargeSlot)parkingSlot);
-                break;
-        }
+    public void setBack(ParkingSlot parkingSlot) {
+        SizeOfSlot sizeOfSlot = parkingSlot.getSizeOfSlot();
+        numberOfSlot.put(sizeOfSlot,numberOfSlot.get(sizeOfSlot)+1);
+        parkingSlotDao.update(parkingSlot,numberOfSlot.get(sizeOfSlot));
     }
 
-    private ParkingSlot getSmallSlot() throws NoAvailableParkingPlaceException {
-        if(hasAvailableMotorbikePlace()){
-            return smallSlots.removeFirst();
-        } else {
-            if(hasAvailableCarPlace()) {
-                removal.removeParkingPlace(mediumSlots,1);
-                adder.addParkingPlace(smallSlots,new SmallSlot(),2);
+    private void getExtraSlot(SizeOfSlot currentSlot, SizeOfSlot fromSlot, int countOfNeeded, int countOfReceived) {
 
-            } else if(hasAvailableTruckPlace()){
-                removal.removeParkingPlace(largeSlots,1);
-                adder.addParkingPlace(smallSlots,new SmallSlot(),4);
+        numberOfSlot.put(fromSlot, numberOfSlot.get(fromSlot) - countOfNeeded);
+        parkingSlotDao.update(fromSlot, numberOfSlot.get(fromSlot));
+
+        numberOfSlot.put(currentSlot, countOfReceived);
+        parkingSlotDao.update(currentSlot, numberOfSlot.get(currentSlot) + countOfReceived);
+
+    }
+
+    private SmallSlot getSmallSlot() throws NoAvailableParkingSlotException {
+
+        if (numberOfSlot.get(SizeOfSlot.SMALL) == 0) {
+
+            if (numberOfSlot.get(SizeOfSlot.MEDIUM) != 0) {
+                getExtraSlot(SizeOfSlot.SMALL, SizeOfSlot.MEDIUM, 1, 2);
+
+            } else if (numberOfSlot.get(SizeOfSlot.LARGE) != 0) {
+
+                getExtraSlot(SizeOfSlot.SMALL, SizeOfSlot.LARGE, 1, 4);
+            } else {
+                throw new NoAvailableParkingSlotException("No available parking slots left");
             }
-            else{
-                throw new NoAvailableParkingPlaceException("Sorry there is no available slot for you :()");
+        }
+        numberOfSlot.put(SizeOfSlot.SMALL, numberOfSlot.get(SizeOfSlot.SMALL) - 1);
+        parkingSlotDao.update(SizeOfSlot.SMALL, numberOfSlot.get(SizeOfSlot.SMALL));
+        return new SmallSlot();
+    }
+
+    private MediumSlot getMediumSlot() throws NoAvailableParkingSlotException {
+        if (numberOfSlot.get(SizeOfSlot.MEDIUM) == 0) {
+
+            if (numberOfSlot.get(SizeOfSlot.SMALL) >= 2) {
+                getExtraSlot(SizeOfSlot.MEDIUM,SizeOfSlot.SMALL,2,1);
+            } else if (numberOfSlot.get(SizeOfSlot.LARGE) != 0) {
+
+                getExtraSlot(SizeOfSlot.MEDIUM, SizeOfSlot.LARGE, 1, 2);
+            } else {
+                throw new NoAvailableParkingSlotException("No available parking slots left");
             }
         }
-        return smallSlots.removeFirst();
-    };
-
-
-   private boolean hasAvailableMotorbikePlace(){
-        return  MAX_NUMBER_OF_MOTORBIKE_SLOT - smallSlots.size()>=0;
-   }
-
-    private boolean hasAvailableCarPlace(){
-        return MAX_NUMBER_OF_CAR_SLOT - mediumSlots.size()>=0;
+        numberOfSlot.put(SizeOfSlot.MEDIUM, numberOfSlot.get(SizeOfSlot.MEDIUM) - 1);
+        parkingSlotDao.update(SizeOfSlot.MEDIUM, numberOfSlot.get(SizeOfSlot.MEDIUM));
+        return new MediumSlot();
     }
 
-    private boolean hasAvailableTruckPlace(){
-        return MAX_NUMBER_OF_TRUCK_SLOT - largeSlots.size()>=0;
+    private LargeSlot getLargeSlot() throws NoAvailableParkingSlotException {
+
+        if (numberOfSlot.get(SizeOfSlot.LARGE) == 0) {
+
+            if (numberOfSlot.get(SizeOfSlot.SMALL) >= 4) {
+                getExtraSlot(SizeOfSlot.LARGE,SizeOfSlot.SMALL,4,1);
+            } else if (numberOfSlot.get(SizeOfSlot.MEDIUM) >=2 ) {
+
+                getExtraSlot(SizeOfSlot.LARGE, SizeOfSlot.MEDIUM, 2, 1);
+            } else {
+                throw new NoAvailableParkingSlotException("No available parking slots left");
+            }
+        }
+        numberOfSlot.put(SizeOfSlot.LARGE, numberOfSlot.get(SizeOfSlot.LARGE) - 1);
+        parkingSlotDao.update(SizeOfSlot.LARGE, numberOfSlot.get(SizeOfSlot.LARGE));
+        return new LargeSlot();
+
     }
 
-    private ParkingSlot getMediumSlot() throws NoAvailableParkingPlaceException {
-
-       if(hasAvailableCarPlace()) {
-           return  mediumSlots.removeFirst();
-       } else {
-
-           if(hasAvailableMotorbikePlace() && MAX_NUMBER_OF_MOTORBIKE_SLOT - smallSlots.size() >=2) {
-               removal.removeParkingPlace(smallSlots,2);
-               adder.addParkingPlace(mediumSlots,new MediumSlot(),1);
-           } else if(hasAvailableTruckPlace()){
-               removal.removeParkingPlace(largeSlots,1);//maybe too expensive.
-               adder.addParkingPlace(mediumSlots,new MediumSlot(),2);
-
-           }
-           else{
-               throw new NoAvailableParkingPlaceException("Sorry there is no available slot for you :(");
-           }
-       }
-       return  mediumSlots.removeFirst();
-    }
-
-    private ParkingSlot getLargeSlot() throws NoAvailableParkingPlaceException {
-
-       if (hasAvailableTruckPlace()) {
-           return largeSlots.removeFirst();
-       } else{
-
-           if(hasAvailableMotorbikePlace() && MAX_NUMBER_OF_MOTORBIKE_SLOT - smallSlots.size()>=4){
-               removal.removeParkingPlace(smallSlots,4);
-               adder.addParkingPlace(largeSlots,new LargeSlot(),1);
-           }else if(hasAvailableCarPlace() & MAX_NUMBER_OF_CAR_SLOT-mediumSlots.size()>=2) {
-               removal.removeParkingPlace(mediumSlots,2);
-                adder.addParkingPlace(largeSlots,new LargeSlot(),1);
-
-           } else {
-               throw new NoAvailableParkingPlaceException("Sorry there is no available slot for you :(");
-           }
-
-           return largeSlots.removeFirst();
-       }
-    }
 }

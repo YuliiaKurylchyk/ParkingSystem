@@ -3,9 +3,12 @@ package com.kurylchyk.model.parkingSlots;
 public abstract class ParkingSlot {
 
     protected SizeOfSlot sizeOfSlot;
-    public ParkingSlot(SizeOfSlot sizeOfSlot) {
-        this.sizeOfSlot = sizeOfSlot;
+    protected final Integer parkingSlotID;
 
+
+    public ParkingSlot(Integer parkingSlotID,SizeOfSlot sizeOfSlot) {
+        this.parkingSlotID  = parkingSlotID;
+        this.sizeOfSlot = sizeOfSlot;
 
     }
 
@@ -15,6 +18,10 @@ public abstract class ParkingSlot {
 
     public SizeOfSlot getSizeOfSlot(){
         return sizeOfSlot;
+    }
+
+    public Integer getParkingSlotID() {
+        return parkingSlotID;
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.kurylchyk.model.Connector;
 import com.kurylchyk.model.Customer;
 import com.kurylchyk.model.ParkingTicket;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.parkingSlots.SmallSlot;
+import com.kurylchyk.model.vehicles.Motorbike;
 import com.kurylchyk.model.vehicles.Vehicle;
 
 import java.sql.*;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingTicket,Integer>,AddDeleteDAO<ParkingTicket> {
+public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingTicket,Integer>,AddDeleteDAO<ParkingTicket,Integer> {
 
     private Connection connection;
     private CustomerDao customerDao;
@@ -27,17 +29,50 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
 
     @Override
-    public void add(ParkingTicket parkingTicket) {
+    public Integer insert(ParkingTicket parkingTicket) {
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = "INSERT INTO parking_ticket(customer_id,vehicle_id,parking_slot_id,status,from_time)" +
+                "VALUES (?,?,?,?,?)";
+        Integer id = null;
+        try{
 
+            preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1,parkingTicket.getCustomer().getCustomerID());
+            preparedStatement.setString(2,parkingTicket.getVehicle().getLicencePlate());
+            preparedStatement.setInt(3,parkingTicket.getParkingSlot().getParkingSlotID());
+            preparedStatement.setString(4,parkingTicket.getStatus());
+            preparedStatement.setObject(5,parkingTicket.getFrom_time());
+            preparedStatement.execute();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+
+            if(resultSet.next()) {
+               id =  resultSet.getInt(1);
+            }
+        }catch (SQLException exception) {
+            exception.printStackTrace();
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if(connection!=null){
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return id;
     }
 
     @Override
     public void delete(ParkingTicket parkingTicket) {
-
     }
 
     @Override
-    public ParkingTicket get(Integer id) throws Exception {
+    public ParkingTicket select(Integer id) throws Exception {
         PreparedStatement preparedStatement = null;
         connection = getConnection();
         ParkingTicket parkingTicket = null;
@@ -47,9 +82,9 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet!=null && resultSet.next()) {
-                Vehicle currentVehicle = vehicleDao.get(resultSet.getString("vehicle_id"));
-                Customer currentCustomer = customerDao.get(resultSet.getInt("customer_id"));
-                ParkingSlot currentParkingSlot = parkingSlotDao.get(resultSet.getString("parking_slot_id"));
+                Vehicle currentVehicle = vehicleDao.select(resultSet.getString("vehicle_id"));
+                Customer currentCustomer = customerDao.select(resultSet.getInt("customer_id"));
+                ParkingSlot currentParkingSlot = parkingSlotDao.select(resultSet.getInt("parking_slot_id"));
 
                 parkingTicket = new ParkingTicket(currentVehicle,currentParkingSlot,currentCustomer);
                 parkingTicket.setStatus(resultSet.getString("status"));
@@ -77,7 +112,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
     }
 
     @Override
-    public List<ParkingTicket> getAll() {
+    public List<ParkingTicket> selectAll() {
         return null;
     }
 

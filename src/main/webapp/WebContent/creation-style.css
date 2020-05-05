@@ -1,0 +1,90 @@
+
+body {
+    background-color: #f1f1f1;
+}
+
+#creationForm {
+    background-color: #ffffff;
+    margin: 0 auto 0 auto;
+    font-family: Raleway;
+    padding: 40px;
+    width: 70%;
+}
+
+h1, h3 {
+    text-align: center;
+}
+
+#label_type_of_vehicle{
+    float: left;
+    font-size: 18px;
+}
+
+
+.vehicle_type_button {
+
+    width:150px;
+    float:left;
+    margin-left: 50px;
+    padding: 20px 2px 2px 2px;
+}
+
+.type_of_vehicle {
+
+    width:auto;
+}
+
+
+input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+}
+
+
+button {
+    background-color: #74D3DC;
+    border: 2px solid #74D3DC;
+    color: black;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+button:hover {
+    background-color: white;
+    transition-duration: 0.4s;
+    border: 2px solid #74D3DC;
+}
+
+
+#container {
+    margin: 0 auto 0 auto;
+    width: 70%;
+
+}
+
+#containerButton {
+
+    margin-top: 5%;
+    width: 20%
+}
+
+table {
+
+    background-color: white;
+    border: 2px solid #74D3DC;
+    color: black;
+    font-size: 18px;
+    font-family: Raleway;
+    width: 100%;
+}
+td {
+    border: 2px solid #74D3DC;
+    padding: 20px;
+}
+

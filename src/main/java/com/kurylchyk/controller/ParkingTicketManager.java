@@ -9,7 +9,7 @@ import com.kurylchyk.model.ParkingTicket;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.exceptions.NoAvailableParkingPlaceException;
+import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
 import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
 import com.kurylchyk.model.vehicles.*;
 
@@ -84,9 +84,9 @@ public final class ParkingTicketManager {
         Customer customer = setCustomerInfo();
         ParkingSlot parkingSlot;
         try {
-            parkingSlot = parkingLot.getParkingPlace(vehicle);
+            parkingSlot = parkingLot.getParkingSlot(vehicle);
             ParkingTicketDB.addNewActiveTicket(new ParkingTicket(vehicle, parkingSlot, customer));
-        } catch (NoAvailableParkingPlaceException exception) {
+        } catch (NoAvailableParkingSlotException exception) {
             System.out.println(exception);
         }
 

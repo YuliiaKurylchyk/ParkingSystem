@@ -4,7 +4,7 @@ public class SmallSlot extends  ParkingSlot {
 
 
     public SmallSlot() {
-        super(SizeOfSlot.SMALL);
+        super(1,SizeOfSlot.SMALL);
     }
 
 

@@ -60,7 +60,7 @@ public class ParkingTicketDB {
 
             if(parkingTicket.equals(parkingTicketToRemove)){
                 listOfActiveTickets.remove(parkingTicket);
-                parkingTicket.getPayment();
+                parkingTicket.getCost();
                 parkingTicket.setStatus("left");
                 listOfUsedTickets.add(parkingTicket);
                 return parkingTicket.getParkingSlot();

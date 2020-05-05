@@ -7,6 +7,6 @@ import sun.font.GlyphLayout;
 public class LargeSlot extends ParkingSlot {
 
     public LargeSlot(){
-        super(SizeOfSlot.LARGE);
+        super(3,SizeOfSlot.LARGE);
     }
 }

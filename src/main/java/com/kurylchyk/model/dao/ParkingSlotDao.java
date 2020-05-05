@@ -10,11 +10,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSlot,String> {
+
+public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSlot,Integer> {
     private Connection connection;
     //do something with it!!!!
     @Override
-    public ParkingSlot get(String id) throws Exception {
+    public ParkingSlot select(Integer id) throws Exception {
         ParkingSlot parkingSlot = null;
         connection = getConnection();
         PreparedStatement preparedStatement = null;
@@ -22,7 +23,7 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
 
         try{
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,id);
+            preparedStatement.setInt(1,id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -52,7 +53,7 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
 
 
     @Override
-    public List<ParkingSlot> getAll() {
+    public List<ParkingSlot> selectAll() {
         connection = getConnection();
         List<ParkingSlot> allParkingSlots = new ArrayList<>();
         Statement statement = null;
@@ -85,24 +86,89 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
     }
 
     private ParkingSlot determineSizeOfSlot(SizeOfSlot size) {
+        ParkingSlot parkingSlot = null;
 
         switch (size) {
             case SMALL:
-                return new SmallSlot();
+                parkingSlot  = new SmallSlot();
+                break;
             case MEDIUM:
-                return new MediumSlot();
+                parkingSlot =  new MediumSlot();
+                break;
             case LARGE:
-                return new LargeSlot();
+               parkingSlot = new LargeSlot();
+               break;
         }
-        return  null;
+       return  parkingSlot;
     }
 
 
+    public Integer selectNumberOfSlot(SizeOfSlot size) {
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query  = "SELECT quantity FROM parking_slot WHERE size = ?";
+        int count = 0;
+
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,size.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }finally {
+
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            }catch (SQLException exception){
+                exception.printStackTrace();
+            }
+        }
+        return count;
+    }
     @Override
-    public void update(ParkingSlot parkingSlot, String param) {
+    public void update(ParkingSlot parkingSlot, Integer quantity) {
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query  = "UPDATE parking_slot SET quantity = ? WHERE size = ?";
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,quantity);
+            preparedStatement.setString(2,parkingSlot.getSizeOfSlot().toString());
+            preparedStatement.execute();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }finally {
+
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            }catch (SQLException exception){
+                exception.printStackTrace();
+            }
+        }
 
     }
 
+
+
+    public void update(SizeOfSlot size, Integer param) {
+        ParkingSlot parkingSlot = determineSizeOfSlot(size);
+        update(parkingSlot,param);
+    }
 
 
 }
