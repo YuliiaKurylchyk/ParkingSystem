@@ -15,7 +15,7 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
     private Connection connection;
     //do something with it!!!!
     @Override
-    public ParkingSlot select(Integer id) throws Exception {
+    public ParkingSlot select(Integer id)  {
         ParkingSlot parkingSlot = null;
         connection = getConnection();
         PreparedStatement preparedStatement = null;

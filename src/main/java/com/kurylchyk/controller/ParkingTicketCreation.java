@@ -2,6 +2,7 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.Customer;
 import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.dao.CustomerDao;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDao;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
@@ -20,6 +21,10 @@ import java.io.IOException;
 public class ParkingTicketCreation extends HttpServlet {
     private ParkingTicketDAO parkingTicketDAO;
 
+    {
+
+    }
+
     @Override
     public void init() throws ServletException {
         parkingTicketDAO = new ParkingTicketDAO();
@@ -27,8 +32,14 @@ public class ParkingTicketCreation extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("IN PARKING TICKET CREATION");
+
+
 
         HttpSession session = req.getSession();
 
@@ -46,22 +57,22 @@ public class ParkingTicketCreation extends HttpServlet {
         System.out.println(id);
         parkingTicket.setParkingTicketID(id);
 
-        session.setAttribute("parkingTicket", parkingTicket);
+        session.setAttribute("currentTicket", parkingTicket);
 
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
         requestDispatcher.forward(req,resp);
 
 
+
     }
+
+
+
 
     private void connectCustomerToVehicle(Vehicle vehicle,Customer customer) {
 
         VehicleDao vehicleDao =  new VehicleDao();
         vehicleDao.updateCustomerID(vehicle,customer);
-
-    }
-
-    public static void main(String[] args) {
 
     }
 }

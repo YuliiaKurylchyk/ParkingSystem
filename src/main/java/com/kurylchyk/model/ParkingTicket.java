@@ -92,6 +92,9 @@ public class ParkingTicket {
         return from_time;
     }
 
+    public LocalDateTime getTo_time(){
+        return to_time;
+    }
     public String toString() {
 
         return "The vehicle: " + vehicle + "\n"

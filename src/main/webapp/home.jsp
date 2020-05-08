@@ -4,7 +4,9 @@
 <html>
 <head>
     <title>home page</title>
-    <link rel="stylesheet" href="home-style.css">
+    <style type="text/css">
+        <%@include file="WebContent/home-style.css" %>
+    </style>
     <script src="https://kit.fontawesome.com/89f0f4f970.js" crossorigin="anonymous"></script>
 </head>
 <body>

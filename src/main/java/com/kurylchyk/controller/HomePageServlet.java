@@ -1,5 +1,6 @@
 package com.kurylchyk.controller;
 
+import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDao;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
@@ -10,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/")
@@ -36,10 +38,10 @@ public class HomePageServlet extends HttpServlet {
                 //deleteUser(request, response);
                 break;
             case "/edit":
-                //showEditForm(request, response);
+                showEditForm(req, resp);
                 break;
             case "/show":
-                showAllEntities(req, resp);
+                showParkingTickets(req, resp);
                 break;
             default:
                 showHomePage(req,resp);
@@ -71,12 +73,23 @@ public class HomePageServlet extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-    private void showAllEntities(HttpServletRequest req, HttpServletResponse resp)
+    private void showParkingTickets(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
          RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
         requestDispatcher.forward(req, resp);
 
+    }
 
+    private void  showEditForm(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
+
+    Integer id = Integer.parseInt(request.getParameter("id"));
+        ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+
+        HttpSession session = request.getSession();
+        session.setAttribute("currentTicket",parkingTicketDAO.select(id));
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("parkingTicketInfo.jsp");
+        requestDispatcher.forward(request,response);
     }
 
 }
