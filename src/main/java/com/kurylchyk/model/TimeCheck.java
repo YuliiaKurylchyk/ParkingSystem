@@ -1,9 +1,7 @@
 package com.kurylchyk.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedHashMap;
 
 public class TimeCheck {
 
@@ -13,9 +11,9 @@ public class TimeCheck {
     }
 
 
-    public static  long countOfHours(LocalDateTime from, LocalDateTime to) {
+    public static  long countOfDays(LocalDateTime from, LocalDateTime to) {
 
-        return ChronoUnit.HOURS.between(from, to);
+        return  ChronoUnit.DAYS.between(from, to);
     }
 
 

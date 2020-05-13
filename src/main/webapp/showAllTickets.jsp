@@ -25,12 +25,13 @@
 <h3>Choose the date and parking status</h3>
 <div class="container">
     <div id="selectContainer">
-    <form action="ParkingTicketUtil" method="POST">
+    <form action="showTicket" method="POST">
         <select name="dateOfParkingTicket" >
             <option value="today">Today</option>
-            <option value="yesterday">Yesterday</option>
-            <option value="oneWeekAgo">1 week</option>
-            <option value="MonthAgo">1 month</option>
+            <option value="yesterday">From yesterday</option>
+            <option value="oneWeekAgo">For the last week</option>
+            <option value="MonthAgo">For the last month</option>
+            <option value="allTickets">All</option>
         </select>
 
 
@@ -53,7 +54,9 @@
                 <th>Customer</th>
                 <th>Parking Slot</th>
                 <th>Status</th>
-                <th>From time</th>
+                <th>Arrival time</th>
+                <th>Left time</th>
+                <th>Cost</th>
             </tr>
             </thead>
 
@@ -77,10 +80,10 @@
                         <c:out value="${currentTicket.status}"/>
                     </td>
                     <td>
-                        <c:out value="${currentTicket.from_time}"/>
+                        <c:out value="${currentTicket.arrivalTime}"/>
                     </td>
                     <td>
-                        <c:out value="${currentTicket.to_time}"/>
+                        <c:out value="${currentTicket.leftTime}"/>
                     </td>
                     <td>
                         <c:out value="${currentTicket.cost}"/>

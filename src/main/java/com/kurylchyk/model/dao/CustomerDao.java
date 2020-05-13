@@ -2,6 +2,7 @@ package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.Connector;
 import com.kurylchyk.model.Customer;
+import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import sun.util.calendar.CalendarUtils;
 
@@ -14,7 +15,7 @@ public class CustomerDao extends Connector implements GetUpdateDAO<Customer, Int
     private Connection connection;
 
     @Override
-    public Customer select(Integer id) {
+    public Customer select(Integer id) throws NoSuchCustomerFoundException {
         connection = getConnection();
         PreparedStatement preparedStatement = null;
         String query = "SELECT * FROM customer WHERE customer_id =?";
@@ -26,11 +27,13 @@ public class CustomerDao extends Connector implements GetUpdateDAO<Customer, Int
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet != null && resultSet.next()) {
+            if (resultSet.next()) {
 
                 customer = new Customer(id,resultSet.getString("name"),
                         resultSet.getString("surname"),
                         resultSet.getString("phone_number"));
+            }else {
+                throw new NoSuchCustomerFoundException("No customer with id "+id + " is found");
             }
 
         } catch (SQLException ex) {
@@ -126,12 +129,13 @@ public class CustomerDao extends Connector implements GetUpdateDAO<Customer, Int
     }
 
 
-    public Integer selectIdByPhoneNumber(String phoneNumber) {
+
+    public Integer selectIdByPhoneNumber(String phoneNumber) throws NoSuchCustomerFoundException{
 
         connection = getConnection();
         PreparedStatement preparedStatement = null;
         String query = "SELECT customer_id FROM customer where phone_number = ?";
-        Integer id = 0;
+        Integer customerID = 0;
 
         try {
 
@@ -139,10 +143,10 @@ public class CustomerDao extends Connector implements GetUpdateDAO<Customer, Int
              preparedStatement.setString(1,phoneNumber);
             ResultSet set = preparedStatement.executeQuery();
             if(set.next()){
-                id = set.getInt(1);
+                customerID = set.getInt(1);
             }
             else{
-                id = -1;
+               throw  new NoSuchCustomerFoundException("No such customer with phone number "+ phoneNumber);
             }
 
         } catch (SQLException exception) {
@@ -161,18 +165,42 @@ public class CustomerDao extends Connector implements GetUpdateDAO<Customer, Int
             }
         }
 
-        return id;
+        return customerID;
     }
 
     @Override
-    public void update(Customer customer, Integer param) {
-
+    public void update(Customer customer,Integer id) {
+        connection = getConnection();
+        PreparedStatement preparedStatement= null;
+        String query = "UPDATE CUSTOMER SET NAME=?,SURNAME = ?,phone_number = ? WHERE customer_id = ?";
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,customer.getName());
+            preparedStatement.setString(2,customer.getSurname());
+            preparedStatement.setString(3,customer.getPhoneNumber());
+            preparedStatement.setInt(4,id);
+            preparedStatement.execute();
+        }catch (SQLException exception){
+            exception.printStackTrace();
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if(connection!=null){
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void delete(Customer customer) {
 
     }
+
 
 
 }

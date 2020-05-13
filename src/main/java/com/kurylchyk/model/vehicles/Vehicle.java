@@ -5,7 +5,7 @@ public abstract class Vehicle {
     private String make;
     private String model;
     private String licencePlate;
-    private TypeOfVehicle type;
+    private TypeOfVehicle typeOfVehicle;
 
     public void setMake(String make) {
         this.make = make;
@@ -19,8 +19,8 @@ public abstract class Vehicle {
         this.licencePlate = licencePlate;
     }
 
-    public void setType(TypeOfVehicle type) {
-        this.type = type;
+    public void setTypeOfVehicle(TypeOfVehicle type) {
+        this.typeOfVehicle = type;
     }
 
     public Vehicle() {}
@@ -28,7 +28,7 @@ public abstract class Vehicle {
         this.make = make;
         this.model = model;
         this.licencePlate = licencePlate;
-        this.type = type;
+        this.typeOfVehicle = type;
     }
 
     @Override
@@ -44,11 +44,12 @@ public abstract class Vehicle {
         return model;
     }
 
+
     public String getLicencePlate() {
         return licencePlate;
     }
     public TypeOfVehicle getTypeOfVehicle(){
-        return type;
+        return typeOfVehicle;
     }
 
     @Override

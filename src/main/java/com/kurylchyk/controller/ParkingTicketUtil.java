@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Date;
 
-@WebServlet("/ParkingTicketUtil")
+@WebServlet("/showTicket")
 public class ParkingTicketUtil extends HttpServlet {
 
     private static ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
@@ -25,42 +25,62 @@ public class ParkingTicketUtil extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String date = req.getParameter("dateOfParkingTicket");
-        String status  = req.getParameter("statusOfParkingTicket");
+        String status = req.getParameter("statusOfParkingTicket");
+        List<ParkingTicket> appropriateTickets = null;
+        LocalDateTime dateTime = getAppropriateDate(date);
 
-        System.out.println(date);
-        System.out.println(status);
-            if(date!=null) {
-             List<ParkingTicket> appropriateTickets =    getAppropriateTickets(date);
-                req.setAttribute("appropriateTickets",appropriateTickets);
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
-                requestDispatcher.forward(req,resp);
+        if (status.equals("all")) {
+            if(date.equals("allTickets")) {
+                appropriateTickets = parkingTicketDAO.selectAll();
+            }else {
+                    appropriateTickets = getAppropriateTickets(dateTime);
             }
+        } else{
+            if(date.equals("allTickets")){
+                appropriateTickets = parkingTicketDAO.selectAll(status);
+            }else {
+                appropriateTickets = getAppropriateTickets(dateTime, status);
+            }
+        }
+
+        req.setAttribute("appropriateTickets", appropriateTickets);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
+        requestDispatcher.forward(req, resp);
     }
 
-    public static List<ParkingTicket> getAppropriateTickets(String action){
-       List list = null;
+    private List<ParkingTicket> getAppropriateTickets(LocalDateTime date) {
 
-        switch (action) {
-            case "today" :
-                list = parkingTicketDAO.selectInDate(LocalDateTime.now());
+        return parkingTicketDAO.selectInDate(date);
+
+    }
+
+    private List<ParkingTicket> getAppropriateTickets(LocalDateTime date, String status) {
+       return parkingTicketDAO.selectInDateAndStatus(date,status);
+    }
+
+    private LocalDateTime getAppropriateDate(String date) {
+
+        LocalDateTime appropriateDate = null;
+        switch (date) {
+            case "today":
+                appropriateDate = LocalDateTime.now();
                 break;
             case "yesterday":
-                list = parkingTicketDAO.selectInDate(LocalDateTime.now().minusDays(1));
+                appropriateDate = LocalDateTime.now().minusDays(1);
                 break;
             case "oneWeekAgo":
-                list = parkingTicketDAO.selectInDate(LocalDateTime.now().minusWeeks(1));
+                appropriateDate = LocalDateTime.now().minusWeeks(1);
                 break;
-            case"MonthAgo":
-                list = parkingTicketDAO.selectInDate(LocalDateTime.now().minusMonths(1));
+            case "MonthAgo":
+                appropriateDate = LocalDateTime.now().minusMonths(1);
                 break;
 
         }
 
-        return list;
+        return appropriateDate;
+
 
     }
-
-
 
 
 }

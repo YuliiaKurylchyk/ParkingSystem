@@ -1,23 +1,15 @@
 package com.kurylchyk.model;
 
-import com.kurylchyk.model.parkingSlots.SizeOfSlot;
+import java.math.BigDecimal;
 
 public class Payment {
+    public  static BigDecimal calculatePrice(Long days, Integer pricePerDay){
 
-    public  static double calculatePrice(long hours, SizeOfSlot sizeOfSlot){
+        if(days==0) {
+            return new BigDecimal(pricePerDay);
+        } else {
+            return  new BigDecimal(days*pricePerDay);
+        }
 
-         double priceForHour = 0.0;
-         switch (sizeOfSlot) {
-             case SMALL:
-                 priceForHour = 15;
-                 break;
-             case MEDIUM:
-                 priceForHour = 25;
-                 break;
-             case LARGE:
-                 priceForHour = 35;
-                break;
-         }
-         return (priceForHour*=hours);
     }
 }

@@ -2,6 +2,7 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDao;
+import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
 
@@ -19,23 +20,23 @@ public class HomePageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req,resp);
+        doGet(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
         String action = req.getServletPath();
-        System.out.println(action);
         switch (action) {
             case "/new":
                 showNewForm(req, resp);
                 break;
-            case "/insert":
-                //insertUser(request, response);
+            case "/update":
+                updateEntity(req, resp);
                 break;
-            case "/delete":
-                //deleteUser(request, response);
+            case "/remove":
+                removeEntity(req, resp);
                 break;
             case "/edit":
                 showEditForm(req, resp);
@@ -44,7 +45,7 @@ public class HomePageServlet extends HttpServlet {
                 showParkingTickets(req, resp);
                 break;
             default:
-                showHomePage(req,resp);
+                showHomePage(req, resp);
                 break;
         }
 
@@ -57,7 +58,8 @@ public class HomePageServlet extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-    private void showHomePage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void showHomePage(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         VehicleDao vehicleDao = new VehicleDao();
         Integer numberOfBikes = vehicleDao.getCountOfType(TypeOfVehicle.MOTORBIKE);
         Integer numberOfCars = vehicleDao.getCountOfType(TypeOfVehicle.CAR);
@@ -76,20 +78,61 @@ public class HomePageServlet extends HttpServlet {
     private void showParkingTickets(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-         RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
         requestDispatcher.forward(req, resp);
 
     }
 
-    private void  showEditForm(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-    Integer id = Integer.parseInt(request.getParameter("id"));
+        Integer id = Integer.parseInt(request.getParameter("id"));
         ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
 
         HttpSession session = request.getSession();
-        session.setAttribute("currentTicket",parkingTicketDAO.select(id));
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("parkingTicketInfo.jsp");
-        requestDispatcher.forward(request,response);
+        try {
+            session.setAttribute("currentTicket", parkingTicketDAO.select(id));
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("parkingTicketInfo.jsp");
+            requestDispatcher.forward(request, response);
+        }catch (NoSuchParkingTicketException exception) {
+            //do something
+        }
     }
 
+    private void updateEntity(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(req.getSession().getAttribute("currentTicket")!=null){
+            req.getSession().removeAttribute("currentTicket");
+        }
+
+        if(req.getSession().getAttribute("vehicle")!=null){
+            req.getSession().removeAttribute("vehicle");
+        }
+
+        if(req.getSession().getAttribute("customer")!=null){
+            req.getSession().removeAttribute("customer");
+        }
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+        requestDispatcher.forward(req, resp);
+
+    }
+
+    private void removeEntity(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
+
+        if(req.getSession().getAttribute("currentTicket")!=null){
+            req.getSession().removeAttribute("currentTicket");
+        }
+
+        if(req.getSession().getAttribute("vehicle")!=null){
+            req.getSession().removeAttribute("vehicle");
+        }
+
+        if(req.getSession().getAttribute("customer")!=null){
+            req.getSession().removeAttribute("customer");
+        }
+
+        req.getSession().setAttribute("toRemove",true);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+        requestDispatcher.forward(req,resp);
+
+
+    }
 }

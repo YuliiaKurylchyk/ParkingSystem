@@ -121,7 +121,6 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
         }catch (SQLException ex){
             ex.printStackTrace();
         }finally {
-
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -164,6 +163,34 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
     }
 
 
+    public Integer selectPrice(SizeOfSlot sizeOfSlot) {
+        connection = getConnection();
+        Integer price = null;
+        PreparedStatement preparedStatement = null;
+        String query = "SELECT price FROM parking_slot WHERE size = ?";
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,sizeOfSlot.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (SQLException exception) {
+            exception.printStackTrace();
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            }catch (SQLException exception){
+                exception.printStackTrace();
+            }
+        }
+        return price;
+    }
 
     public void update(SizeOfSlot size, Integer param) {
         ParkingSlot parkingSlot = determineSizeOfSlot(size);

@@ -36,7 +36,7 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
                 vehicleToBeReturned.setMake(resultSet.getString("make"));
                 vehicleToBeReturned.setModel(resultSet.getString("model"));
                 vehicleToBeReturned.setLicencePlate(resultSet.getString("licence_plate"));
-                vehicleToBeReturned.setType(type);
+                vehicleToBeReturned.setTypeOfVehicle(type);
 
                 return vehicleToBeReturned;
             }
@@ -77,7 +77,7 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
                 vehicleToBeAdded.setMake(resultSet.getString("make"));
                 vehicleToBeAdded.setModel(resultSet.getString("model"));
                 vehicleToBeAdded.setLicencePlate(resultSet.getString("licence_plate"));
-                vehicleToBeAdded.setType(typeOfCurrentVehicle);
+                vehicleToBeAdded.setTypeOfVehicle(typeOfCurrentVehicle);
 
                 allVehicles.add(vehicleToBeAdded);
             }
@@ -206,8 +206,36 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
 
     }
 
-    //@Override
-    public void update(Vehicle vehicle, String param) {
+    @Override
+    public void update(Vehicle vehicle,String previousLicencePlate) {
+
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = "UPDATE VEHICLE SET MAKE=?, MODEL=?, LICENCE_PLATE = ?, TYPE = ? WHERE LICENCE_PLATE = ?";
+
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,vehicle.getMake());
+            preparedStatement.setString(2,vehicle.getModel());
+            preparedStatement.setString(3,vehicle.getLicencePlate());
+            preparedStatement.setString(4,vehicle.getTypeOfVehicle().toString());
+            preparedStatement.setString(5,previousLicencePlate);
+            preparedStatement.execute();
+        }catch (SQLException exception) {
+            exception.printStackTrace();
+        }finally {
+
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     //@Override

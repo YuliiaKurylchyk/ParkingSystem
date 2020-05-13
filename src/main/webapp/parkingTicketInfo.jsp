@@ -28,7 +28,7 @@
         <tr>
             <td><jsp:text>Vehicle</jsp:text></td>
             <td> <c:out value="${currentTicket.vehicle}"/></td>
-            <td><a href="edit?id=<c:out value='${currentTicket.vehicle}'/>">Edit</a> &nbsp;&nbsp;&nbsp;</td>
+            <td><a href="editTicket?vehicleID=<c:out value='${currentTicket.vehicle.licencePlate}'/>">Edit</a> &nbsp;&nbsp;&nbsp;</td>
         </tr>
 
         <tr>
@@ -38,17 +38,28 @@
         </tr>
         <tr><td><jsp:text>Customer</jsp:text></td>
             <td> <c:out value="${currentTicket.customer}"/></td>
-            <td><a href="edit?id=<c:out value='${currentTicket.customer}' />">Edit</a> </td>&nbsp;&nbsp;&nbsp;&nbsp;
+            <td><a href="editTicket?customerID=<c:out value='${currentTicket.customer.customerID}' />">Edit</a> </td>&nbsp;&nbsp;&nbsp;&nbsp;
         </tr>
         <tr>
-            <td><jsp:text>From time: </jsp:text></td>
-            <td> <c:out value="${currentTicket.from_time}"/></td>
-            <td><a href="edit?id=<c:out value='${currentTicket.from_time}' />">Edit</a> </td>&nbsp;&nbsp;&nbsp;&nbsp;
+            <td><jsp:text>Arrival time: </jsp:text></td>
+            <td> <c:out value="${currentTicket.arrivalTime}"/></td>
+            &nbsp;&nbsp;<td></td>
+        <tr>
+            <td>Left time:</td>
+            <td> <c:out value="${currentTicket.leftTime}"/></td>
+            <td></td>
+        </tr>
+
         </tr>
         <tr>
             <td>Status:</td>
-            <td> <c:out value="${currentTicket.status}"/></td>
-            <td><a href="edit?id=<c:out value='${currentTicket.status}' />">Edit</a> &nbsp;</td>&nbsp;&nbsp;&nbsp;
+            <td> <c:out value="${currentTicket.status}"/></td>&nbsp;
+            <td></td>
+        </tr>
+        <tr>
+            <td>Cost:</td>
+            <td> <c:out value="${currentTicket.cost}"/></td>&nbsp;
+            <td></td>
         </tr>
     </table>
 </div>
@@ -61,6 +72,11 @@
         <a href="/"> <button type="button" value="" name="BackToMenu">Back to menu</button> </a>
     </div>
 
+    <c:if test="${toRemove==true}">
+    <div style="float:right;">
+        <a href="delete"> <button type="button" value="" name="Remove">Remove</button> </a>
+    </div>
+    </c:if>
 </div>
 </body>
 </html>

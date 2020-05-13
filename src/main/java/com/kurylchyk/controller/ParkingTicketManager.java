@@ -1,145 +1,137 @@
 package com.kurylchyk.controller;
 
-
-import java.util.Scanner;
-
 import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingLot;
 import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.Payment;
+import com.kurylchyk.model.TimeCheck;
+import com.kurylchyk.model.dao.CustomerDao;
+import com.kurylchyk.model.dao.ParkingSlotDao;
+import com.kurylchyk.model.dao.ParkingTicketDAO;
+import com.kurylchyk.model.dao.VehicleDao;
+import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
-import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
-import com.kurylchyk.model.vehicles.*;
+import com.kurylchyk.model.vehicles.Vehicle;
+import com.sun.deploy.net.HttpResponse;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public final class ParkingTicketManager {
+    private static ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private static ParkingSlotDao parkingSlotDao = new ParkingSlotDao();
+    private static CustomerDao customerDao = new CustomerDao();
+    private static VehicleDao vehicleDao = new VehicleDao();
 
-    private static Scanner sc = new Scanner(System.in);
-    private ParkingLot parkingLot = new ParkingLot();
-    private static int countOfParkingTickets = 0;
-    private Remover remover  = new Remover();
-
-    private Customer setCustomerInfo() {
-        String name = "";
-        String surname = "";
-        String phoneNumber = "";
-        String email = "";
-        System.out.println("Please, enter customer info : ");
-        System.out.print("Name: ");
-        name = sc.nextLine();
-        System.out.println("\n");
-        System.out.print("Surname :");
-        surname = sc.nextLine();
-        System.out.println("\n");
-        System.out.print("Phone number :");
-        phoneNumber = sc.nextLine();
-
-
-        return new Customer(name, surname, phoneNumber);
-
+    public static void removeParkingTicket(ParkingTicket parkingTicket) {
+        LocalDateTime leftTime = TimeCheck.getTime();
+        parkingTicket.setLeftTime(leftTime);
+        parkingTicket.setStatus("left");
+        parkingTicket.setCost(countTheCost(parkingTicket));
+        parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
     }
 
-    private Vehicle setVehicleInfo() throws NoSuchTypeOfVehicleException {
+    private static BigDecimal countTheCost(ParkingTicket parkingTicket) {
 
-        TypeOfVehicle type;
-        String sort;
-        String model;
-        String licencePlate;
+        Integer pricePerDay = parkingSlotDao.selectPrice(parkingTicket.getParkingSlot().getSizeOfSlot());
+        System.out.println("TimeArrival " + parkingTicket.getArrivalTime());
+        System.out.println("TimeLeft " + parkingTicket.getLeftTime());
+        BigDecimal cost = Payment.calculatePrice(TimeCheck.countOfDays(parkingTicket.getArrivalTime(),
+                parkingTicket.getLeftTime()), pricePerDay);
+        return cost;
+    }
 
-        System.out.println("Choose the type of transport:");
+    public static ParkingTicket searchParkingTicket(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer parkingTicketID = Integer.parseInt(req.getParameter("id"));
+        RequestDispatcher requestDispatcher = null;
+        ParkingTicket parkingTicket = null;
+
         try {
-            type = TypeOfVehicle.valueOf(sc.nextLine().toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            throw new NoSuchTypeOfVehicleException("No such type of vehicle", ex);
-        }
+          parkingTicket = parkingTicketDAO.select(parkingTicketID);
 
-        System.out.println("Please, enter customer info : ");
-        System.out.print("Sort: ");
-        sort = sc.nextLine();
-        System.out.println("\n");
-        System.out.print("Model: ");
-        model = sc.nextLine();
-        System.out.println("\n");
-        System.out.print("Licence Plate: ");
-        licencePlate = sc.nextLine();
-        System.out.println("\n");
-
-        switch (type) {
-            case MOTORBIKE:
-                return new Motorbike(sort, model, licencePlate);
-            case CAR:
-                return new Car(sort, model, licencePlate);
-            case TRUCK:
-                return new Truck(sort, model, licencePlate);
-            case BUS:
-                return  new Bus(sort,model,licencePlate);
+        } catch (NoSuchParkingTicketException exception) {
+            req.setAttribute("notFound", exception);
+            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
         }
-        return null;
+        return parkingTicket;
+
     }
 
-    public void createParkingTicket() throws NoSuchTypeOfVehicleException {
-        Vehicle vehicle = setVehicleInfo();
-
-        Customer customer = setCustomerInfo();
-        ParkingSlot parkingSlot;
+    public static Customer searchCustomerByPhoneNumber(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String customerPhoneNumber = req.getParameter("phone_number");
+        Customer customer = null;
+        RequestDispatcher requestDispatcher = null;
         try {
-            parkingSlot = parkingLot.getParkingSlot(vehicle);
-            ParkingTicketDB.addNewActiveTicket(new ParkingTicket(vehicle, parkingSlot, customer));
-        } catch (NoAvailableParkingSlotException exception) {
-            System.out.println(exception);
+            customer = customerDao.select(customerDao.selectIdByPhoneNumber(customerPhoneNumber));
+        } catch (NoSuchCustomerFoundException exception) {
+            req.setAttribute("notFound", exception);
+            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+            requestDispatcher.forward(req, resp);
         }
-
+        return customer;
     }
 
-    public void showActiveTicket() {
-
-        ParkingTicketDB.showActiveTickets();
-    }
-
-    public void showTicketsInDB() {
-
-        ParkingTicketDB.showUsedTickets();
-    }
-
-    public void removeParkingTicket() {
-
-        System.out.println("Choose option how to remove: ");
-        System.out.println("1 - by registration number");
-        System.out.println("2 - by model and/or make of vehicle");
-        System.out.println("3 - surname");
-        System.out.println("4 - remove by parking ticket ID");
-        System.out.println("5  - back to menu");
-        Scanner sc = new Scanner(System.in);
-        ParkingTicket ticketToBeRemoved = null;
-
-
-        int answer = sc.nextInt();
+    public static Customer searchCustomerByID(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        Integer id = Integer.parseInt(req.getParameter("customerID"));
+        RequestDispatcher requestDispatcher = null;
+        Customer customer = null;
         try {
-            switch (answer) {
-                case 1:
-                    ticketToBeRemoved =remover.removeByRegistrationNumber();
-                    break;
-                case 2:
-                    ticketToBeRemoved = remover.removeByMakeAndModel();
-                    break;
-                case 3:
-                    ticketToBeRemoved = remover.removeBySurname();
-                    break;
-                case 4:
-                    ticketToBeRemoved = remover.removeByParkingTicketID();
-                    break;
-                case 5:
-                    return;
+            customer = customerDao.select(id);
+        } catch (NoSuchCustomerFoundException exception) {
+            req.setAttribute("notFound", exception);
+            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+            requestDispatcher.forward(req, resp);
+        }
+        return customer;
 
+    }
+
+    public static void checkAction(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        RequestDispatcher requestDispatcher;
+        if(session.getAttribute("currentTicket")==null) {
+            ParkingTicket currentTicket = null;
+            if(session.getAttribute("vehicle")!=null){
+                currentTicket =ParkingTicketManager.getTicketByVehicle((Vehicle)session.getAttribute("vehicle"));
+                session.removeAttribute("vehicle");
             }
-        } catch (NoSuchVehicleFoundException | NoSuchParkingTicketException exception) {
-            System.out.println(exception);
-            return;
+            if(session.getAttribute("customer")!=null) {
+                currentTicket = ParkingTicketManager.getTicketByCustomer((Customer)session.getAttribute("customer"));
+                session.removeAttribute("customer");
+            }
+            session.setAttribute("currentTicket",currentTicket);
         }
+        requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
+        requestDispatcher.forward(req,resp);
 
-        ParkingTicketDB.removeActiveTicket(ticketToBeRemoved);
     }
 
+    public static Vehicle searchVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String licencePlate = req.getParameter("licence_plate");
+        Vehicle vehicle = null;
+        RequestDispatcher requestDispatcher = null;
+        try {
+            vehicle = vehicleDao.select(licencePlate);
+        } catch (NoSuchVehicleFoundException exception) {
+            req.setAttribute("notFound", exception);
+            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+        }
+        return vehicle;
+    }
+
+    public static ParkingTicket getTicketByVehicle(Vehicle vehicle) {
+        return parkingTicketDAO.selectByVehicleID(vehicle.getLicencePlate());
+    }
+
+    public static ParkingTicket getTicketByCustomer(Customer customer) {
+        return parkingTicketDAO.selectByCustomerID(customer.getCustomerID());
+    }
 
 }

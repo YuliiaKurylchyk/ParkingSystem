@@ -44,24 +44,23 @@ public class ParkingTicketCreation extends HttpServlet {
         HttpSession session = req.getSession();
 
         Vehicle vehicle = (Vehicle) session.getAttribute("vehicle");
-        System.out.println(vehicle);
         Customer customer = (Customer) session.getAttribute("customer");
-        System.out.println(customer);
         ParkingSlot parkingSlot = (ParkingSlot) session.getAttribute("parkingSlot");
-        System.out.println(parkingSlot);
+
+        session.removeAttribute("vehicle");
+        session.removeAttribute("customer");
+        session.removeAttribute("parkingSlot");
+
+
         connectCustomerToVehicle(vehicle,customer);
-
-
         ParkingTicket parkingTicket = new ParkingTicket(vehicle,parkingSlot,customer);
         Integer id =  parkingTicketDAO.insert(parkingTicket);
-        System.out.println(id);
         parkingTicket.setParkingTicketID(id);
 
-        session.setAttribute("currentTicket", parkingTicket);
 
+        session.setAttribute("currentTicket", parkingTicket);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
         requestDispatcher.forward(req,resp);
-
 
 
     }

@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title></title>
@@ -15,44 +16,55 @@
 </head>
 <body>
 <h1>Parking ticket creation</h1>
-<form action="vehicleCreation" method="post" >
-    <h3>Vehicle information:</h3>
+<c:if test="${vehicle != null}">
+<form action="vehicleUpdating" method="post">
+    </c:if>
 
-    <p id="label_type_of_vehicle">Type of Vehicle: </p>
-    <div class="vehicle_type_button">
-        <input type="radio" id="motorbike" class="type_of_vehicle"
-               name="type_of_vehicle" value="MOTORBIKE">
-        <label for="motorbike">Motorbike</label>
-    </div>
-    <div class="vehicle_type_button">
-        <input type="radio" id="car" class="type_of_vehicle"
-               name="type_of_vehicle" value="CAR">
-        <label for="car">Car</label>
-    </div>
-    <div class="vehicle_type_button">
-        <input type="radio" id="truck" class="type_of_vehicle"
-               name="type_of_vehicle" value="TRUCK">
-        <label for="truck">Truck</label>
-    </div>
-    <div class="vehicle_type_button">
-        <input type="radio" id="bus" class="type_of_vehicle"
-               name="type_of_vehicle" value="BUS">
-        <label for="bus">Bus</label>
-    </div>
+    <c:if test="${vehicle==null}">
+    <form action="vehicleCreation" method="post">
+        </c:if>
+        <h3>Vehicle information:</h3>
 
-    <p><input placeholder="Make" name="make"></p>
-    <p><input placeholder="Model" name="model"></p>
-    <p><input placeholder="Licence plate" name="licence_plate"></p>
-
-
-    <div style="overflow:auto;">
-        <div style="float:right;">
-            <button type="submit" value="vehicleCreation">Next</button>
+        <p id="label_type_of_vehicle">Type of Vehicle: </p>
+        <div class="vehicle_type_button">
+            <input type="radio" id="motorbike" class="type_of_vehicle"
+                   name="type_of_vehicle" value="MOTORBIKE" ${vehicle.typeOfVehicle=='MOTORBIKE'? 'checked':''}>
+            <label for="motorbike">Motorbike</label>
         </div>
-    </div>
+        <div class="vehicle_type_button">
+            <input type="radio" id="car" class="type_of_vehicle"
+                   name="type_of_vehicle" value="CAR" ${vehicle.typeOfVehicle=='CAR'? 'checked':''} >
+            <label for="car">Car</label>
+        </div>
+        <div class="vehicle_type_button">
+            <input type="radio" id="truck" class="type_of_vehicle"
+                   name="type_of_vehicle" value="TRUCK" ${vehicle.typeOfVehicle=='TRUCK'? 'checked':''}>
+            <label for="truck">Truck</label>
+        </div>
+        <div class="vehicle_type_button">
+            <input type="radio" id="bus" class="type_of_vehicle"
+                   name="type_of_vehicle" value="BUS" ${vehicle.typeOfVehicle=='BUS'? 'checked':''}>
+            <label for="bus">Bus</label>
+        </div>
 
-</form>
+        <p><input placeholder="Make" name="make" value="${vehicle.make}"></p>
+        <p><input placeholder="Model" name="model" value="${vehicle.model}"></p>
+        <p><input placeholder="Licence plate" name="licence_plate" value="${vehicle.licencePlate}"></p>
 
+
+        <div style="overflow:auto;">
+            <div style="float:right;">
+                <c:if test="${vehicle != null}">
+                    <button type="submit">Done</button>
+                </c:if>
+
+                <c:if test="${vehicle == null}">
+                    <button type="submit">Next</button>
+                </c:if>
+            </div>
+        </div>
+
+    </form>
 
 
 </body>

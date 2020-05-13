@@ -2,6 +2,7 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.Customer;
 import com.kurylchyk.model.dao.CustomerDao;
+import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.vehicles.Vehicle;
 
 import javax.servlet.ServletException;
@@ -27,6 +28,7 @@ public class CustomerCreation extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
         String name = req.getParameter("name");
         String surname = req.getParameter("surname");
         String phoneNumber = req.getParameter("phone_number");
@@ -39,18 +41,20 @@ public class CustomerCreation extends HttpServlet {
 
         } else {
 
-            int id = checkCustomerIsInDB(phoneNumber);
+            Integer id = checkCustomerIsInDB(phoneNumber);
             Customer customer;
-            if (id < 0) {
+            if (id == null) {
                 id = addCustomerToDB(getCreatedCustomer(name, surname, phoneNumber));
-
             }
-            customer = customerDao.select(id);
-            HttpSession session = req.getSession();
-            session.setAttribute("customer", customer);
-
-            System.out.println("Forward to parkingTicketCreation");
-            req.getRequestDispatcher("parkingTicketCreation").forward(req, resp);
+            try {
+                customer = customerDao.select(id);
+                HttpSession session = req.getSession();
+                session.setAttribute("customer", customer);
+                System.out.println("Forward to parkingTicketCreation");
+                req.getRequestDispatcher("parkingTicketCreation").forward(req, resp);
+            }catch (NoSuchCustomerFoundException exception){
+                //do something
+            }
         }
     }
     private boolean validateNameAndSurname(String name, String surname) {
@@ -63,8 +67,12 @@ public class CustomerCreation extends HttpServlet {
         return phoneNumber.charAt(0)=='0' && phoneNumber.length()==10 && phoneNumber.matches("[0-9]+");
     }
     private Integer checkCustomerIsInDB(String phoneNumber) {
-
-        return customerDao.selectIdByPhoneNumber(phoneNumber);
+        try {
+            return customerDao.selectIdByPhoneNumber(phoneNumber);
+        }catch (NoSuchCustomerFoundException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     private Customer getCreatedCustomer(String name, String surname, String phoneNumber) {

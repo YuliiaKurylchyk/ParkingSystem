@@ -41,6 +41,7 @@ public class VehicleCreation extends HttpServlet {
 
 
         System.out.println(licencePlate);
+        System.out.println("Vehicle creation");
         if(!validateLicencePlate(licencePlate)) {
 
         }else {

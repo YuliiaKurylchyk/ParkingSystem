@@ -9,7 +9,7 @@ public interface GetUpdateDAO<T, S> {
 
     List<T> selectAll();
 
-   void update(T t, S param);
+   void update(T t,S param);
 
 
 

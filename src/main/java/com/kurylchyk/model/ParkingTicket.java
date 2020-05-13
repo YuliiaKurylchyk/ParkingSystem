@@ -13,8 +13,8 @@ public class ParkingTicket {
     private Customer customer;
     private Vehicle vehicle;
     private ParkingSlot parkingSlot;
-    private LocalDateTime from_time;
-    private LocalDateTime to_time;
+    private LocalDateTime arrivalTime;
+    private LocalDateTime leftTime;
     private BigDecimal cost;
     private String status;
 
@@ -28,11 +28,11 @@ public class ParkingTicket {
         this.parkingSlot = parkingSlot;
         this.customer = customer;
         this.status = "present";
-        from_time = TimeCheck.getTime();
+        arrivalTime = TimeCheck.getTime();
     }
     public ParkingTicket(){
-
     }
+
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
@@ -50,12 +50,12 @@ public class ParkingTicket {
         this.parkingSlot = parkingSlot;
     }
 
-    public void setFrom_time(LocalDateTime from_time) {
-        this.from_time = from_time;
+    public void setArrivalTime(LocalDateTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
-    public void setTo_time(LocalDateTime to_time) {
-        this.to_time = to_time;
+    public void setLeftTime(LocalDateTime leftTime) {
+        this.leftTime = leftTime;
     }
 
     public void setStatus(String stat) {
@@ -79,27 +79,25 @@ public class ParkingTicket {
     }
 
     public BigDecimal getCost() {
-        to_time = TimeCheck.getTime();
-        cost = new BigDecimal(Payment.calculatePrice(TimeCheck.countOfHours(from_time,to_time), parkingSlot.getSizeOfSlot()));
-        return cost;
+       return cost;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public LocalDateTime getFrom_time() {
-        return from_time;
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
     }
 
-    public LocalDateTime getTo_time(){
-        return to_time;
+    public LocalDateTime getLeftTime(){
+        return leftTime;
     }
     public String toString() {
 
         return "The vehicle: " + vehicle + "\n"
                 + "Place №" + parkingSlot + "\n"
-                + "Data and time : " + from_time + "\n"
+                + "Data and time : " + arrivalTime + "\n"
                 + "Customer: " + customer + "\n"
                 + "Status: " + status;
     }
