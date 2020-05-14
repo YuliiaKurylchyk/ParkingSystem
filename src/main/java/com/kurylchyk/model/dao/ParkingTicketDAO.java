@@ -76,7 +76,32 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     @Override
     public void delete(ParkingTicket parkingTicket) {
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = "DELETE FROM parking_ticket WHERE parking_ticket_id = ?";
+
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,parkingTicket.getParkingTicketID());
+            preparedStatement.execute();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+
     }
+
+
 
     @Override
     public ParkingTicket select(Integer id) throws NoSuchParkingTicketException {
@@ -208,6 +233,38 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
         return parkingTicket;
     }
+
+    public Integer countCustomer(Customer customer) {
+        Integer customerID = customer.getCustomerID();
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE customer_id=?";
+        Integer count = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, customerID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                count = resultSet.getInt("COUNT");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return count;
+    }
+
 
     //make it array list
     @Override
@@ -505,3 +562,4 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
     }
 
 }
+

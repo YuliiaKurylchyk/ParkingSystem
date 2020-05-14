@@ -238,8 +238,30 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
         }
     }
 
-    //@Override
+    @Override
     public void delete(Vehicle vehicle) {
+        connection = getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = "DELETE FROM vehicle WHERE licence_plate = ?";
+
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,vehicle.getLicencePlate());
+            preparedStatement.execute();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
 
     }
 

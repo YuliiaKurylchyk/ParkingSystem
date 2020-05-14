@@ -58,9 +58,11 @@ public class DeletionServlet extends HttpServlet {
 
     }
 
-    public void doDeleteCompletely(HttpServletRequest req, HttpServletResponse resp){
-
-
+    public void doDeleteCompletely(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ParkingTicket currentTicket = (ParkingTicket) req.getSession().getAttribute("currentTicket");
+        ParkingTicketManager.deleteCompletely(currentTicket);
+        req.setAttribute("deleted","This ticket has been deleted successfully");
+        req.getRequestDispatcher("parkingTicketInfo.jsp").forward(req,resp);
     }
 
 

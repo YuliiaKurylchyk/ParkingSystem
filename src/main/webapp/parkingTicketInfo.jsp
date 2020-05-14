@@ -19,7 +19,8 @@
 
 <h1>Parking ticket Information: </h1>
 
-<h5 color="red"><c:out value="${requestScope.alreadyLeft}"></c:out></h5>
+<h5 style="color:red;"><c:out value="${requestScope.alreadyLeft}"></c:out></h5>
+<h5 style="color:red;"><c:out value="${requestScope.deleted}"></c:out></h5>
 
 <div class="container">
     <table>
@@ -80,7 +81,7 @@
         <a href="deletingServlet?action=remove"> <button type="button" value="" name="Remove">Remove</button> </a>
     </div>
 </c:if>
-<c:if test="${currentTicket.status=='left'}">
+<c:if test="${currentTicket.status=='left' and requestScope.deleted==null}">
     <div style="float:right;">
         <a href="deletingServlet?action=delete"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
     </div>

@@ -136,4 +136,13 @@ public final class ParkingTicketManager {
         }
         return null;
     }
+
+    public static void deleteCompletely(ParkingTicket currentTicket) {
+        Integer countOfCustomers = parkingTicketDAO.countCustomer(currentTicket.getCustomer());
+        parkingTicketDAO.delete(currentTicket);
+        vehicleDao.delete(currentTicket.getVehicle());
+        if(countOfCustomers==1) {
+            customerDao.delete(currentTicket.getCustomer());
+        }
+    }
 }
