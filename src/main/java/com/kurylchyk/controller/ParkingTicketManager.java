@@ -1,16 +1,12 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingTicket;
-import com.kurylchyk.model.Payment;
-import com.kurylchyk.model.TimeCheck;
+import com.kurylchyk.model.*;
 import com.kurylchyk.model.dao.CustomerDao;
 import com.kurylchyk.model.dao.ParkingSlotDao;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDao;
-import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
-import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
-import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
+import com.kurylchyk.model.exceptions.*;
+import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.Vehicle;
 import com.sun.deploy.net.HttpResponse;
 
@@ -34,7 +30,26 @@ public final class ParkingTicketManager {
         parkingTicket.setLeftTime(leftTime);
         parkingTicket.setStatus("left");
         parkingTicket.setCost(countTheCost(parkingTicket));
-        parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
+        parkingTicketDAO.update(parkingTicket, parkingTicket.getParkingTicketID());
+        int countOfSlots = parkingSlotDao.selectNumberOfSlot(parkingTicket.getParkingSlot().getSizeOfSlot());
+        parkingSlotDao.update(parkingTicket.getParkingSlot().getSizeOfSlot(), countOfSlots + 1);
+    }
+
+
+    public static  ParkingSlot getParkingSlot(HttpServletRequest req, HttpServletResponse resp, Vehicle vehicle) throws ServletException, IOException {
+        ParkingSlot parkingSlot = null;
+        try {
+            parkingSlot = ParkingLot.getParkingSlot(vehicle);
+        } catch (NoAvailableParkingSlotException exception){
+            req.setAttribute("NoSlots", exception);
+            req.getRequestDispatcher("NoPlateFoundError.jsp").forward(req, resp);
+        }
+
+        return parkingSlot;
+    }
+
+    public static void setParkingSlotBack(ParkingSlot parkingSlot){
+        ParkingLot.setParkingSlotBack(parkingSlot);
     }
 
     private static BigDecimal countTheCost(ParkingTicket parkingTicket) {
@@ -53,7 +68,7 @@ public final class ParkingTicketManager {
         ParkingTicket parkingTicket = null;
 
         try {
-          parkingTicket = parkingTicketDAO.select(parkingTicketID);
+            parkingTicket = parkingTicketDAO.select(parkingTicketID);
 
         } catch (NoSuchParkingTicketException exception) {
             req.setAttribute("notFound", exception);
@@ -93,23 +108,23 @@ public final class ParkingTicketManager {
 
     }
 
-    public static void checkAction(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
+    public static void checkAction(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         RequestDispatcher requestDispatcher;
-        if(session.getAttribute("currentTicket")==null) {
+        if (session.getAttribute("currentTicket") == null) {
             ParkingTicket currentTicket = null;
-            if(session.getAttribute("vehicle")!=null){
-                currentTicket =ParkingTicketManager.getTicketByVehicle((Vehicle)session.getAttribute("vehicle"));
+            if (session.getAttribute("vehicle") != null) {
+                currentTicket = ParkingTicketManager.getTicketByVehicle((Vehicle) session.getAttribute("vehicle"));
                 session.removeAttribute("vehicle");
             }
-            if(session.getAttribute("customer")!=null) {
-                currentTicket = ParkingTicketManager.getTicketByCustomer((Customer)session.getAttribute("customer"));
+            if (session.getAttribute("customer") != null) {
+                currentTicket = ParkingTicketManager.getTicketByCustomer((Customer) session.getAttribute("customer"));
                 session.removeAttribute("customer");
             }
-            session.setAttribute("currentTicket",currentTicket);
+            session.setAttribute("currentTicket", currentTicket);
         }
         requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
-        requestDispatcher.forward(req,resp);
+        requestDispatcher.forward(req, resp);
 
     }
 

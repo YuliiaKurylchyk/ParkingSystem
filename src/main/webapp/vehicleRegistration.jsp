@@ -17,11 +17,11 @@
 <body>
 <h1>Parking ticket creation</h1>
 <c:if test="${vehicle != null}">
-<form action="vehicleUpdating" method="post">
+<form action="updatingServlet?option=updateVehicle" method="post">
     </c:if>
 
     <c:if test="${vehicle==null}">
-    <form action="vehicleCreation" method="post">
+    <form action="creationServlet?action=vehicle" method="post">
         </c:if>
         <h3>Vehicle information:</h3>
 
@@ -47,9 +47,27 @@
             <label for="bus">Bus</label>
         </div>
 
+        <c:if test="${requestScope.badType!=null}">
+            <p style="color:red">
+                <c:out value="${requestScope.badType}"/>
+            </p>
+        </c:if>
         <p><input placeholder="Make" name="make" value="${vehicle.make}"></p>
         <p><input placeholder="Model" name="model" value="${vehicle.model}"></p>
+
+        <c:if test="${requestScope.badData!=null}">
+            <h3 style="color:red">
+                <c:out value="${requestScope.badData}"/>
+            </h3>
+        </c:if>
+
         <p><input placeholder="Licence plate" name="licence_plate" value="${vehicle.licencePlate}"></p>
+
+        <c:if test="${requestScope.badLicencePlate!=null}">
+            <h3 style="color:red">
+                <c:out value="${requestScope.badLicencePlate}"/>
+            </h3>
+        </c:if>
 
 
         <div style="overflow:auto;">
@@ -65,7 +83,5 @@
         </div>
 
     </form>
-
-
 </body>
 </html>

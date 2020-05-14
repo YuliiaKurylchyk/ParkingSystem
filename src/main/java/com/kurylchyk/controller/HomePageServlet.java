@@ -54,7 +54,7 @@ public class HomePageServlet extends HttpServlet {
 
     private void showNewForm(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("vehicleRegistration.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("creationServlet?action=");
         dispatcher.forward(req, resp);
     }
 
@@ -102,7 +102,6 @@ public class HomePageServlet extends HttpServlet {
         if(req.getSession().getAttribute("currentTicket")!=null){
             req.getSession().removeAttribute("currentTicket");
         }
-
         if(req.getSession().getAttribute("vehicle")!=null){
             req.getSession().removeAttribute("vehicle");
         }
@@ -110,9 +109,9 @@ public class HomePageServlet extends HttpServlet {
         if(req.getSession().getAttribute("customer")!=null){
             req.getSession().removeAttribute("customer");
         }
+        req.getSession().setAttribute("action","update");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
         requestDispatcher.forward(req, resp);
-
     }
 
     private void removeEntity(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {

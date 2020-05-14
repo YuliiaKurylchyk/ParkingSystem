@@ -34,47 +34,40 @@ public class SearchServlet extends HttpServlet {
         vehicleDao = new VehicleDao();
     }
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-
-        System.out.println("IN DELETION!");
 
         switch (req.getParameter("option")) {
             case "parkingTicket":
-                changeParkingTicket(req, resp);
+                getParkingTicket(req, resp);
                 break;
             case "customer":
-                changeCustomer(req, resp);
+                getCustomer(req, resp);
                 break;
             case "vehicle":
-                changeVehicle(req, resp);
+                getVehicle(req, resp);
                 break;
         }
     }
 
     // зробити обробку виключень тут!
-    private void changeCustomer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void getCustomer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Customer customer = null;
-        if (req.getParameter("phone_number") != null) {
-            customer = ParkingTicketManager.searchCustomerByPhoneNumber(req, resp);
-        } else if (req.getParameter("customerID") != null) {
-            customer = ParkingTicketManager.searchCustomerByID(req, resp);
-        }
+        customer = ParkingTicketManager.searchCustomerByPhoneNumber(req, resp);
         req.getSession().setAttribute("customer", customer);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("customerRegistration.jsp");
-        checkAction(req,resp,requestDispatcher);
-
+        checkAction(req, resp, requestDispatcher);
 
     }
 
-    private void changeVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void getVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         Vehicle vehicle = ParkingTicketManager.searchVehicle(req, resp);
         HttpSession session = req.getSession();
@@ -84,8 +77,7 @@ public class SearchServlet extends HttpServlet {
 
     }
 
-
-    private void changeParkingTicket(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void getParkingTicket(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ParkingTicket parkingTicket = ParkingTicketManager.searchParkingTicket(req, resp);
         HttpSession session = req.getSession();
         session.setAttribute("currentTicket", parkingTicket);
@@ -95,11 +87,13 @@ public class SearchServlet extends HttpServlet {
 
     public void checkAction(HttpServletRequest req, HttpServletResponse resp, RequestDispatcher requestDispatcher) throws ServletException, IOException {
 
-        if (req.getSession().getAttribute("toRemove") != null) {
-
-            ParkingTicketManager.checkAction(req,resp);
-        }else {
-            requestDispatcher.forward(req, resp);
+        switch (String.valueOf(req.getSession().getAttribute("action"))) {
+            case "update":
+                requestDispatcher.forward(req, resp);
+                break;
+            case "delete":
+                ParkingTicketManager.checkAction(req, resp);
+                break;
         }
     }
 

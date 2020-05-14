@@ -51,7 +51,6 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
 
     }
 
-
     @Override
     public List<ParkingSlot> selectAll() {
         connection = getConnection();
@@ -147,7 +146,6 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
         }catch (SQLException ex){
             ex.printStackTrace();
         }finally {
-
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -161,7 +159,6 @@ public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSl
         }
 
     }
-
 
     public Integer selectPrice(SizeOfSlot sizeOfSlot) {
         connection = getConnection();

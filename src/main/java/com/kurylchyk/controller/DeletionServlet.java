@@ -2,6 +2,7 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.Customer;
 import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.dao.ParkingSlotDao;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.parkingSlots.LargeSlot;
@@ -22,6 +23,7 @@ public class DeletionServlet extends HttpServlet {
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
 
 
+
     @Override
     public void init() throws ServletException {
 
@@ -34,7 +36,15 @@ public class DeletionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doRemove(req,resp);
+
+        switch (req.getParameter("action")){
+            case "remove":
+                doRemove(req,resp);
+                break;
+            case "delete":
+                doDeleteCompletely(req,resp);
+                break;
+        }
     }
 
     public void doRemove(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,10 +59,17 @@ public class DeletionServlet extends HttpServlet {
                 exception.printStackTrace();
             }
         }
-        ParkingTicketManager.removeParkingTicket(parkingTicket);
+
+            ParkingTicketManager.removeParkingTicket(parkingTicket);
+
         session.removeAttribute("toRemove");
         req.getRequestDispatcher("parkingTicketInfo.jsp").forward(req,resp);
 
     }
 
+    public void doDeleteCompletely(HttpServletRequest req, HttpServletResponse resp){
+
+
+
+    }
 }

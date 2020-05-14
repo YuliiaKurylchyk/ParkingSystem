@@ -28,7 +28,7 @@
         <tr>
             <td><jsp:text>Vehicle</jsp:text></td>
             <td> <c:out value="${currentTicket.vehicle}"/></td>
-            <td><a href="editTicket?vehicleID=<c:out value='${currentTicket.vehicle.licencePlate}'/>">Edit</a> &nbsp;&nbsp;&nbsp;</td>
+            <td><a href="updatingServlet?option=vehicle&vehicleID=<c:out value='${currentTicket.vehicle.licencePlate}'/>">Edit</a> &nbsp;&nbsp;&nbsp;</td>
         </tr>
 
         <tr>
@@ -38,7 +38,7 @@
         </tr>
         <tr><td><jsp:text>Customer</jsp:text></td>
             <td> <c:out value="${currentTicket.customer}"/></td>
-            <td><a href="editTicket?customerID=<c:out value='${currentTicket.customer.customerID}' />">Edit</a> </td>&nbsp;&nbsp;&nbsp;&nbsp;
+            <td><a href="updatingServlet?option=customer&customerID=<c:out value='${currentTicket.customer.customerID}' />">Edit</a> </td>&nbsp;&nbsp;&nbsp;&nbsp;
         </tr>
         <tr>
             <td><jsp:text>Arrival time: </jsp:text></td>
@@ -71,12 +71,16 @@
     <div style="float:right;">
         <a href="/"> <button type="button" value="" name="BackToMenu">Back to menu</button> </a>
     </div>
-
-    <c:if test="${toRemove==true}">
+<c:if test="${currentTicket.status=='present'}">
     <div style="float:right;">
-        <a href="delete"> <button type="button" value="" name="Remove">Remove</button> </a>
+        <a href="delete?action=remove"> <button type="button" value="" name="Remove">Remove</button> </a>
     </div>
-    </c:if>
+</c:if>
+<c:if test="${currentTicket.status=='left'}">
+    <div style="float:right;">
+        <a href="delete?action=delete"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
+    </div>
+</c:if>
 </div>
 </body>
 </html>

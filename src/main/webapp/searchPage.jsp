@@ -22,7 +22,6 @@
 <div id="selectContainer">
     <h3>Search by</h3>
     <form action="searchPage.jsp" method="POST">
-
         <select name="option" onchange="this.form.submit();">
             <option value="" disabled selected>Select your option</option>
             <option value="parkingTicket">Parking ticket info</option>
@@ -30,7 +29,6 @@
             <option value="vehicle">Vehicle info</option>
         </select>
     </form>
-
 
     <form action="search" method="POST" id="searchForm">
 
@@ -57,7 +55,7 @@
 <div id="container">
 
     <c:if test="${notFound!=null}">
-        <h3 style="color:red">
+        <h3 style="color:#ff0000">
             <c:out value="${notFound}"/>
         </h3>
     </c:if>

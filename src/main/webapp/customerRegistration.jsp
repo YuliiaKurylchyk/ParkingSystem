@@ -18,17 +18,29 @@
 <body>
 <h1>Parking ticket creation</h1>
 <c:if test="${customer != null}">
-<form action="customerUpdating" method="post">
+<form action="updatingServlet?option=updateCustomer" method="post">
 </c:if>
 <c:if test="${customer == null}">
-<form action="customerCreation" method="post">
+<form action="creationServlet?action=customer" method="post">
     </c:if>
 
     <h3>Customer information: </h3>
 
     <p><input placeholder="Name" name="name" value="${customer.name}"></p>
     <p><input placeholder="Surname" name="surname" value="${customer.surname}"></p>
+
+        <c:if test="${requestScope.badData!=null}">
+            <h3 style="color:red">
+                <c:out value="${requestScope.badData}"/>
+            </h3>
+        </c:if>
     <p><input placeholder="Phone number" name="phone_number" value="${customer.phoneNumber}"></p>
+
+        <c:if test="${requestScope.badPhoneNumber!=null}">
+            <h3 style="color:red">
+                <c:out value="${requestScope.badPhoneNumber}"/>
+            </h3>
+        </c:if>
     </div>
 
     <div style="overflow:auto;">
