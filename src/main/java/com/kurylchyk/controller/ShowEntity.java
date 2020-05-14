@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/showEntity")
+//@WebServlet("/showEntity")
 public class ShowEntity extends HttpServlet {
 
     private ParkingTicketDAO parkingTicketDAO ;

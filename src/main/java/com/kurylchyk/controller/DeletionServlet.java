@@ -18,16 +18,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-@WebServlet("/delete")
+@WebServlet("/deletingServlet")
 public class DeletionServlet extends HttpServlet {
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
 
-
-
-    @Override
-    public void init() throws ServletException {
-
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,7 +31,9 @@ public class DeletionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        switch (req.getParameter("action")){
+        String action = req.getParameter("action");
+        retrieveParkingTicket(req,resp);
+        switch (action){
             case "remove":
                 doRemove(req,resp);
                 break;
@@ -51,25 +47,40 @@ public class DeletionServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         ParkingTicket parkingTicket = (ParkingTicket) session.getAttribute("currentTicket");
-        if(parkingTicket==null){
-            try {
-                parkingTicket = parkingTicketDAO.select(Integer.parseInt(req.getParameter("id")));
-                session.setAttribute("currentTicket",parkingTicket);
-            }catch (NoSuchParkingTicketException exception){
-                exception.printStackTrace();
-            }
-        }
 
+        if(parkingTicket.getStatus().equals("left")){
+            req.setAttribute("alreadyLeft","The parking ticket status is already left");
+        }else {
             ParkingTicketManager.removeParkingTicket(parkingTicket);
-
-        session.removeAttribute("toRemove");
-        req.getRequestDispatcher("parkingTicketInfo.jsp").forward(req,resp);
+        }
+        session.setAttribute("currentTicket", parkingTicket);
+        req.getRequestDispatcher("parkingTicketInfo.jsp").forward(req, resp);
 
     }
 
     public void doDeleteCompletely(HttpServletRequest req, HttpServletResponse resp){
 
 
+    }
 
+
+    private void retrieveParkingTicket(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (session.getAttribute("currentTicket") == null) {
+            ParkingTicket currentTicket = null;
+            if (session.getAttribute("vehicle") != null) {
+                currentTicket = ParkingTicketManager.getTicketByVehicle((Vehicle) session.getAttribute("vehicle"));
+                session.removeAttribute("vehicle");
+            }
+            if (session.getAttribute("customer") != null) {
+                currentTicket = ParkingTicketManager.getTicketByCustomer((Customer) session.getAttribute("customer"));
+                session.removeAttribute("customer");
+            }
+            if(req.getParameter("parkingTicketID")!=null){
+                currentTicket = ParkingTicketManager.getTicketByID(Integer.parseInt(req.getParameter("parkingTicketID")));
+            }
+            session.setAttribute("currentTicket", currentTicket);
+        }
     }
 }

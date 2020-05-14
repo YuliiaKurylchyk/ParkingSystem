@@ -128,7 +128,7 @@ public class HomePageServlet extends HttpServlet {
             req.getSession().removeAttribute("customer");
         }
 
-        req.getSession().setAttribute("toRemove",true);
+        req.getSession().setAttribute("action","deleting");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
         requestDispatcher.forward(req,resp);
 

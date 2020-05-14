@@ -30,11 +30,9 @@ public final class ParkingTicketManager {
         parkingTicket.setLeftTime(leftTime);
         parkingTicket.setStatus("left");
         parkingTicket.setCost(countTheCost(parkingTicket));
-        parkingTicketDAO.update(parkingTicket, parkingTicket.getParkingTicketID());
-        int countOfSlots = parkingSlotDao.selectNumberOfSlot(parkingTicket.getParkingSlot().getSizeOfSlot());
-        parkingSlotDao.update(parkingTicket.getParkingSlot().getSizeOfSlot(), countOfSlots + 1);
+        ParkingLot.setParkingSlotBack(parkingTicket.getParkingSlot());
+        parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
     }
-
 
     public static  ParkingSlot getParkingSlot(HttpServletRequest req, HttpServletResponse resp, Vehicle vehicle) throws ServletException, IOException {
         ParkingSlot parkingSlot = null;
@@ -108,25 +106,6 @@ public final class ParkingTicketManager {
 
     }
 
-    public static void checkAction(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        RequestDispatcher requestDispatcher;
-        if (session.getAttribute("currentTicket") == null) {
-            ParkingTicket currentTicket = null;
-            if (session.getAttribute("vehicle") != null) {
-                currentTicket = ParkingTicketManager.getTicketByVehicle((Vehicle) session.getAttribute("vehicle"));
-                session.removeAttribute("vehicle");
-            }
-            if (session.getAttribute("customer") != null) {
-                currentTicket = ParkingTicketManager.getTicketByCustomer((Customer) session.getAttribute("customer"));
-                session.removeAttribute("customer");
-            }
-            session.setAttribute("currentTicket", currentTicket);
-        }
-        requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
-        requestDispatcher.forward(req, resp);
-
-    }
 
     public static Vehicle searchVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String licencePlate = req.getParameter("licence_plate");
@@ -149,4 +128,12 @@ public final class ParkingTicketManager {
         return parkingTicketDAO.selectByCustomerID(customer.getCustomerID());
     }
 
+    public static ParkingTicket getTicketByID(Integer id) {
+        try {
+            return parkingTicketDAO.select(id);
+        }catch (NoSuchParkingTicketException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

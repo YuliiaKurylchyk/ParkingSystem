@@ -31,23 +31,23 @@
     </form>
 
     <form action="search" method="POST" id="searchForm">
-
         <input type="hidden" name="option" value="${param.option}">
         <c:choose>
             <c:when test="${param.option == 'parkingTicket'}">
                 <p>Enter parking ticket ID</p>
                 <input type="text" placeholder="ID" name="id">
-                <input type="submit" value="Search">
+                <input type="submit" value="${action=='update'?'Search':'Remove'}">
             </c:when>
             <c:when test="${param.option=='customer'}">
                 <p>Enter customer ID or phone number</p>
                 <input type="text" placeholder="phone number" name="phone_number">
-                <input type="submit" value="Search">
+                <input type="submit" value="${action=='update'?'Search':'Remove'}">
             </c:when>
             <c:when test="${param.option=='vehicle'}">
                 <p>Enter licence plate of vehicle</p>
                 <input type="text" placeholder="licence plate" name="licence_plate">
-                <input type="submit" value="Search">
+                <input type="submit" value="${action=='update'?'Search':'Remove'}">
+
             </c:when>
         </c:choose>
     </form>

@@ -41,11 +41,9 @@ public class UpdatingServlet extends HttpServlet {
         String option = req.getParameter("option");
 
         switch (option) {
-
             case "vehicle":
                 changeVehicle(req, resp);
                 break;
-
             case "customer":
                 changeCustomer(req, resp);
                 break;
@@ -151,7 +149,8 @@ public class UpdatingServlet extends HttpServlet {
         requestDispatcher.forward(req, resp);
     }
 
-    private void updateCustomer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void updateCustomer(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         HttpSession session = req.getSession();
         Customer customer = getUpdatedCustomer(req, resp);

@@ -93,10 +93,10 @@
                     <td><a href="/edit?id=<c:out value='${currentTicket.parkingTicketID}'/>">Edit</a> &nbsp;&nbsp;&nbsp;
 
                         <c:if test="${currentTicket.status=='present'}">
-                        <a href="delete?action=remove&id=<c:out value='${currentTicket.parkingTicketID}' />">Remove</a></td>
+                        <a href="deletingServlet?action=remove&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Remove</a></td>
                         </c:if>
                 <c:if test="${currentTicket.status=='left'}">
-                        <a href="delete?action=delete&id=<c:out value='${currentTicket.parkingTicketID}' />">Delete completely</a></td>
+                        <a href="deletingServlet?action=delete&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Delete completely</a></td>
                 </c:if>
 
                 </tr>

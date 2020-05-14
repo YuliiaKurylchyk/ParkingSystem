@@ -19,6 +19,8 @@
 
 <h1>Parking ticket Information: </h1>
 
+<h5 color="red"><c:out value="${requestScope.alreadyLeft}"></c:out></h5>
+
 <div class="container">
     <table>
         <tr><td><jsp:text>Parking Ticket ID</jsp:text></td>
@@ -64,6 +66,8 @@
     </table>
 </div>
 
+
+
 <div id="containerButton">
     <div style="float: left;">
          <button type="button" value="" name="GetReceipt">Get receipt</button>
@@ -73,12 +77,12 @@
     </div>
 <c:if test="${currentTicket.status=='present'}">
     <div style="float:right;">
-        <a href="delete?action=remove"> <button type="button" value="" name="Remove">Remove</button> </a>
+        <a href="deletingServlet?action=remove"> <button type="button" value="" name="Remove">Remove</button> </a>
     </div>
 </c:if>
 <c:if test="${currentTicket.status=='left'}">
     <div style="float:right;">
-        <a href="delete?action=delete"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
+        <a href="deletingServlet?action=delete"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
     </div>
 </c:if>
 </div>

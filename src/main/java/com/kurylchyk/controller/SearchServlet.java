@@ -43,7 +43,6 @@ public class SearchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-
         switch (req.getParameter("option")) {
             case "parkingTicket":
                 getParkingTicket(req, resp);
@@ -80,6 +79,7 @@ public class SearchServlet extends HttpServlet {
     private void getParkingTicket(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ParkingTicket parkingTicket = ParkingTicketManager.searchParkingTicket(req, resp);
         HttpSession session = req.getSession();
+        System.out.println(parkingTicket);
         session.setAttribute("currentTicket", parkingTicket);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
         checkAction(req, resp, requestDispatcher);
@@ -87,12 +87,14 @@ public class SearchServlet extends HttpServlet {
 
     public void checkAction(HttpServletRequest req, HttpServletResponse resp, RequestDispatcher requestDispatcher) throws ServletException, IOException {
 
-        switch (String.valueOf(req.getSession().getAttribute("action"))) {
+        String action = String.valueOf(req.getSession().getAttribute("action"));
+        req.getSession().removeAttribute("action");
+        switch (action) {
             case "update":
                 requestDispatcher.forward(req, resp);
                 break;
-            case "delete":
-                ParkingTicketManager.checkAction(req, resp);
+            case "deleting":
+                req.getRequestDispatcher("deletingServlet?action=remove").forward(req,resp);
                 break;
         }
     }
