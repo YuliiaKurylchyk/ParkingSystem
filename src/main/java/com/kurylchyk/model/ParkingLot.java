@@ -1,11 +1,9 @@
 package com.kurylchyk.model;
 
-import com.kurylchyk.model.dao.ParkingSlotDao;
+import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.parkingSlots.*;
 import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
-import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
 import com.kurylchyk.model.vehicles.*;
-import com.sun.glass.ui.Size;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +11,11 @@ import java.util.Map;
 
 public class ParkingLot {
 
-    private static ParkingSlotDao parkingSlotDao;
+    private static ParkingSlotDAO parkingSlotDao;
     private static Map<SizeOfSlot, Integer> numberOfSlot;
 
     static {
-        parkingSlotDao = new ParkingSlotDao();
+        parkingSlotDao = new ParkingSlotDAO();
         numberOfSlot = new HashMap<>();
         getNumberOfSlots();
     }

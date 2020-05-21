@@ -1,19 +1,14 @@
 package com.kurylchyk.controller;
 
-
 import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingLot;
 import com.kurylchyk.model.ParkingTicket;
-import com.kurylchyk.model.dao.CustomerDao;
+import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.VehicleDao;
-import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
+import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
-import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
 import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.*;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,12 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/updatingServlet")
 public class UpdatingServlet extends HttpServlet {
 
-    private CustomerDao customerDao = new CustomerDao();
-    private VehicleDao vehicleDao = new VehicleDao();
+    private CustomerDAO customerDao = new CustomerDAO();
+    private VehicleDAO vehicleDao = new VehicleDAO();
+    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
     private RequestDispatcher requestDispatcher;
 
     @Override
@@ -58,7 +55,7 @@ public class UpdatingServlet extends HttpServlet {
     }
 
     private void retrieveVehicleFromDB(HttpServletRequest req, HttpServletResponse resp) throws NoSuchVehicleFoundException {
-        vehicleDao = new VehicleDao();
+        vehicleDao = new VehicleDAO();
         Vehicle vehicle = vehicleDao.select(req.getParameter("vehicleID"));
         HttpSession session = req.getSession();
         session.setAttribute("vehicle", vehicle);
@@ -130,7 +127,7 @@ public class UpdatingServlet extends HttpServlet {
 
     private void retrieveCustomerFromDB(HttpServletRequest req, HttpServletResponse resp) {
 
-        customerDao = new CustomerDao();
+        customerDao = new CustomerDAO();
         try {
             Customer customer = customerDao.select(Integer.parseInt(req.getParameter("customerID")));
             System.out.println(customer);
@@ -159,13 +156,18 @@ public class UpdatingServlet extends HttpServlet {
 
         ParkingTicket currentTicket = (ParkingTicket) session.getAttribute("currentTicket");
         if (currentTicket == null) {
-            currentTicket = ParkingTicketManager.getTicketByCustomer(customer);
+            List<ParkingTicket> allFoundTickets = parkingTicketDAO.selectByCustomerID(customer.getCustomerID());
+            req.setAttribute("appropriateTickets", allFoundTickets);
+            req.setAttribute("onlyCurrentCustomer","");
+            requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
+
+        }else{
+            currentTicket.setCustomer(customer);
+            session.setAttribute("currentTicket", currentTicket);
+            requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
         }
 
-        currentTicket.setCustomer(customer);
-        session.setAttribute("currentTicket", currentTicket);
         session.removeAttribute("customer");
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
         requestDispatcher.forward(req, resp);
     }
 

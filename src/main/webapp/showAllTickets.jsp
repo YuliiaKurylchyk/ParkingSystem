@@ -22,84 +22,96 @@
 <body>
 <h1>Parking Tickets</h1>
 
-<h3>Choose the date and parking status</h3>
+<c:if test="${requestScope.onlyCurrentCustomer==null}">
+    <h3>Choose the date and parking status</h3>
     <div id="selectContainer">
-    <form action="showTicket" method="POST">
-        <select name="dateOfParkingTicket" >
-            <option value="today">Today</option>
-            <option value="yesterday">From yesterday</option>
-            <option value="oneWeekAgo">For the last week</option>
-            <option value="MonthAgo">For the last month</option>
-            <option value="allTickets">All</option>
-        </select>
+        <form action="showTicket" method="GET">
+            <select name="dateOfParkingTicket">
+                <option value="today">Today</option>
+                <option value="yesterday">From yesterday</option>
+                <option value="oneWeekAgo">For the last week</option>
+                <option value="MonthAgo">For the last month</option>
+                <option value="allTickets">All</option>
+            </select>
 
-        <select name="statusOfParkingTicket" >
-            <option value="all">all</option>
-            <option value="present">only present</option>
-            <option value="left">only left</option>
-        </select>
+            <select name="statusOfParkingTicket">
+                <option value="all">all</option>
+                <option value="present">only present</option>
+                <option value="left">only left</option>
+            </select>
 
-        <input id="showButton" type="submit" value="Show">
-    </form>
+            <input id="showButton" type="submit" value="Show">
+        </form>
     </div>
-    <div id="container">
-        <table>
-            <thead>
+</c:if>
+
+<div id="container">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Vehicle</th>
+            <th>Customer</th>
+            <th>Parking Slot</th>
+            <th>Status</th>
+            <th>Arrival time</th>
+            <th>Left time</th>
+            <th>Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <c:forEach var="currentTicket" items="${appropriateTickets}">
             <tr>
-                <th>ID</th>
-                <th>Vehicle</th>
-                <th>Customer</th>
-                <th>Parking Slot</th>
-                <th>Status</th>
-                <th>Arrival time</th>
-                <th>Left time</th>
-                <th>Cost</th>
-            </tr>
-            </thead>
-
-            <tbody>
-
-            <c:forEach var="currentTicket" items="${appropriateTickets}">
-                <tr>
-                    <td>
-                        <c:out value="${currentTicket.parkingTicketID}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.vehicle}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.customer}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.parkingSlot}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.status}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.arrivalTime}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.leftTime}"/>
-                    </td>
-                    <td>
-                        <c:out value="${currentTicket.cost}"/>
-                    </td>
-
-                    <td><a href="/edit?id=<c:out value='${currentTicket.parkingTicketID}'/>">Edit</a> &nbsp;&nbsp;&nbsp;
-
-                        <c:if test="${currentTicket.status=='present'}">
-                        <a href="deletingServlet?action=remove&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Remove</a></td>
-                        </c:if>
+                <td>
+                    <c:out value="${currentTicket.parkingTicketID}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.vehicle}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.customer}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.parkingSlot}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.status}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.arrivalTime}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.leftTime}"/>
+                </td>
+                <td>
+                    <c:out value="${currentTicket.cost}"/>
+                </td>
+                <td>
+                <c:if test="${action!='deleting'}">
+                        <a href="/edit?id=<c:out value='${currentTicket.parkingTicketID}'/>">Edit</a> &nbsp;&nbsp;&nbsp;
+                    </c:if>
+                    <c:if test="${currentTicket.status=='present'}">
+                        <a href="deletingServlet?action=remove&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Remove</a>
+                        </td>
+                     </c:if>
                 <c:if test="${currentTicket.status=='left'}">
-                        <a href="deletingServlet?action=delete&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Delete completely</a></td>
+                    <a href="deletingServlet?action=delete&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Delete
+                        completely</a></td>
                 </c:if>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+<div id="containerButton">
+    <div style="float:left;">
+        <a href="/">
+            <button type="button" value="" name="BackToMenu">Back to menu</button>
+        </a>
     </div>
+</div>
 </div>
 </body>
 </html>

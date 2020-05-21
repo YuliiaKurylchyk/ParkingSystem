@@ -1,14 +1,11 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingLot;
 import com.kurylchyk.model.ParkingTicket;
-import com.kurylchyk.model.dao.CustomerDao;
+import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.VehicleDao;
-import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
+import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
-import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.*;
 
@@ -23,8 +20,8 @@ import java.io.IOException;
 
 @WebServlet("/creationServlet")
 public class CreationServlet extends HttpServlet {
-    private VehicleDao vehicleDao = new VehicleDao();
-    private CustomerDao customerDao = new CustomerDao();
+    private VehicleDAO vehicleDao = new VehicleDAO();
+    private CustomerDAO customerDao = new CustomerDAO();
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
     private Vehicle createdVehicle;
     private Customer createdCustomer;
@@ -35,7 +32,6 @@ public class CreationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -116,7 +112,7 @@ public class CreationServlet extends HttpServlet {
 
     private void connectCustomerToVehicle(Vehicle vehicle, Customer customer) {
 
-        VehicleDao vehicleDao = new VehicleDao();
+        VehicleDAO vehicleDao = new VehicleDAO();
         vehicleDao.updateCustomerID(vehicle, customer);
 
     }

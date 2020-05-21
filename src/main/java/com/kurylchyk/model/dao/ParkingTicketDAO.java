@@ -7,29 +7,25 @@ import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.parkingSlots.SmallSlot;
-import com.kurylchyk.model.vehicles.Motorbike;
 import com.kurylchyk.model.vehicles.Vehicle;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingTicket, Integer>, AddDeleteDAO<ParkingTicket, Integer> {
 
-    private CustomerDao customerDao;
-    private VehicleDao vehicleDao;
-    private ParkingSlotDao parkingSlotDao;
+    private CustomerDAO customerDao;
+    private VehicleDAO vehicleDao;
+    private ParkingSlotDAO parkingSlotDao;
 
     {
-        customerDao = new CustomerDao();
-        vehicleDao = new VehicleDao();
-        parkingSlotDao = new ParkingSlotDao();
+        customerDao = new CustomerDAO();
+        vehicleDao = new VehicleDAO();
+        parkingSlotDao = new ParkingSlotDAO();
 
     }
 
@@ -74,7 +70,6 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ex.printStackTrace();
         }
     }
-
 
     @Override
     public ParkingTicket select(Integer id) throws NoSuchParkingTicketException {
@@ -136,36 +131,36 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         return parkingTicket;
     }
 
-    public ParkingTicket selectByCustomerID(Integer customerID) {
+    //add exception NoSuchParkingTicketException
+    public List <ParkingTicket> selectByCustomerID(Integer customerID) {
 
-
-        ParkingTicket parkingTicket = null;
+        List<ParkingTicket> allTickets = new ArrayList<>();
         String query = "SELECT * FROM parking_ticket WHERE customer_id = ?";
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setInt(1, customerID);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                ParkingTicket currentTicket;
                 Vehicle currentVehicle = vehicleDao.select(resultSet.getString("vehicle_id"));
                 Customer currentCustomer = customerDao.select(resultSet.getInt("customer_id"));
                 ParkingSlot currentParkingSlot = parkingSlotDao.select(resultSet.getInt("parking_slot_id"));
-                parkingTicket = new ParkingTicket(currentVehicle, currentParkingSlot, currentCustomer);
-                parkingTicket.setStatus(resultSet.getString("status"));
+                currentTicket = new ParkingTicket(currentVehicle, currentParkingSlot, currentCustomer);
+                currentTicket.setStatus(resultSet.getString("status"));
                 LocalDateTime arrivalTime = resultSet.getObject("from_time", LocalDateTime.class);
-                parkingTicket.setArrivalTime(arrivalTime);
+                currentTicket.setArrivalTime(arrivalTime);
                 LocalDateTime leftTime = resultSet.getObject("to_time", LocalDateTime.class);
-                parkingTicket.setLeftTime(leftTime);
-                parkingTicket.setCost(resultSet.getBigDecimal("cost"));
-                parkingTicket.setParkingTicketID(resultSet.getInt("parking_ticket_id"));
-            } else {
-                throw new NoSuchParkingTicketException("Parking ticket with customer id " + customerID + "is found");
+                currentTicket.setLeftTime(leftTime);
+                currentTicket.setCost(resultSet.getBigDecimal("cost"));
+                currentTicket.setParkingTicketID(resultSet.getInt("parking_ticket_id"));
+                allTickets.add(currentTicket);
             }
-        } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException | NoSuchParkingTicketException exception) {
+        } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException exception) {
             exception.printStackTrace();
         }
 
-        return parkingTicket;
+        return allTickets;
     }
 
     public Integer countCustomer(Customer customer) {
@@ -394,6 +389,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         }
 
     }
+
 
 }
 

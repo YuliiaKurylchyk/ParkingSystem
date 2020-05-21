@@ -1,29 +1,26 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.*;
-import com.kurylchyk.model.dao.CustomerDao;
-import com.kurylchyk.model.dao.ParkingSlotDao;
+import com.kurylchyk.model.dao.CustomerDAO;
+import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.VehicleDao;
+import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.*;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.Vehicle;
-import  java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public final class ParkingTicketManager {
     private static ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
-    private static ParkingSlotDao parkingSlotDao = new ParkingSlotDao();
-    private static CustomerDao customerDao = new CustomerDao();
-    private static VehicleDao vehicleDao = new VehicleDao();
+    private static ParkingSlotDAO parkingSlotDao = new ParkingSlotDAO();
+    private static CustomerDAO customerDao = new CustomerDAO();
+    private static VehicleDAO vehicleDao = new VehicleDAO();
 
     public static void removeParkingTicket(ParkingTicket parkingTicket) {
         LocalDateTime leftTime = TimeCheck.getTime();
@@ -112,9 +109,9 @@ public final class ParkingTicketManager {
     }
 
     public static ParkingTicket getTicketByCustomer(Customer customer) {
-        return parkingTicketDAO.selectByCustomerID(customer.getCustomerID());
+        //refactor!!!
+        return parkingTicketDAO.selectByCustomerID(customer.getCustomerID()).get(0);
     }
-
 
     public static ParkingTicket getTicketByID(Integer id) {
         try {

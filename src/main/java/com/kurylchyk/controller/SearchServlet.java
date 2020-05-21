@@ -3,15 +3,10 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.Customer;
 import com.kurylchyk.model.ParkingTicket;
-import com.kurylchyk.model.dao.CustomerDao;
+import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.VehicleDao;
-import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
-import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
-import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
+import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.vehicles.Vehicle;
-import com.sun.deploy.net.HttpResponse;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,19 +14,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.io.IOException;
 
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
     private ParkingTicketDAO parkingTicketDAO;
-    private CustomerDao customerDao;
-    private VehicleDao vehicleDao;
+    private CustomerDAO customerDao;
+    private VehicleDAO vehicleDao;
 
     @Override
     public void init() throws ServletException {
         parkingTicketDAO = new ParkingTicketDAO();
-        customerDao = new CustomerDao();
-        vehicleDao = new VehicleDao();
+        customerDao = new CustomerDAO();
+        vehicleDao = new VehicleDAO();
     }
 
     @Override
@@ -61,9 +57,17 @@ public class SearchServlet extends HttpServlet {
         Customer customer = null;
         customer = ParkingTicketManager.searchCustomerByPhoneNumber(req, resp);
         req.getSession().setAttribute("customer", customer);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("customerRegistration.jsp");
-        checkAction(req, resp, requestDispatcher);
-
+        RequestDispatcher requestDispatcher;
+        if(req.getSession().getAttribute("action").equals("update")) {
+            requestDispatcher = req.getRequestDispatcher("customerRegistration.jsp");
+        }else {
+            List<ParkingTicket> allFoundTickets = parkingTicketDAO.selectByCustomerID(customer.getCustomerID());
+            requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
+            req.setAttribute("onlyCurrentCustomer","");
+            req.getSession().setAttribute("appropriateTickets",allFoundTickets);
+        }
+        req.getSession().removeAttribute("action");
+        requestDispatcher.forward(req,resp);
     }
 
     private void getVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -1,5 +1,5 @@
 <%@ page import="com.kurylchyk.model.vehicles.Vehicle" %>
-<%@ page import="com.kurylchyk.model.dao.VehicleDao" %>
+<%@ page import="com.kurylchyk.model.dao.VehicleDAO" %>
 <%@ page import="com.kurylchyk.model.vehicles.TypeOfVehicle" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>

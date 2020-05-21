@@ -2,12 +2,10 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.ParkingLot;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.VehicleDao;
+import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.parkingSlots.SizeOfSlot;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
-import com.kurylchyk.model.vehicles.Vehicle;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +27,7 @@ public class HomePageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
+        clearSession(req.getSession());
         String action = req.getServletPath();
         switch (action) {
             case "/new":
@@ -63,7 +61,7 @@ public class HomePageServlet extends HttpServlet {
 
     private void showHomePage(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        VehicleDao vehicleDao = new VehicleDao();
+        VehicleDAO vehicleDao = new VehicleDAO();
         ParkingTicketDAO parkingTicketDAO  = new ParkingTicketDAO();
         Integer numberOfBikes = vehicleDao.getCountOfType(TypeOfVehicle.MOTORBIKE);
         Integer numberOfCars = vehicleDao.getCountOfType(TypeOfVehicle.CAR);
@@ -111,17 +109,9 @@ public class HomePageServlet extends HttpServlet {
         }
     }
 
-    private void updateEntity(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getSession().getAttribute("currentTicket")!=null){
-            req.getSession().removeAttribute("currentTicket");
-        }
-        if(req.getSession().getAttribute("vehicle")!=null){
-            req.getSession().removeAttribute("vehicle");
-        }
+    private void updateEntity(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        if(req.getSession().getAttribute("customer")!=null){
-            req.getSession().removeAttribute("customer");
-        }
         req.getSession().setAttribute("action","update");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
         requestDispatcher.forward(req, resp);
@@ -129,17 +119,6 @@ public class HomePageServlet extends HttpServlet {
 
     private void removeEntity(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
 
-        if(req.getSession().getAttribute("currentTicket")!=null){
-            req.getSession().removeAttribute("currentTicket");
-        }
-
-        if(req.getSession().getAttribute("vehicle")!=null){
-            req.getSession().removeAttribute("vehicle");
-        }
-
-        if(req.getSession().getAttribute("customer")!=null){
-            req.getSession().removeAttribute("customer");
-        }
 
         req.getSession().setAttribute("action","deleting");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
@@ -147,4 +126,24 @@ public class HomePageServlet extends HttpServlet {
 
 
     }
+
+    private void clearSession(HttpSession session){
+        if(session.getAttribute("currentTicket")!=null){
+            session.removeAttribute("currentTicket");
+        }
+
+        if(session.getAttribute("vehicle")!=null){
+            session.removeAttribute("vehicle");
+        }
+
+        if(session.getAttribute("customer")!=null){
+           session.removeAttribute("customer");
+        }
+        if(session.getAttribute("appropriateTickets")!=null){
+            session.removeAttribute("appropriateTickets");
+        }
+
+
+    }
+
 }

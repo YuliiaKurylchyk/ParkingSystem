@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ParkingSlotDao  extends Connector implements GetUpdateDAO<ParkingSlot,Integer> {
+public class ParkingSlotDAO extends Connector implements GetUpdateDAO<ParkingSlot,Integer> {
 
     @Override
     public ParkingSlot select(Integer id)  {
