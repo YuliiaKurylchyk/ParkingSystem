@@ -1,0 +1,60 @@
+body {
+    background-color: #f1f1f1;
+}
+
+h1, h3 {
+    text-align: center;
+}
+#container {
+    margin:auto ;
+    width: 80%;
+}
+
+#selectContainer {
+    margin-left: 25%;
+    width: 60%;
+    padding:3%;
+}
+
+#searchContainer {
+    width: 80%;
+    margin-left: 10%;
+}
+
+
+input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+}
+
+
+select {
+    width: 70%;
+    height: 30px;
+}
+
+.searchButton {
+    background-color: #74D3DC;
+    border: 2px solid #74D3DC;
+    width: 30%;
+    color: black;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+    border-radius: 2px;
+
+    margin-left:35%;
+    margin-top: 3%;
+}
+
+.searchButton:hover {
+    background-color: white;
+    transition-duration: 0.4s;
+    border: 2px solid #74D3DC;
+}
+
+

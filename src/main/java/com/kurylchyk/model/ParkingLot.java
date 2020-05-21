@@ -5,7 +5,7 @@ import com.kurylchyk.model.parkingSlots.*;
 import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
 import com.kurylchyk.model.exceptions.NoSuchTypeOfVehicleException;
 import com.kurylchyk.model.vehicles.*;
-import com.sun.javafx.css.Size;
+import com.sun.glass.ui.Size;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +32,9 @@ public class ParkingLot {
         numberOfSlot.put(SizeOfSlot.LARGE, numberOfLargeSlots);
     }
 
+    public static Integer getCountOfSlot(SizeOfSlot sizeOfSlot) {
+        return numberOfSlot.get(sizeOfSlot);
+    }
     public static ParkingSlot getParkingSlot(Vehicle vehicle) throws NoAvailableParkingSlotException {
 
         ParkingSlot parkingSlot = null;

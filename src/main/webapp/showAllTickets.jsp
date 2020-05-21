@@ -15,7 +15,7 @@
     <title>Title</title>
 
     <style type="text/css">
-        <%@include file="WebContent/creation-style.css" %>
+        <%@include file="WebContent/showPage-style.css" %>
     </style>
 
 </head>
@@ -23,7 +23,6 @@
 <h1>Parking Tickets</h1>
 
 <h3>Choose the date and parking status</h3>
-<div class="container">
     <div id="selectContainer">
     <form action="showTicket" method="POST">
         <select name="dateOfParkingTicket" >
@@ -34,17 +33,15 @@
             <option value="allTickets">All</option>
         </select>
 
-
         <select name="statusOfParkingTicket" >
             <option value="all">all</option>
             <option value="present">only present</option>
             <option value="left">only left</option>
         </select>
 
-        <input type="submit" value="Show">
+        <input id="showButton" type="submit" value="Show">
     </form>
     </div>
-
     <div id="container">
         <table>
             <thead>
@@ -63,7 +60,6 @@
             <tbody>
 
             <c:forEach var="currentTicket" items="${appropriateTickets}">
-
                 <tr>
                     <td>
                         <c:out value="${currentTicket.parkingTicketID}"/>

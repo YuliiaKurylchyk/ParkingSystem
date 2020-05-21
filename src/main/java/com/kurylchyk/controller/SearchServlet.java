@@ -89,6 +89,7 @@ public class SearchServlet extends HttpServlet {
 
         String action = String.valueOf(req.getSession().getAttribute("action"));
         req.getSession().removeAttribute("action");
+
         switch (action) {
             case "update":
                 requestDispatcher.forward(req, resp);

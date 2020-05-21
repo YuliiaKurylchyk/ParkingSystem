@@ -1,27 +1,31 @@
 package com.kurylchyk.model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 
 public class Connector {
-    private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_URL = "jdbc:h2:~/parking_system";
-    private static final String USER_NAME = "sa";
-    private static final String PASSWORD = "";
 
+    private static DataSource dataSource;
+    private static final String JNDI_LOOKUP_SERVICE = "java:/comp/env/jdbc/parkingSystemDB";
+    static {
 
-    public final Connection getConnection() {
-
-        Connection connection = null;
         try {
-            Class.forName(DB_DRIVER);
-            connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
-            System.out.println("Connected");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("is not connected");
+            Context context = new InitialContext();
+            Object lookup = context.lookup(JNDI_LOOKUP_SERVICE);
+            if(lookup!=null){
+                dataSource = (DataSource) lookup;
+            }
+            else{
+                throw new RuntimeException("DataSource is not found!");
+            }
+        }catch (NamingException e){
             e.printStackTrace();
         }
-        return connection;
+    }
+    public static DataSource getDataSource(){
+        return dataSource;
     }
 }

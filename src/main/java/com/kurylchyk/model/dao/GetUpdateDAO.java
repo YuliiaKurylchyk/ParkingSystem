@@ -11,6 +11,4 @@ public interface GetUpdateDAO<T, S> {
 
    void update(T t,S param);
 
-
-
 }

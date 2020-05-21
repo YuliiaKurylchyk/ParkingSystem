@@ -143,7 +143,8 @@ public class UpdatingServlet extends HttpServlet {
         }
     }
 
-    private void changeCustomer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void changeCustomer(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         retrieveCustomerFromDB(req, resp);
         requestDispatcher = req.getRequestDispatcher("customerRegistration.jsp");
         requestDispatcher.forward(req, resp);

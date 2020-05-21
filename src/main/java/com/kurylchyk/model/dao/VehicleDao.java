@@ -12,20 +12,15 @@ import java.util.List;
 
 public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, String>, AddDeleteDAO<Vehicle, String> {
 
-    private Connection connection;
-
-
     @Override
     public Vehicle select(String id) throws NoSuchVehicleFoundException {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "SELECT * FROM vehicle WHERE licence_plate=?";
         ResultSet resultSet = null;
         Vehicle vehicle = null;
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, id);
             resultSet = preparedStatement.executeQuery();
 
@@ -42,31 +37,19 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
         throw new NoSuchVehicleFoundException("No Such vehicle found");
     }
 
     @Override
     public List<Vehicle> selectAll() {
-        connection = getConnection();
+
         List<Vehicle> allVehicles = new ArrayList<>();
         String query = "SELECT * FROM vehicle";
-        Statement statement = null;
 
-        try {
-            statement = connection.createStatement();
+        try(Connection connection = Connector.getDataSource().getConnection();
+            Statement statement = connection.createStatement()) {
+
             ResultSet resultSet = statement.executeQuery(query);
             Vehicle vehicleToBeAdded = null;
 
@@ -84,17 +67,6 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
         return allVehicles;
     }
@@ -118,12 +90,11 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
     @Override
     public String insert(Vehicle vehicle) {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
+
         String query = "INSERT INTO vehicle(make,model,licence_plate,type) VALUES(?,?,?,?)";
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicle.getMake());
             preparedStatement.setString(2, vehicle.getModel());
             preparedStatement.setString(3, vehicle.getLicencePlate());
@@ -132,57 +103,29 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
 
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
         return vehicle.getLicencePlate();
     }
 
     public void updateCustomerID(Vehicle vehicle, Customer customer) {
 
-        PreparedStatement preparedStatement = null;
-        connection = getConnection();
         String query = "UPDATE vehicle SET customer_id = ? WHERE licence_plate = ?";
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, customer.getCustomerID());
             preparedStatement.setString(2, vehicle.getLicencePlate());
             preparedStatement.execute();
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
     }
 
     public Integer getCountOfType(TypeOfVehicle type) {
-
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
+        String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE type = ?";
         Integer count = 0;
-        try {
-            preparedStatement = connection.prepareStatement("SELECT COUNT(*) AS COUNT FROM vehicle WHERE type = ?");
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, type.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -190,17 +133,6 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
         return count;
 
@@ -209,12 +141,10 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
     @Override
     public void update(Vehicle vehicle,String previousLicencePlate) {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "UPDATE VEHICLE SET MAKE=?, MODEL=?, LICENCE_PLATE = ?, TYPE = ? WHERE LICENCE_PLATE = ?";
 
-        try{
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1,vehicle.getMake());
             preparedStatement.setString(2,vehicle.getModel());
             preparedStatement.setString(3,vehicle.getLicencePlate());
@@ -223,47 +153,21 @@ public class VehicleDao extends Connector implements GetUpdateDAO<Vehicle, Strin
             preparedStatement.execute();
         }catch (SQLException exception) {
             exception.printStackTrace();
-        }finally {
-
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
     }
 
     @Override
     public void delete(Vehicle vehicle) {
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
+
         String query = "DELETE FROM vehicle WHERE licence_plate = ?";
 
-        try{
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1,vehicle.getLicencePlate());
             preparedStatement.execute();
         }catch (SQLException ex){
             ex.printStackTrace();
-        }finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
     }
-
 
 }

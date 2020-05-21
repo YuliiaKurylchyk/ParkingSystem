@@ -11,7 +11,7 @@
 <head>
     <title>Title</title>
     <style type="text/css">
-        <%@include file="WebContent/creation-style.css" %>
+        <%@include file="WebContent/parkingInfo-style.css" %>
     </style>
 
 </head>
@@ -68,21 +68,20 @@
 </div>
 
 
-
 <div id="containerButton">
-    <div style="float: left;">
-         <button type="button" value="" name="GetReceipt">Get receipt</button>
+    <div style="float: left;margin-left: 10%;">
+        <a>  <button type="button" value="" name="GetReceipt">Get receipt</button> </a>
     </div>
-    <div style="float:right;">
+    <div style="float:left;">
         <a href="/"> <button type="button" value="" name="BackToMenu">Back to menu</button> </a>
     </div>
 <c:if test="${currentTicket.status=='present'}">
-    <div style="float:right;">
+    <div style="float:left;">
         <a href="deletingServlet?action=remove"> <button type="button" value="" name="Remove">Remove</button> </a>
     </div>
 </c:if>
 <c:if test="${currentTicket.status=='left' and requestScope.deleted==null}">
-    <div style="float:right;">
+    <div style="float:left;">
         <a href="deletingServlet?action=delete"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
     </div>
 </c:if>

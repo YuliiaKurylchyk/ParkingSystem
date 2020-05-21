@@ -12,15 +12,15 @@
     <title>Title</title>
 
     <style type="text/css">
-        <%@include file="WebContent/creation-style.css" %>
+        <%@include file="WebContent/searchPage-style.css" %>
     </style>
 
 </head>
 <body>
-<h1>Update</h1>
-
+<h1>Choose the option to search</h1>
+<h3>Search by</h3>
 <div id="selectContainer">
-    <h3>Search by</h3>
+
     <form action="searchPage.jsp" method="POST">
         <select name="option" onchange="this.form.submit();">
             <option value="" disabled selected>Select your option</option>
@@ -29,24 +29,25 @@
             <option value="vehicle">Vehicle info</option>
         </select>
     </form>
-
+</div>
+<div id="searchContainer">
     <form action="search" method="POST" id="searchForm">
         <input type="hidden" name="option" value="${param.option}">
         <c:choose>
             <c:when test="${param.option == 'parkingTicket'}">
                 <p>Enter parking ticket ID</p>
                 <input type="text" placeholder="ID" name="id">
-                <input type="submit" value="${action=='update'?'Search':'Remove'}">
+                <input type="submit" class="searchButton" value="${action=='update'?'Search':'Remove'}">
             </c:when>
             <c:when test="${param.option=='customer'}">
                 <p>Enter customer ID or phone number</p>
                 <input type="text" placeholder="phone number" name="phone_number">
-                <input type="submit" value="${action=='update'?'Search':'Remove'}">
+                <input type="submit" class="searchButton"  value="${action=='update'?'Search':'Remove'}">
             </c:when>
             <c:when test="${param.option=='vehicle'}">
                 <p>Enter licence plate of vehicle</p>
                 <input type="text" placeholder="licence plate" name="licence_plate">
-                <input type="submit" value="${action=='update'?'Search':'Remove'}">
+                <input type="submit" class="searchButton" value="${action=='update'?'Search':'Remove'}">
 
             </c:when>
         </c:choose>

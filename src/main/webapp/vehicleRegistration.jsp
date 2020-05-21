@@ -47,11 +47,14 @@
             <label for="bus">Bus</label>
         </div>
 
-        <c:if test="${requestScope.badType!=null}">
-            <p style="color:red">
-                <c:out value="${requestScope.badType}"/>
-            </p>
-        </c:if>
+            <div style="width:100%;float: left">
+                <c:if test="${requestScope.badType!=null}">
+                    <h3 style="color:red">
+                        <c:out value="${requestScope.badType}"/>
+                    </h3>
+                 </c:if>
+            </div>
+
         <p><input placeholder="Make" name="make" value="${vehicle.make}"></p>
         <p><input placeholder="Model" name="model" value="${vehicle.model}"></p>
 

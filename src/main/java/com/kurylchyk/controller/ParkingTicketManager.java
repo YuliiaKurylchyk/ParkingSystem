@@ -8,7 +8,7 @@ import com.kurylchyk.model.dao.VehicleDao;
 import com.kurylchyk.model.exceptions.*;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.Vehicle;
-import com.sun.deploy.net.HttpResponse;
+import  java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -60,7 +60,8 @@ public final class ParkingTicketManager {
         return cost;
     }
 
-    public static ParkingTicket searchParkingTicket(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public static ParkingTicket searchParkingTicket(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         Integer parkingTicketID = Integer.parseInt(req.getParameter("id"));
         RequestDispatcher requestDispatcher = null;
         ParkingTicket parkingTicket = null;
@@ -70,13 +71,14 @@ public final class ParkingTicketManager {
 
         } catch (NoSuchParkingTicketException exception) {
             req.setAttribute("notFound", exception);
-            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+            req.getRequestDispatcher("searchPage.jsp").forward(req,resp);
         }
         return parkingTicket;
 
     }
 
-    public static Customer searchCustomerByPhoneNumber(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public static Customer searchCustomerByPhoneNumber(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String customerPhoneNumber = req.getParameter("phone_number");
         Customer customer = null;
         RequestDispatcher requestDispatcher = null;
@@ -90,24 +92,9 @@ public final class ParkingTicketManager {
         return customer;
     }
 
-    public static Customer searchCustomerByID(HttpServletRequest req, HttpServletResponse resp)
+
+    public static Vehicle searchVehicle(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Integer id = Integer.parseInt(req.getParameter("customerID"));
-        RequestDispatcher requestDispatcher = null;
-        Customer customer = null;
-        try {
-            customer = customerDao.select(id);
-        } catch (NoSuchCustomerFoundException exception) {
-            req.setAttribute("notFound", exception);
-            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
-            requestDispatcher.forward(req, resp);
-        }
-        return customer;
-
-    }
-
-
-    public static Vehicle searchVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String licencePlate = req.getParameter("licence_plate");
         Vehicle vehicle = null;
         RequestDispatcher requestDispatcher = null;
@@ -115,7 +102,7 @@ public final class ParkingTicketManager {
             vehicle = vehicleDao.select(licencePlate);
         } catch (NoSuchVehicleFoundException exception) {
             req.setAttribute("notFound", exception);
-            requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
+             req.getRequestDispatcher("searchPage.jsp").forward(req,resp);
         }
         return vehicle;
     }
@@ -127,6 +114,7 @@ public final class ParkingTicketManager {
     public static ParkingTicket getTicketByCustomer(Customer customer) {
         return parkingTicketDAO.selectByCustomerID(customer.getCustomerID());
     }
+
 
     public static ParkingTicket getTicketByID(Integer id) {
         try {

@@ -1,6 +1,7 @@
 <%@ page import="com.kurylchyk.model.vehicles.Vehicle" %>
 <%@ page import="com.kurylchyk.model.dao.VehicleDao" %>
 <%@ page import="com.kurylchyk.model.vehicles.TypeOfVehicle" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>home page</title>
@@ -50,7 +51,7 @@
                     <i class="fas fa-motorcycle "></i>
                 </div>
                 <div class="vehicle_count">
-                    <%=request.getAttribute("numberOfBikes")%>
+                    <c:out value="${requestScope.numberOfBikes}"> </c:out>
                 </div>
             </div>
             <div id="car" class="vehicle" >
@@ -59,7 +60,7 @@
                     <i class="fas fa-car"></i>
                 </div>
                 <div class="vehicle_count">
-                    <%=request.getAttribute("numberOfCars")%>
+                    <c:out value="${requestScope.numberOfCars}"> </c:out>
                 </div>
 
             </div>
@@ -71,7 +72,7 @@
                 </div>
 
                 <div class="vehicle_count">
-                    <%=request.getAttribute("numberOfTrucks")%>
+                    <c:out value="${requestScope.numberOfTrucks}"> </c:out>
                 </div>
             </div>
             <div id="bus" class="vehicle" >
@@ -81,7 +82,7 @@
                 </div>
 
                 <div class="vehicle_count">
-                    <%=request.getAttribute("numberOfBuses")%>
+                    <c:out value="${requestScope.numberOfBuses}"> </c:out>
                 </div>
             </div>
 
@@ -92,26 +93,28 @@
             <h5>Current information about parking tickets</h5>
             <table>
                 <tr>
-                    <td>Today is:</td>
-                    <td> </td>
-                </tr>
-
-                <tr>
                     <td>Today's vehicle entries: </td>
-                    <td> </td>
+                    <td><c:out value="${requestScope.countOfTodayEntities}"></c:out> </td>
                 </tr>
 
                 <tr>
                     <td>Today's vehicle entries present: </td>
-                    <td> </td>
+                    <td> <c:out value="${requestScope.countOfAllPresent}"></c:out></td>
                 </tr>
                 <tr>
                     <td>Total vehicle entries left: </td>
-                    <td> </td>
+                    <td> <c:out value="${requestScope.countOfAllLeft}"></c:out></td>
                 </tr>
                 <tr>
-                    <td>Вільні small,medium, large </td>
-                    <td> </td>
+                    <td>Count of free slots
+
+                        <table>
+                            <tr> <td>SMALL</td> <td><c:out value="${requestScope.smallSlots}"></c:out></td> </tr>
+                            <tr> <td>MEDIUM</td> <td><c:out value="${requestScope.mediumSlots}"></c:out></td> </tr>
+                            <tr> <td>LARGE</td> <td><c:out value="${requestScope.largeSlots}"></c:out></td> </tr>
+                        </table>
+                    </td>
+
                 </tr>
             </table>
         </div>

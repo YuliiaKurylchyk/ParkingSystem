@@ -22,7 +22,6 @@ import java.util.List;
 
 public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingTicket, Integer>, AddDeleteDAO<ParkingTicket, Integer> {
 
-    private Connection connection;
     private CustomerDao customerDao;
     private VehicleDao vehicleDao;
     private ParkingSlotDao parkingSlotDao;
@@ -37,14 +36,13 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     @Override
     public Integer insert(ParkingTicket parkingTicket) {
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
+
         String query = "INSERT INTO parking_ticket(customer_id,vehicle_id,parking_slot_id,status,from_time)" +
                 "VALUES (?,?,?,?,?)";
         Integer id = null;
-        try {
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, parkingTicket.getCustomer().getCustomerID());
             preparedStatement.setString(2, parkingTicket.getVehicle().getLicencePlate());
             preparedStatement.setInt(3, parkingTicket.getParkingSlot().getParkingSlotID());
@@ -58,17 +56,6 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
 
         return id;
@@ -76,41 +63,26 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     @Override
     public void delete(ParkingTicket parkingTicket) {
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
+
         String query = "DELETE FROM parking_ticket WHERE parking_ticket_id = ?";
 
-        try{
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setInt(1,parkingTicket.getParkingTicketID());
             preparedStatement.execute();
         }catch (SQLException ex){
             ex.printStackTrace();
-        }finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
     }
-
 
 
     @Override
     public ParkingTicket select(Integer id) throws NoSuchParkingTicketException {
-        PreparedStatement preparedStatement = null;
-        connection = getConnection();
+
         ParkingTicket parkingTicket = null;
         String query = "SELECT * FROM parking_ticket WHERE parking_ticket_id = ?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -131,29 +103,16 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             }
         } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
         return parkingTicket;
     }
 
     public ParkingTicket selectByVehicleID(String vehicleID) {
-        PreparedStatement preparedStatement = null;
-        connection = getConnection();
+
         ParkingTicket parkingTicket = null;
         String query = "SELECT * FROM parking_ticket WHERE vehicle_id = ?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicleID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -173,32 +132,18 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             }
         } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException | NoSuchParkingTicketException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
         return parkingTicket;
-
-
     }
 
     public ParkingTicket selectByCustomerID(Integer customerID) {
 
-        PreparedStatement preparedStatement = null;
-        connection = getConnection();
+
         ParkingTicket parkingTicket = null;
         String query = "SELECT * FROM parking_ticket WHERE customer_id = ?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
             preparedStatement.setInt(1, customerID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -218,17 +163,6 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             }
         } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException | NoSuchParkingTicketException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
 
         return parkingTicket;
@@ -236,12 +170,10 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     public Integer countCustomer(Customer customer) {
         Integer customerID = customer.getCustomerID();
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE customer_id=?";
         Integer count = null;
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, customerID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
@@ -249,33 +181,20 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
 
         return count;
     }
 
-
     //make it array list
     @Override
     public List<ParkingTicket> selectAll() {
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
+
         String query = "SELECT * FROM parking_ticket";
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -308,18 +227,6 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ex.printStackTrace();
         } catch (NoSuchCustomerFoundException exception) {
             exception.printStackTrace();
-        } finally {
-
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
 
         return listOfTickets;
@@ -329,13 +236,11 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     public List<ParkingTicket> selectAll(String currentStatus) {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "SELECT * FROM parking_ticket WHERE status = ?";
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1,currentStatus);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -369,32 +274,17 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ex.printStackTrace();
         } catch (NoSuchCustomerFoundException exception) {
             exception.printStackTrace();
-        } finally {
-
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
         return listOfTickets;
 
     }
     public List<ParkingTicket> selectInDate(LocalDateTime date) {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "SELECT * FROM parking_ticket WHERE from_time >= ?";
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, date.toLocalDate());
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -427,32 +317,17 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ex.printStackTrace();
         } catch (NoSuchCustomerFoundException exception) {
             exception.printStackTrace();
-        } finally {
-
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
-
         return listOfTickets;
     }
 
     public List<ParkingTicket> selectInDateAndStatus(LocalDateTime date, String stat) {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "SELECT * FROM parking_ticket WHERE from_time >= ? AND status = ?";
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, date.toLocalDate());
             preparedStatement.setString(2, stat);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -484,34 +359,17 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ex.printStackTrace();
         } catch (NoSuchCustomerFoundException exception) {
             exception.printStackTrace();
-        } finally {
-
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
 
         return listOfTickets;
-
     }
-
 
     @Override
     public void update(ParkingTicket parkingTicket, Integer id) {
-
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "UPDATE parking_ticket SET status = ?,to_time = ?,  cost = ? WHERE parking_ticket_id = ?";
 
-        try {
-                    preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                     preparedStatement.setString(1,parkingTicket.getStatus());
                     preparedStatement.setObject(2,parkingTicket.getLeftTime());
                     preparedStatement.setObject(3,parkingTicket.getCost());
@@ -519,44 +377,20 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
                     preparedStatement.execute();
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
     }
 
     public void updateVehicleID(Integer parkingTicketID, String vehicleID) {
 
-        connection = getConnection();
-        PreparedStatement preparedStatement = null;
         String query = "UPDATE parking_ticket SET vehicle_id = ? WHERE parking_ticket_id=?";
 
-        try {
-            preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, vehicleID);
             preparedStatement.setInt(2, parkingTicketID);
             preparedStatement.execute();
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
         }
 
     }
