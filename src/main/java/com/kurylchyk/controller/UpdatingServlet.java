@@ -1,7 +1,7 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDAO;
@@ -101,29 +101,20 @@ public class UpdatingServlet extends HttpServlet {
     }
 
     private Vehicle getUpdatedVehicle(HttpServletRequest req, HttpServletResponse resp) {
-        Vehicle vehicle = null;
+
         String make = req.getParameter("make");
         String model = req.getParameter("model");
         String licencePlate = req.getParameter("licence_plate");
-        TypeOfVehicle type = TypeOfVehicle.valueOf(req.getParameter("type_of_vehicle"));
+        TypeOfVehicle type = TypeOfVehicle.valueOf(req.getParameter("typeOfVehicle"));
 
-        switch (type) {
-            case MOTORBIKE:
-                vehicle = new Motorbike(make, model, licencePlate);
-                break;
-            case CAR:
-                vehicle = new Car(make, model, licencePlate);
-                break;
-            case TRUCK:
-                vehicle = new Truck(make, model, licencePlate);
-                break;
-            case BUS:
-                vehicle = new Bus(make, model, licencePlate);
-                break;
-        }
+        Vehicle vehicle = Vehicle.newVehicle()
+                .setType(type)
+                .setMake(make)
+                .setModel(model)
+                .setLicencePlate(licencePlate)
+                .buildVehicle();
         return vehicle;
     }
-
 
     private void retrieveCustomerFromDB(HttpServletRequest req, HttpServletResponse resp) {
 

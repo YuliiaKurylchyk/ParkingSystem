@@ -1,11 +1,12 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.controller.validation.CustomerValidation;
+import com.kurylchyk.controller.validation.VehicleValidation;
+import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDAO;
-import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.*;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @WebServlet("/creationServlet")
 public class CreationServlet extends HttpServlet {
@@ -56,11 +59,20 @@ public class CreationServlet extends HttpServlet {
 
     private void createVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        VehicleManager.validateVehicle(req, resp);
-        TypeOfVehicle typeOfVehicle = TypeOfVehicle.valueOf(req.getParameter("type_of_vehicle"));
+
+        VehicleValidation vehicleValidation = VehicleValidation.fromRequestParameters(req);
+        List<String> violations = vehicleValidation.validate();
+        if(!violations.isEmpty()){
+            vehicleValidation.setAsRequestAttribute(req);
+            req.setAttribute("violations",violations);
+            req.getRequestDispatcher("vehicleRegistration.jsp").forward(req,resp);
+
+        }
+
+        TypeOfVehicle typeOfVehicle = TypeOfVehicle.valueOf(req.getParameter("typeOfVehicle"));
         String make = req.getParameter("make");
         String model = req.getParameter("model");
-        String licencePlate = req.getParameter("licence_plate");
+        String licencePlate = req.getParameter("licencePlate");
 
         if (VehicleManager.checkIfVehicleIsInDB(licencePlate)) {
             if (VehicleManager.checkIfPresent(licencePlate)) {
@@ -73,10 +85,11 @@ public class CreationServlet extends HttpServlet {
         } else {
             createdVehicle = VehicleManager.createVehicle(make, model, licencePlate, typeOfVehicle);
         }
-        ParkingSlot parkingSlot = null;
-        parkingSlot = ParkingTicketManager.getParkingSlot(req, resp, createdVehicle);
-        createdSlot = parkingSlot;
 
+
+        createdSlot =  ParkingTicketManager.getParkingSlot(req, resp, createdVehicle);
+
+        System.out.println(createdSlot);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("customerRegistration.jsp");
         requestDispatcher.forward(req, resp);
 
@@ -84,11 +97,19 @@ public class CreationServlet extends HttpServlet {
 
     private void createCustomer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        CustomerManager.validateCustomer(req, resp);
+        CustomerValidation customerValidation = CustomerValidation.fromRequestParameters(req);
+        List<String> violations = customerValidation.validate();
+        //customerValidation.setAsRequestAttribute(req);
+
+        if(!violations.isEmpty()){
+            customerValidation.setAsRequestAttribute(req);
+            req.setAttribute("violations",violations);
+            req.getRequestDispatcher("customerRegistration.jsp").forward(req,resp);
+        }
+
         String name = req.getParameter("name");
         String surname = req.getParameter("surname");
-        String phoneNumber = req.getParameter("phone_number");
-
+        String phoneNumber = req.getParameter("phoneNumber");
         Integer id = CustomerManager.checkCustomerIsInDB(phoneNumber);
         if (id != null) {
             customerIsInDB = true;
@@ -110,14 +131,21 @@ public class CreationServlet extends HttpServlet {
             addCustomerToDB(createdCustomer);
         }
         connectCustomerToVehicle(createdVehicle, createdCustomer);
-        ParkingTicket parkingTicket = new ParkingTicket(createdVehicle, createdSlot, createdCustomer);
+
+        System.out.println(createdSlot);
+        ParkingTicket parkingTicket = ParkingTicket.newParkingTicket()
+                .withVehicle(createdVehicle)
+                .withCustomer(createdCustomer)
+                .withParkingSlot(createdSlot)
+                .withArrivalTime(LocalDateTime.now())
+                .withStatus("present")
+                .buildTicket();
         Integer id = parkingTicketDAO.insert(parkingTicket);
         parkingTicket.setParkingTicketID(id);
 
         session.setAttribute("currentTicket", parkingTicket);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("parkingTicketInfo.jsp");
         requestDispatcher.forward(req, resp);
-
     }
 
     private void connectCustomerToVehicle(Vehicle vehicle, Customer customer) {
@@ -127,8 +155,9 @@ public class CreationServlet extends HttpServlet {
 
     }
 
-    private Integer addCustomerToDB(Customer customer) {
-        return customerDao.insert(customer);
+    private void addCustomerToDB(Customer customer) {
+        Integer id = customerDao.insert(customer);
+        customer.setCustomerID(id);
     }
 
     private void addVehicleToDB(Vehicle vehicle) {

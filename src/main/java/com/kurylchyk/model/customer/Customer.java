@@ -1,4 +1,4 @@
-package com.kurylchyk.model;
+package com.kurylchyk.model.customer;
 
 
 public class Customer {
@@ -7,6 +7,11 @@ public class Customer {
     private String surname;
     private String phoneNumber;
 
+    public Customer(){}
+
+    public static CustomerBuilder newCustomer(){
+        return new CustomerBuilder();
+    }
 
     public Customer(String name, String surname, String phoneNumber) {
         this.name = name;
@@ -18,6 +23,22 @@ public class Customer {
         this.customerID = customerID;
         this.name = name;
         this.surname = surname;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setCustomerID(Integer customerID) {
+        this.customerID = customerID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

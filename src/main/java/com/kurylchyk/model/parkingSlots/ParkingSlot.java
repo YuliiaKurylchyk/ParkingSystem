@@ -12,10 +12,6 @@ public abstract class ParkingSlot {
 
     }
 
-    public void setSizeOfSlot(SizeOfSlot sizeOfSlot) {
-        this.sizeOfSlot = sizeOfSlot;
-    }
-
     public SizeOfSlot getSizeOfSlot(){
         return sizeOfSlot;
     }

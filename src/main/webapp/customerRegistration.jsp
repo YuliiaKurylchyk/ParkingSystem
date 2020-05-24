@@ -19,44 +19,65 @@
 <h1>Parking ticket creation</h1>
 <c:if test="${customer != null}">
 <form action="updatingServlet?option=updateCustomer" method="post">
-</c:if>
-<c:if test="${customer == null}">
-<form action="creationServlet?action=customer" method="post">
     </c:if>
-
-    <h3>Customer information: </h3>
-
-    <p><input placeholder="Name" name="name" value="${customer.name}"></p>
-    <p><input placeholder="Surname" name="surname" value="${customer.surname}"></p>
-
-        <c:if test="${requestScope.badData!=null}">
-            <h3 style="color:red">
-                <c:out value="${requestScope.badData}"/>
-            </h3>
+    <c:if test="${customer == null}">
+    <form action="creationServlet?action=customer" method="post">
         </c:if>
-    <p><input placeholder="Phone number" name="phone_number" value="${customer.phoneNumber}"></p>
 
-        <c:if test="${requestScope.badPhoneNumber!=null}">
-            <h3 style="color:red">
-                <c:out value="${requestScope.badPhoneNumber}"/>
-            </h3>
+        <h3>Customer information: </h3>
+
+        <p><input placeholder="Name" name="name"
+        <c:choose>
+        <c:when test="${customer!=null}">
+                  value="${customer.name}"
+        </c:when>
+        <c:otherwise>
+                  value="${name}"
+        </c:otherwise>
+            </c:choose>
+            >
+        </p>
+        <p><input placeholder="Surname" name="surname"
+        <c:choose>
+                  <c:when test="${customer!=null}">value="${customer.surname}"
+        </c:when>
+        <c:otherwise> value="${surname}"</c:otherwise>
+            </c:choose>
+            >
+        </p>
+
+        <p><input placeholder="Phone number" name="phoneNumber"
+
+        <c:choose>
+                  <c:when test="${customer!=null}">value="${customer.phoneNumber}"</c:when>
+        <c:otherwise> value="${phoneNumber}"</c:otherwise>
+            </c:choose>
+            >
+        </p>
+
+        <c:if test="${requestScope.violations!=null}">
+
+            <c:forEach items="${violations}" var="violation">
+                <h3 style="color:red">${violation}.</h3>
+            </c:forEach>
         </c:if>
-    </div>
-
-    <div style="overflow:auto;">
-        <div style="float:right;">
-
-            <c:if test="${customer != null}">
-                <button type="submit">Done</button>
-            </c:if>
-
-            <c:if test="${customer == null}">
-                <button type="submit">Get parking ticket!</button>
-            </c:if>
 
         </div>
-    </div>
-</form>
+
+        <div style="overflow:auto;">
+            <div style="float:right;">
+
+                <c:if test="${customer != null}">
+                    <button type="submit">Done</button>
+                </c:if>
+
+                <c:if test="${customer == null}">
+                    <button type="submit">Get parking ticket!</button>
+                </c:if>
+
+            </div>
+        </div>
+    </form>
 
 </body>
 </html>

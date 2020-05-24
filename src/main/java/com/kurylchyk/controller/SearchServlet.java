@@ -1,8 +1,8 @@
 package com.kurylchyk.controller;
 
 
-import com.kurylchyk.model.Customer;
-import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDAO;

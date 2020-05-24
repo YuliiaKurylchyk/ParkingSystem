@@ -1,6 +1,8 @@
-package com.kurylchyk.model;
+package com.kurylchyk.model.parkingTicket;
 
 
+import com.kurylchyk.model.TimeCheck;
+import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.Vehicle;
 
@@ -18,17 +20,32 @@ public class ParkingTicket {
     private BigDecimal cost;
     private String status;
 
+    public ParkingTicket(ParkingTicketBuilder builder){
+        this.parkingTicketID = builder.parkingTicketID;
+        this.vehicle = builder.vehicle;
+        this.customer = builder.customer;
+        this.parkingSlot = builder.parkingSlot;
+        this.status = builder.status;
+        this.arrivalTime = builder.arrivalTime;
+        this.leftTime = builder.leftTime;
+        this.cost = builder.cost;
+    }
+
     public void setParkingTicketID(Integer parkingTicketID) {
         this.parkingTicketID = parkingTicketID;
     }
 
-    public ParkingTicket(Vehicle vehicle, ParkingSlot parkingSlot, Customer customer) {
+   // public ParkingTicket(Vehicle vehicle, ParkingSlot parkingSlot, Customer customer) {
 
-        this.vehicle = vehicle;
-        this.parkingSlot = parkingSlot;
-        this.customer = customer;
-        this.status = "present";
-        arrivalTime = TimeCheck.getTime();
+//        this.vehicle = vehicle;
+  //      this.parkingSlot = parkingSlot;
+    //    this.customer = customer;
+      //  this.status = "present";
+        //arrivalTime = TimeCheck.getTime();
+   // }
+
+    public static ParkingTicketBuilder newParkingTicket(){
+        return new ParkingTicketBuilder();
     }
     public ParkingTicket(){
     }
@@ -93,6 +110,8 @@ public class ParkingTicket {
     public LocalDateTime getLeftTime(){
         return leftTime;
     }
+
+    @Override
     public String toString() {
 
         return "The vehicle: " + vehicle + "\n"
@@ -101,7 +120,6 @@ public class ParkingTicket {
                 + "Customer: " + customer + "\n"
                 + "Status: " + status;
     }
-
 
     @Override
     public int hashCode() {

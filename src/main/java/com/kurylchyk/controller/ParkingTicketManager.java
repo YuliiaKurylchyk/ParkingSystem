@@ -1,12 +1,14 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.*;
+import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.*;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.vehicles.Vehicle;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

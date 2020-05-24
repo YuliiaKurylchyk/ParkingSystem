@@ -1,7 +1,7 @@
 package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.Customer;
+import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 
 
@@ -17,16 +17,12 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
         String query = "SELECT * FROM customer WHERE customer_id =?";
         Customer customer = null;
 
-
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
-                customer = new Customer(id, resultSet.getString("name"),
-                        resultSet.getString("surname"),
-                        resultSet.getString("phone_number"));
+               customer = getCustomer(resultSet);
             } else {
                 throw new NoSuchCustomerFoundException("No customer with id " + id + " is found");
             }
@@ -37,6 +33,22 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
         return customer;
     }
 
+
+    protected  Customer getCustomer(ResultSet resultSet) throws SQLException {
+        Integer customerID = resultSet.getInt("customer_id");
+        String name  = resultSet.getString("name");
+        String surname = resultSet.getString("surname");
+        String phoneNumber = resultSet.getString("phone_number");
+
+        Customer customer = Customer.newCustomer().
+                setCustomerID(customerID)
+                .setName(name)
+                .setSurname(surname)
+                .setPhoneNumber(phoneNumber)
+                .buildCustomer();
+
+        return customer;
+    }
     @Override
     public List<Customer> selectAll() {
 
@@ -49,9 +61,7 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
 
             Customer currentCustomer = null;
             while (resultSet.next()) {
-                currentCustomer = new Customer(resultSet.getString("name"),
-                        resultSet.getString("surname"),
-                        resultSet.getString("phone_number"));
+                currentCustomer = getCustomer(resultSet);
                 allCustomers.add(currentCustomer);
             }
         } catch (SQLException ex) {

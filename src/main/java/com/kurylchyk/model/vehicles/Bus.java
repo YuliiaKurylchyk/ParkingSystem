@@ -6,7 +6,10 @@ public class Bus extends Vehicle{
         super(sort, model, registrationNumber,TypeOfVehicle.BUS);
     }
 
-    public Bus(){}
+    public Bus(){
+        typeOfVehicle = TypeOfVehicle.BUS;
+
+    }
 
     @Override
     public boolean equals(Object anotherVehicle) {

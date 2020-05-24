@@ -28,49 +28,61 @@
         <p id="label_type_of_vehicle">Type of Vehicle: </p>
         <div class="vehicle_type_button">
             <input type="radio" id="motorbike" class="type_of_vehicle"
-                   name="type_of_vehicle" value="MOTORBIKE" ${vehicle.typeOfVehicle=='MOTORBIKE'? 'checked':''}>
+                   name="typeOfVehicle" value="MOTORBIKE" ${vehicle.typeOfVehicle=='MOTORBIKE'? 'checked':''}
+                                                                 ${typeOfVehicle=='MOTORBIKE'?'checked':''}>
             <label for="motorbike">Motorbike</label>
         </div>
         <div class="vehicle_type_button">
             <input type="radio" id="car" class="type_of_vehicle"
-                   name="type_of_vehicle" value="CAR" ${vehicle.typeOfVehicle=='CAR'? 'checked':''} >
+                   name="typeOfVehicle" value="CAR" ${vehicle.typeOfVehicle=='CAR'? 'checked':''}
+                                                        ${typeOfVehicle=='CAR'?'checked':''}>
             <label for="car">Car</label>
         </div>
         <div class="vehicle_type_button">
             <input type="radio" id="truck" class="type_of_vehicle"
-                   name="type_of_vehicle" value="TRUCK" ${vehicle.typeOfVehicle=='TRUCK'? 'checked':''}>
+                   name="typeOfVehicle" value="TRUCK" ${vehicle.typeOfVehicle=='TRUCK'? 'checked':''}
+                                                    ${typeOfVehicle=='TRUCK'?'checked':''} >
             <label for="truck">Truck</label>
         </div>
         <div class="vehicle_type_button">
             <input type="radio" id="bus" class="type_of_vehicle"
-                   name="type_of_vehicle" value="BUS" ${vehicle.typeOfVehicle=='BUS'? 'checked':''}>
+                   name="typeOfVehicle" value="BUS" ${vehicle.typeOfVehicle=='BUS'? 'checked':''}
+                                                    ${typeOfVehicle=='BUS'?'checked':''}>
             <label for="bus">Bus</label>
         </div>
 
-            <div style="width:100%;float: left">
-                <c:if test="${requestScope.badType!=null}">
-                    <h3 style="color:red">
-                        <c:out value="${requestScope.badType}"/>
-                    </h3>
-                 </c:if>
-            </div>
 
-        <p><input placeholder="Make" name="make" value="${vehicle.make}"></p>
-        <p><input placeholder="Model" name="model" value="${vehicle.model}"></p>
+        <p><input placeholder="Make" name="make"
+                  <c:choose>
+                  <c:when test="${vehicle!=null}">value="${vehicle.make}" </c:when>
+                   <c:otherwise>value="${make}"</c:otherwise>
+                    </c:choose>
+                      ></p>
+        <p><input placeholder="Model" name="model"
+        <c:choose>
+                  <c:when test="${vehicle!=null}">value="${vehicle.model}" </c:when>
+                  <c:otherwise>value="${model}"</c:otherwise>
+        </c:choose>
 
-        <c:if test="${requestScope.badData!=null}">
-            <h3 style="color:red">
-                <c:out value="${requestScope.badData}"/>
-            </h3>
-        </c:if>
+        ></p>
 
-        <p><input placeholder="Licence plate" name="licence_plate" value="${vehicle.licencePlate}"></p>
 
-        <c:if test="${requestScope.badLicencePlate!=null}">
-            <h3 style="color:red">
-                <c:out value="${requestScope.badLicencePlate}"/>
-            </h3>
-        </c:if>
+
+        <p><input placeholder="Licence plate" name="licencePlate"
+        <c:choose>
+                  <c:when test="${vehicle!=null}">value="${vehicle.licencePlate}" </c:when>
+                  <c:otherwise>value="${licencePlate}"</c:otherwise>
+        </c:choose>
+
+        ></p>
+
+
+            <c:if test="${requestScope.violations!=null}">
+
+                <c:forEach items="${violations}" var="violation">
+                    <h3 style="color:red">${violation}.</h3>
+                </c:forEach>
+            </c:if>
 
 
         <div style="overflow:auto;">

@@ -1,6 +1,6 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.ParkingTicket;
+import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 
 import javax.servlet.RequestDispatcher;

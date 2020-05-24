@@ -1,5 +1,5 @@
 <%@ page import="com.kurylchyk.controller.ParkingTicketUtil" %>
-<%@ page import="com.kurylchyk.model.ParkingTicket" %>
+<%@ page import="com.kurylchyk.model.parkingTicket.ParkingTicket" %>
 <%@ page import="java.util.List" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--

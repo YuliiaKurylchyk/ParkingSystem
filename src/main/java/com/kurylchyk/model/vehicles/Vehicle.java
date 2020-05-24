@@ -2,11 +2,14 @@ package com.kurylchyk.model.vehicles;
 
 public abstract class Vehicle {
     //maybe you should to make these protected
-    private String make;
-    private String model;
-    private String licencePlate;
-    private TypeOfVehicle typeOfVehicle;
+    protected String make;
+    protected String model;
+    protected  String licencePlate;
+    protected TypeOfVehicle typeOfVehicle;
 
+    public static VehicleBuilder newVehicle(){
+        return new VehicleBuilder();
+    }
     public void setMake(String make) {
         this.make = make;
     }
@@ -19,9 +22,6 @@ public abstract class Vehicle {
         this.licencePlate = licencePlate;
     }
 
-    public void setTypeOfVehicle(TypeOfVehicle type) {
-        this.typeOfVehicle = type;
-    }
 
     public Vehicle() {}
     public Vehicle(String make, String model, String licencePlate,TypeOfVehicle type) {
@@ -33,7 +33,7 @@ public abstract class Vehicle {
 
     @Override
     public String toString() {
-        return make + "\t" + model + "\t" + licencePlate;
+        return  make + "\t" + model + "\t" + licencePlate;
     }
 
     public String getMake(){
