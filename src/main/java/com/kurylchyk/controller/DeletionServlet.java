@@ -38,7 +38,8 @@ public class DeletionServlet extends HttpServlet {
         }
     }
 
-    public void doRemove(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doRemove(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         HttpSession session = req.getSession();
         ParkingTicket parkingTicket = (ParkingTicket) session.getAttribute("currentTicket");

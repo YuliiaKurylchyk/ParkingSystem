@@ -77,12 +77,12 @@
     </div>
 <c:if test="${currentTicket.status=='present'}">
     <div style="float:left;">
-        <a href="deletingServlet?action=remove"> <button type="button" value="" name="Remove">Remove</button> </a>
+        <a href="deletingServlet?action=remove&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />"> <button type="button" value="" name="Remove">Remove</button> </a>
     </div>
 </c:if>
 <c:if test="${currentTicket.status=='left' and requestScope.deleted==null}">
     <div style="float:left;">
-        <a href="deletingServlet?action=delete"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
+        <a href="deletingServlet?action=delete&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />"> <button type="button" value="" name="deleteCompletely">Delete Completely</button> </a>
     </div>
 </c:if>
 </div>

@@ -70,7 +70,8 @@ public class SearchServlet extends HttpServlet {
         requestDispatcher.forward(req,resp);
     }
 
-    private void getVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void getVehicle(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         Vehicle vehicle = ParkingTicketManager.searchVehicle(req, resp);
         HttpSession session = req.getSession();
@@ -92,10 +93,11 @@ public class SearchServlet extends HttpServlet {
     public void checkAction(HttpServletRequest req, HttpServletResponse resp, RequestDispatcher requestDispatcher) throws ServletException, IOException {
 
         String action = String.valueOf(req.getSession().getAttribute("action"));
-        req.getSession().removeAttribute("action");
+        req.getSession().removeAttribute("action"); // let me see
 
         switch (action) {
             case "update":
+
                 requestDispatcher.forward(req, resp);
                 break;
             case "deleting":

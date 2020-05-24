@@ -1,0 +1,45 @@
+body {
+    background-color: #f1f1f1;
+}
+
+
+h1, h3 {
+    text-align: center;
+}
+
+
+.container {
+    margin: 0 auto 0 auto;
+    width: 70%;
+
+}
+
+button {
+    margin-left: 15%;
+    background-color: #74D3DC;
+    border: 2px solid #74D3DC;
+    color: black;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+    border-radius: 2px;
+    clear: left;
+    width: 100%;
+}
+
+button:hover {
+    background-color: white;
+    transition-duration: 0.4s;
+    border: 2px solid #74D3DC;
+}
+
+
+#containerButton div {
+    width: 20%;
+    margin-left: 7%;
+    margin-top: 2%;
+}
+#containerButton div a {
+    width: auto;
+}

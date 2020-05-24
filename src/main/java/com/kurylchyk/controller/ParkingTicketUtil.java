@@ -84,5 +84,4 @@ public class ParkingTicketUtil extends HttpServlet {
 
     }
 
-
 }

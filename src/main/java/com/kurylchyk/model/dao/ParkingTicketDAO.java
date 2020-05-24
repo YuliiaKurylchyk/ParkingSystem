@@ -7,6 +7,7 @@ import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
 
 import java.math.BigDecimal;
@@ -180,6 +181,27 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
         return count;
     }
+    public Integer countAllPresent(TypeOfVehicle typeOfVehicle){
+
+        String query = "SELECT COUNT(status) AS allPresent " +
+                        "FROM parking_ticket AS p " +
+                        "JOIN vehicle AS V " +
+                        "ON p.vehicle_id = v.licence_plate " +
+                        "WHERE p.status = 'present' and v.type=? ";
+        Integer count = 0;
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,typeOfVehicle.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                count = resultSet.getInt("allPresent");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return count;
+    }
+
 
     //make it array list
     @Override
@@ -389,6 +411,8 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         }
 
     }
+
+
 
 
 }

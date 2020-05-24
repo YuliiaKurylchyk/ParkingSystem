@@ -63,10 +63,10 @@ public class HomePageServlet extends HttpServlet {
             throws ServletException, IOException {
         VehicleDAO vehicleDao = new VehicleDAO();
         ParkingTicketDAO parkingTicketDAO  = new ParkingTicketDAO();
-        Integer numberOfBikes = vehicleDao.getCountOfType(TypeOfVehicle.MOTORBIKE);
-        Integer numberOfCars = vehicleDao.getCountOfType(TypeOfVehicle.CAR);
-        Integer numberOfTrucks = vehicleDao.getCountOfType(TypeOfVehicle.TRUCK);
-        Integer numberOfBuses = vehicleDao.getCountOfType(TypeOfVehicle.BUS);
+        Integer numberOfBikes = parkingTicketDAO.countAllPresent(TypeOfVehicle.MOTORBIKE);
+        Integer numberOfCars = parkingTicketDAO.countAllPresent(TypeOfVehicle.CAR);
+        Integer numberOfTrucks = parkingTicketDAO.countAllPresent(TypeOfVehicle.TRUCK);
+        Integer numberOfBuses = parkingTicketDAO.countAllPresent(TypeOfVehicle.BUS);
         Integer countOfTodayEntities = parkingTicketDAO.selectInDate(LocalDateTime.now()).size();
         Integer countOfAllLeft = parkingTicketDAO.selectAll("left").size();
         Integer countOfAllPresent = parkingTicketDAO.selectAll("present").size();
@@ -119,12 +119,9 @@ public class HomePageServlet extends HttpServlet {
 
     private void removeEntity(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
 
-
         req.getSession().setAttribute("action","deleting");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
         requestDispatcher.forward(req,resp);
-
-
     }
 
     private void clearSession(HttpSession session){
