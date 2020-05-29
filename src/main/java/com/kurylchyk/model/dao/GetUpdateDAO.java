@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface GetUpdateDAO<T, S> {
 
-    T select(S id) throws Exception;
+    Optional<T> select(S id) throws Exception;
 
     List<T> selectAll();
 

@@ -11,6 +11,10 @@ public class NoSuchVehicleFoundException  extends  Exception{
         super(message,throwable);
     }
 
+    public NoSuchVehicleFoundException() {
+        
+    }
+
     public String toString(){
         return super.getMessage();
     }

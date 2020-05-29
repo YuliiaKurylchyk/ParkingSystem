@@ -8,12 +8,14 @@ import com.kurylchyk.model.parkingSlots.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class ParkingSlotDAO extends Connector implements GetUpdateDAO<ParkingSlot,Integer> {
 
+    private ParkingSlotFactory parkingSlotFactory = new ParkingSlotFactory();
     @Override
-    public ParkingSlot select(Integer id)  {
+    public Optional<ParkingSlot> select(Integer id)  {
         ParkingSlot parkingSlot = null;
         String query = "SELECT size FROM parking_slot WHERE parking_slot_id = ?";
 
@@ -21,16 +23,15 @@ public class ParkingSlotDAO extends Connector implements GetUpdateDAO<ParkingSlo
             PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            if(resultSet!=null && resultSet.next()){
+            if(resultSet.next()){
                 SizeOfSlot sizeOfSlot = SizeOfSlot.valueOf(resultSet.getString("size"));
-                parkingSlot = determineSizeOfSlot(sizeOfSlot);
+                parkingSlot = parkingSlotFactory.getParkingSlot(sizeOfSlot);
             }
 
         }catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return parkingSlot;
+        return Optional.ofNullable(parkingSlot);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ParkingSlotDAO extends Connector implements GetUpdateDAO<ParkingSlo
             ParkingSlot currentParkingSlot;
             while(resultSet.next()) {
                SizeOfSlot size = SizeOfSlot.valueOf(resultSet.getString("size"));
-                currentParkingSlot = determineSizeOfSlot(size);
+                currentParkingSlot =parkingSlotFactory.getParkingSlot(size);
                 allParkingSlots.add(currentParkingSlot);
             }
         }catch (SQLException exception){
@@ -52,24 +53,6 @@ public class ParkingSlotDAO extends Connector implements GetUpdateDAO<ParkingSlo
         }
         return  allParkingSlots;
     }
-
-    private ParkingSlot determineSizeOfSlot(SizeOfSlot size) {
-        ParkingSlot parkingSlot = null;
-
-        switch (size) {
-            case SMALL:
-                parkingSlot  = new SmallSlot();
-                break;
-            case MEDIUM:
-                parkingSlot =  new MediumSlot();
-                break;
-            case LARGE:
-               parkingSlot = new LargeSlot();
-               break;
-        }
-       return  parkingSlot;
-    }
-
 
     public Integer selectNumberOfSlot(SizeOfSlot size) {
 
@@ -120,10 +103,6 @@ public class ParkingSlotDAO extends Connector implements GetUpdateDAO<ParkingSlo
         return price;
     }
 
-    public void update(SizeOfSlot size, Integer param) {
-        ParkingSlot parkingSlot = determineSizeOfSlot(size);
-        update(parkingSlot,param);
-    }
 
 
 }

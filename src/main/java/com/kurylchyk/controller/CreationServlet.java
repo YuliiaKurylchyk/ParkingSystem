@@ -3,12 +3,17 @@ package com.kurylchyk.controller;
 import com.kurylchyk.controller.validation.CustomerValidation;
 import com.kurylchyk.controller.validation.VehicleValidation;
 import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
+import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.service.CustomerService;
+import com.kurylchyk.model.service.ParkingTicketService;
+import com.kurylchyk.model.service.VehicleService;
 import com.kurylchyk.model.vehicles.*;
 
 import javax.servlet.RequestDispatcher;
@@ -24,9 +29,10 @@ import java.time.LocalDateTime;
 
 @WebServlet("/creationServlet")
 public class CreationServlet extends HttpServlet {
-    private VehicleDAO vehicleDao = new VehicleDAO();
-    private CustomerDAO customerDao = new CustomerDAO();
-    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private VehicleService vehicleService = new VehicleService();
+    private CustomerService customerService = new CustomerService();
+    private ParkingTicketService parkingTicketService = new ParkingTicketService();
+
     private Vehicle createdVehicle;
     private Customer createdCustomer;
     private ParkingSlot createdSlot;
@@ -62,10 +68,10 @@ public class CreationServlet extends HttpServlet {
 
         VehicleValidation vehicleValidation = VehicleValidation.fromRequestParameters(req);
         List<String> violations = vehicleValidation.validate();
-        if(!violations.isEmpty()){
+        if (!violations.isEmpty()) {
             vehicleValidation.setAsRequestAttribute(req);
-            req.setAttribute("violations",violations);
-            req.getRequestDispatcher("vehicleRegistration.jsp").forward(req,resp);
+            req.setAttribute("violations", violations);
+            req.getRequestDispatcher("vehicleRegistration.jsp").forward(req, resp);
 
         }
 
@@ -74,20 +80,24 @@ public class CreationServlet extends HttpServlet {
         String model = req.getParameter("model");
         String licencePlate = req.getParameter("licencePlate");
 
-        if (VehicleManager.checkIfVehicleIsInDB(licencePlate)) {
-            if (VehicleManager.checkIfPresent(licencePlate)) {
+        if (vehicleService.isPresent(licencePlate)) {
+            if (vehicleService.getStatus(licencePlate).equals("present")) {
                 req.setAttribute("exception", new SuchVehiclePresentException("Such vehicle with licence plate " + licencePlate + " is already present"));
                 getServletConfig().getServletContext().getRequestDispatcher("/errorPage.jsp").forward(req, resp);
+
             } else {
                 vehicleIsInDB = true;
-                createdVehicle = VehicleManager.getVehicleFromDB(licencePlate);
+                try {
+                    createdVehicle = vehicleService.get(licencePlate);
+                } catch (NoSuchVehicleFoundException exception) {
+                    exception.printStackTrace();
+                }
             }
         } else {
             createdVehicle = VehicleManager.createVehicle(make, model, licencePlate, typeOfVehicle);
         }
 
-
-        createdSlot =  ParkingTicketManager.getParkingSlot(req, resp, createdVehicle);
+        createdSlot = ParkingTicketManager.getParkingSlot(req, resp, createdVehicle);
 
         System.out.println(createdSlot);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("customerRegistration.jsp");
@@ -101,19 +111,23 @@ public class CreationServlet extends HttpServlet {
         List<String> violations = customerValidation.validate();
         //customerValidation.setAsRequestAttribute(req);
 
-        if(!violations.isEmpty()){
+        if (!violations.isEmpty()) {
             customerValidation.setAsRequestAttribute(req);
-            req.setAttribute("violations",violations);
-            req.getRequestDispatcher("customerRegistration.jsp").forward(req,resp);
+            req.setAttribute("violations", violations);
+            req.getRequestDispatcher("customerRegistration.jsp").forward(req, resp);
         }
 
         String name = req.getParameter("name");
         String surname = req.getParameter("surname");
         String phoneNumber = req.getParameter("phoneNumber");
-        Integer id = CustomerManager.checkCustomerIsInDB(phoneNumber);
-        if (id != null) {
-            customerIsInDB = true;
-            createdCustomer = CustomerManager.getCustomerFromDB(id);
+        Customer customer;
+        if (customerService.isPresent(phoneNumber)) {
+            try {
+                customer = customerService.get(phoneNumber);
+                customerIsInDB = true;
+            } catch (NoSuchCustomerFoundException exception) {
+                exception.printStackTrace();
+            }
         } else {
             createdCustomer = CustomerManager.createCustomer(name, surname, phoneNumber);
         }
@@ -140,7 +154,7 @@ public class CreationServlet extends HttpServlet {
                 .withArrivalTime(LocalDateTime.now())
                 .withStatus("present")
                 .buildTicket();
-        Integer id = parkingTicketDAO.insert(parkingTicket);
+        Integer id = parkingTicketService.add(parkingTicket);
         parkingTicket.setParkingTicketID(id);
 
         session.setAttribute("currentTicket", parkingTicket);
@@ -150,18 +164,18 @@ public class CreationServlet extends HttpServlet {
 
     private void connectCustomerToVehicle(Vehicle vehicle, Customer customer) {
 
-        VehicleDAO vehicleDao = new VehicleDAO();
-        vehicleDao.updateCustomerID(vehicle, customer);
+
+        vehicleService.updateCustomerID(vehicle.getLicencePlate(), customer.getCustomerID());
 
     }
 
     private void addCustomerToDB(Customer customer) {
-        Integer id = customerDao.insert(customer);
+        Integer id = customerService.add(customer);
         customer.setCustomerID(id);
     }
 
     private void addVehicleToDB(Vehicle vehicle) {
-        vehicleDao.insert(vehicle);
+        vehicleService.add(vehicle);
     }
 
 

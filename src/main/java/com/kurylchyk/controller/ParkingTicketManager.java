@@ -9,6 +9,9 @@ import com.kurylchyk.model.dao.VehicleDAO;
 import com.kurylchyk.model.exceptions.*;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.service.CustomerService;
+import com.kurylchyk.model.service.ParkingTicketService;
+import com.kurylchyk.model.service.VehicleService;
 import com.kurylchyk.model.vehicles.Vehicle;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,10 +22,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public final class ParkingTicketManager {
-    private static ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private static ParkingTicketService parkingTicketService = new ParkingTicketService();
     private static ParkingSlotDAO parkingSlotDao = new ParkingSlotDAO();
-    private static CustomerDAO customerDao = new CustomerDAO();
-    private static VehicleDAO vehicleDao = new VehicleDAO();
+    private static CustomerService customerService = new CustomerService();
+    private static VehicleService vehicleService = new VehicleService();
 
     public static void removeParkingTicket(ParkingTicket parkingTicket) {
         LocalDateTime leftTime = TimeCheck.getTime();
@@ -30,7 +33,7 @@ public final class ParkingTicketManager {
         parkingTicket.setStatus("left");
         parkingTicket.setCost(countTheCost(parkingTicket));
         ParkingLot.setParkingSlotBack(parkingTicket.getParkingSlot());
-        parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
+        parkingTicketService.update(parkingTicket,parkingTicket.getParkingTicketID());
     }
 
     public static  ParkingSlot getParkingSlot(HttpServletRequest req, HttpServletResponse resp, Vehicle vehicle) throws ServletException, IOException {
@@ -59,6 +62,7 @@ public final class ParkingTicketManager {
         return cost;
     }
 
+    //remove (first part only)
     public static ParkingTicket searchParkingTicket(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Integer parkingTicketID = Integer.parseInt(req.getParameter("id"));
@@ -66,7 +70,7 @@ public final class ParkingTicketManager {
         ParkingTicket parkingTicket = null;
 
         try {
-            parkingTicket = parkingTicketDAO.select(parkingTicketID);
+            parkingTicket = parkingTicketService.get(parkingTicketID);
 
         } catch (NoSuchParkingTicketException exception) {
             req.setAttribute("notFound", exception);
@@ -76,13 +80,14 @@ public final class ParkingTicketManager {
 
     }
 
+    //remove
     public static Customer searchCustomerByPhoneNumber(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String customerPhoneNumber = req.getParameter("phone_number");
         Customer customer = null;
         RequestDispatcher requestDispatcher = null;
         try {
-            customer = customerDao.select(customerDao.selectIdByPhoneNumber(customerPhoneNumber));
+            customer = customerService.get(customerPhoneNumber);
         } catch (NoSuchCustomerFoundException exception) {
             req.setAttribute("notFound", exception);
             requestDispatcher = req.getRequestDispatcher("searchPage.jsp");
@@ -91,45 +96,46 @@ public final class ParkingTicketManager {
         return customer;
     }
 
-
+//remove
     public static Vehicle searchVehicle(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String licencePlate = req.getParameter("licence_plate");
+
         Vehicle vehicle = null;
         RequestDispatcher requestDispatcher = null;
         try {
-            vehicle = vehicleDao.select(licencePlate);
+            vehicle = vehicleService.get(licencePlate);
         } catch (NoSuchVehicleFoundException exception) {
             req.setAttribute("notFound", exception);
              req.getRequestDispatcher("searchPage.jsp").forward(req,resp);
         }
         return vehicle;
     }
-
-    public static ParkingTicket getTicketByVehicle(Vehicle vehicle) {
-        return parkingTicketDAO.selectByVehicleID(vehicle.getLicencePlate());
+//remove
+    public static ParkingTicket getTicketByVehicle(Vehicle vehicle) throws Exception {
+            return parkingTicketService.getByVehicle(vehicle.getLicencePlate());
+    }
+    //remove
+    public static ParkingTicket getTicketByCustomer(Customer customer) throws Exception {
+        return parkingTicketService.getByCustomer(customer.getCustomerID()).get(0);
     }
 
-    public static ParkingTicket getTicketByCustomer(Customer customer) {
-        //refactor!!!
-        return parkingTicketDAO.selectByCustomerID(customer.getCustomerID()).get(0);
-    }
-
+    //remove
     public static ParkingTicket getTicketByID(Integer id) {
-        try {
-            return parkingTicketDAO.select(id);
-        }catch (NoSuchParkingTicketException ex){
-            ex.printStackTrace();
-        }
+      //  try {
+        //    return parkingTicketDAO.select(id);
+        //}catch (NoSuchParkingTicketException ex){
+          //  ex.printStackTrace();
+        //}
         return null;
     }
 
     public static void deleteCompletely(ParkingTicket currentTicket) {
-        Integer countOfCustomers = parkingTicketDAO.countCustomer(currentTicket.getCustomer());
-        parkingTicketDAO.delete(currentTicket);
-        vehicleDao.delete(currentTicket.getVehicle());
+        Integer countOfCustomers = customerService.countCustomersVehicle(currentTicket.getCustomer().getCustomerID());
+        parkingTicketService.delete(currentTicket);
+        vehicleService.delete(currentTicket.getVehicle());
         if(countOfCustomers==1) {
-            customerDao.delete(currentTicket.getCustomer());
+            customerService.delete(currentTicket.getCustomer());
         }
     }
 }

@@ -7,6 +7,8 @@ import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
 import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.service.CustomerService;
+import com.kurylchyk.model.service.VehicleService;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
 import com.sun.security.sasl.ClientFactoryImpl;
@@ -17,16 +19,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingTicket, Integer>, AddDeleteDAO<ParkingTicket, Integer> {
 
-    private CustomerDAO customerDao;
-    private VehicleDAO vehicleDao;
+    private CustomerDAO customerDAO;
+    private VehicleDAO vehicleDAO;
     private ParkingSlotDAO parkingSlotDao;
 
     {
-        customerDao = new CustomerDAO();
-        vehicleDao = new VehicleDAO();
+
+        customerDAO = new CustomerDAO();
+        vehicleDAO = new VehicleDAO();
         parkingSlotDao = new ParkingSlotDAO();
 
     }
@@ -73,8 +77,9 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         }
     }
 
+
     @Override
-    public ParkingTicket select(Integer id) throws NoSuchParkingTicketException {
+    public Optional<ParkingTicket> select(Integer id) {
 
         ParkingTicket parkingTicket = null;
         String query = "SELECT * FROM parking_ticket WHERE parking_ticket_id = ?";
@@ -84,22 +89,18 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
               parkingTicket = getParkingTicket(resultSet);
-            } else {
-                throw new NoSuchParkingTicketException("Parking ticket with id " + id + "is found");
             }
-        } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return parkingTicket;
+        return Optional.ofNullable(parkingTicket);
     }
 
-    protected ParkingTicket getParkingTicket(ResultSet resultSet)
-            throws SQLException, NoSuchVehicleFoundException, NoSuchCustomerFoundException {
+    private ParkingTicket getParkingTicket(ResultSet resultSet) throws SQLException {
 
-
-        Vehicle currentVehicle = vehicleDao.select(resultSet.getString("vehicle_id"));
-        Customer currentCustomer = customerDao.select(resultSet.getInt("customer_id"));
-        ParkingSlot currentParkingSlot = parkingSlotDao.select(resultSet.getInt("parking_slot_id"));
+        Vehicle currentVehicle = vehicleDAO.select(resultSet.getString("vehicle_id")).get();
+        Customer currentCustomer = customerDAO.select(resultSet.getInt("customer_id")).get();
+        ParkingSlot currentParkingSlot = parkingSlotDao.select(resultSet.getInt("parking_slot_id")).get();
         Integer parkingTicketID = resultSet.getInt("parking_ticket_id");
         String status  = resultSet.getString("status");
         LocalDateTime arrivalTime = resultSet.getObject("from_time", LocalDateTime.class);
@@ -119,7 +120,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         return parkingTicket;
     }
 
-    public ParkingTicket selectByVehicleID(String vehicleID) {
+    public Optional<ParkingTicket> selectByVehicleID(String vehicleID) {
 
         ParkingTicket parkingTicket = null;
         String query = "SELECT * FROM parking_ticket WHERE vehicle_id = ?";
@@ -129,178 +130,32 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 parkingTicket = getParkingTicket(resultSet);
-            } else {
-                throw new NoSuchParkingTicketException("Parking ticket with licence plate " + vehicleID + "is found");
             }
-        } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException | NoSuchParkingTicketException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return parkingTicket;
+        return Optional.ofNullable(parkingTicket);
     }
 
-    //add exception NoSuchParkingTicketException
     public List <ParkingTicket> selectByCustomerID(Integer customerID) {
 
         List<ParkingTicket> allTickets = new ArrayList<>();
         String query = "SELECT * FROM parking_ticket WHERE customer_id = ?";
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
             preparedStatement.setInt(1, customerID);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                ParkingTicket currentTicket = getParkingTicket(resultSet);
                 allTickets.add(currentTicket);
             }
-        } catch (SQLException | NoSuchVehicleFoundException | NoSuchCustomerFoundException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
 
         return allTickets;
     }
 
-    public Integer countCustomer(Customer customer) {
-        Integer customerID = customer.getCustomerID();
-        String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE customer_id=?";
-        Integer count = null;
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, customerID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                count = resultSet.getInt("COUNT");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return count;
-    }
-    public Integer countAllPresent(TypeOfVehicle typeOfVehicle){
-
-        String query = "SELECT COUNT(status) AS allPresent " +
-                        "FROM parking_ticket AS p " +
-                        "JOIN vehicle AS V " +
-                        "ON p.vehicle_id = v.licence_plate " +
-                        "WHERE p.status = 'present' and v.type=? ";
-        Integer count = 0;
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1,typeOfVehicle.toString());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                count = resultSet.getInt("allPresent");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return count;
-    }
-
-    @Override
-    public List<ParkingTicket> selectAll() {
-
-        String query = "SELECT * FROM parking_ticket";
-        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
-
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-           ParkingTicket currentTicket = getParkingTicket(resultSet);
-           listOfTickets.add(currentTicket);
-            }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        } catch (NoSuchVehicleFoundException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchCustomerFoundException exception) {
-            exception.printStackTrace();
-        }
-
-        return listOfTickets;
-
-
-    }
-
-    public List<ParkingTicket> selectAll(String currentStatus) {
-
-        String query = "SELECT * FROM parking_ticket WHERE status = ?";
-        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
-
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1,currentStatus);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                ParkingTicket currentTicket = getParkingTicket(resultSet);
-                listOfTickets.add(currentTicket);
-            }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        } catch (NoSuchVehicleFoundException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchCustomerFoundException exception) {
-            exception.printStackTrace();
-        }
-        return listOfTickets;
-
-    }
-    public List<ParkingTicket> selectInDate(LocalDateTime date) {
-
-        String query = "SELECT * FROM parking_ticket WHERE from_time >= ?";
-        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
-
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, date.toLocalDate());
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-
-                ParkingTicket currentTicket = getParkingTicket(resultSet);
-                listOfTickets.add(currentTicket);
-            }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        } catch (NoSuchVehicleFoundException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchCustomerFoundException exception) {
-            exception.printStackTrace();
-        }
-        return listOfTickets;
-    }
-
-    public List<ParkingTicket> selectInDateAndStatus(LocalDateTime date, String stat) {
-
-        String query = "SELECT * FROM parking_ticket WHERE from_time >= ? AND status = ?";
-        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
-
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, date.toLocalDate());
-            preparedStatement.setString(2, stat);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                ParkingTicket currentTicket = getParkingTicket(resultSet);
-                listOfTickets.add(currentTicket);
-            }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        } catch (NoSuchVehicleFoundException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchCustomerFoundException exception) {
-            exception.printStackTrace();
-        }
-
-        return listOfTickets;
-    }
 
     @Override
     public void update(ParkingTicket parkingTicket, Integer id) {
@@ -333,7 +188,94 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     }
 
+    @Override
+    public List<ParkingTicket> selectAll() {
 
+        String query = "SELECT * FROM parking_ticket";
+        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
+
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                ParkingTicket currentTicket = getParkingTicket(resultSet);
+                listOfTickets.add(currentTicket);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return listOfTickets;
+
+
+    }
+
+    public List<ParkingTicket> selectAll(String currentStatus) {
+
+        String query = "SELECT * FROM parking_ticket WHERE status = ?";
+        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
+
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,currentStatus);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                ParkingTicket currentTicket = getParkingTicket(resultSet);
+                listOfTickets.add(currentTicket);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return listOfTickets;
+
+    }
+    public List<ParkingTicket> selectInDate(LocalDateTime date) {
+
+        String query = "SELECT * FROM parking_ticket WHERE from_time >= ?";
+        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
+
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1, date.toLocalDate());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                ParkingTicket currentTicket = getParkingTicket(resultSet);
+                listOfTickets.add(currentTicket);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return listOfTickets;
+    }
+
+    public List<ParkingTicket> selectInDateAndStatus(LocalDateTime date, String stat) {
+
+        String query = "SELECT * FROM parking_ticket WHERE from_time >= ? AND status = ?";
+        LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
+
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1, date.toLocalDate());
+            preparedStatement.setString(2, stat);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ParkingTicket currentTicket = getParkingTicket(resultSet);
+                listOfTickets.add(currentTicket);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return listOfTickets;
+    }
 
 
 }

@@ -8,15 +8,16 @@ import com.kurylchyk.model.vehicles.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, String>, AddDeleteDAO<Vehicle, String> {
 
     @Override
-    public Vehicle select(String id) throws NoSuchVehicleFoundException {
+    public Optional<Vehicle> select(String id)  {
 
         String query = "SELECT * FROM vehicle WHERE licence_plate=?";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         Vehicle vehicle = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -25,14 +26,11 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 vehicle = getVehicle(resultSet);
-            }else
-            {
-                throw new NoSuchVehicleFoundException("No Such vehicle found");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return vehicle;
+        return Optional.ofNullable(vehicle);
 
     }
 
@@ -108,38 +106,61 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
         }
     }
 
-    public void updateCustomerID(Vehicle vehicle, Customer customer) {
+    public void updateCustomerID(String licencePlate, Integer customerID) {
 
         String query = "UPDATE vehicle SET customer_id = ? WHERE licence_plate = ?";
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, customer.getCustomerID());
-            preparedStatement.setString(2, vehicle.getLicencePlate());
+            preparedStatement.setInt(1, customerID);
+            preparedStatement.setString(2, licencePlate);
             preparedStatement.execute();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
     }
 
-    public Integer getCountOfType(TypeOfVehicle type) {
-        String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE type = ?";
-        Integer count = 0;
+    public String getStatus(String id) {
+
+        String query = "SELECT status FROM parking_ticket WHERE vehicle_id = ?";
+        String status = null;
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, type.toString());
+            preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                count = resultSet.getInt("COUNT");
+            if(resultSet.next()){
+                status = resultSet.getString("status");
             }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        return count;
-
+        return status;
     }
 
-    public Vehicle getVehicle(ResultSet resultSet) throws SQLException {
+
+
+    public Integer countAllPresent(TypeOfVehicle typeOfVehicle){
+
+        String query = "SELECT COUNT(status) AS allPresent " +
+                "FROM parking_ticket AS p " +
+                "JOIN vehicle AS V " +
+                "ON p.vehicle_id = v.licence_plate " +
+                "WHERE p.status = 'present' and v.type=? ";
+        Integer count = 0;
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,typeOfVehicle.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                count = resultSet.getInt("allPresent");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return count;
+    }
+
+    private Vehicle getVehicle(ResultSet resultSet) throws SQLException {
 
         TypeOfVehicle typeOfVehicle = TypeOfVehicle.valueOf(resultSet.getString("type"));
         String make = resultSet.getString("make");
@@ -155,21 +176,5 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
         return vehicle;
     }
 
-    public boolean checkIfPresent(String id) {
-
-        String query = "SELECT status FROM parking_ticket WHERE vehicle_id = ?";
-        boolean result = false;
-        try (Connection connection = Connector.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                result = resultSet.getString("status").equals("present");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return result;
-    }
 
 }

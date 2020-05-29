@@ -8,11 +8,14 @@ import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Integer>, AddDeleteDAO<Customer, Integer> {
 
+
+    //винести з 2 наступних методів реалізацію в окремий клас
     @Override
-    public Customer select(Integer id) throws NoSuchCustomerFoundException {
+    public Optional<Customer> select(Integer id)  {
 
         String query = "SELECT * FROM customer WHERE customer_id =?";
         Customer customer = null;
@@ -23,32 +26,31 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                customer = getCustomer(resultSet);
-            } else {
-                throw new NoSuchCustomerFoundException("No customer with id " + id + " is found");
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return customer;
+        return Optional.ofNullable(customer);
     }
 
+    public Optional<Customer> select(String phoneNumber) {
 
-    protected  Customer getCustomer(ResultSet resultSet) throws SQLException {
-        Integer customerID = resultSet.getInt("customer_id");
-        String name  = resultSet.getString("name");
-        String surname = resultSet.getString("surname");
-        String phoneNumber = resultSet.getString("phone_number");
+        String query = "SELECT * FROM customer WHERE phone_number =?";
+        Customer customer = null;
 
-        Customer customer = Customer.newCustomer().
-                setCustomerID(customerID)
-                .setName(name)
-                .setSurname(surname)
-                .setPhoneNumber(phoneNumber)
-                .buildCustomer();
-
-        return customer;
+        try (Connection connection = Connector.getDataSource().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, phoneNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                customer = getCustomer(resultSet);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return Optional.ofNullable(customer);
     }
+
     @Override
     public List<Customer> selectAll() {
 
@@ -92,27 +94,6 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
         return id;
     }
 
-    public Integer selectIdByPhoneNumber(String phoneNumber) throws NoSuchCustomerFoundException {
-
-        String query = "SELECT customer_id FROM customer where phone_number = ?";
-        Integer customerID = 0;
-
-        try (Connection connection = Connector.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, phoneNumber);
-            ResultSet set = preparedStatement.executeQuery();
-            if (set.next()) {
-                customerID = set.getInt(1);
-            } else {
-                throw new NoSuchCustomerFoundException("No such customer with phone number " + phoneNumber);
-            }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return customerID;
-    }
 
     @Override
     public void update(Customer customer, Integer id) {
@@ -143,6 +124,40 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
             ex.printStackTrace();
         }
     }
+
+
+    public Integer countCustomersVehicle(Integer customerID) {
+        String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE customer_id=?";
+        Integer count = null;
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, customerID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                count = resultSet.getInt("COUNT");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return count;
+    }
+
+    private   Customer getCustomer(ResultSet resultSet) throws SQLException {
+        Integer customerID = resultSet.getInt("customer_id");
+        String name  = resultSet.getString("name");
+        String surname = resultSet.getString("surname");
+        String phoneNumber = resultSet.getString("phone_number");
+
+        Customer customer = Customer.newCustomer().
+                setCustomerID(customerID)
+                .setName(name)
+                .setSurname(surname)
+                .setPhoneNumber(phoneNumber)
+                .buildCustomer();
+
+        return customer;
+    }
+
 
 
 }
