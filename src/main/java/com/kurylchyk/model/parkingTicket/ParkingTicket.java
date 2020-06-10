@@ -1,7 +1,5 @@
 package com.kurylchyk.model.parkingTicket;
 
-
-import com.kurylchyk.model.TimeCheck;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.vehicles.Vehicle;
@@ -18,7 +16,7 @@ public class ParkingTicket {
     private LocalDateTime arrivalTime;
     private LocalDateTime leftTime;
     private BigDecimal cost;
-    private String status;
+    private Status status;
 
     public ParkingTicket(ParkingTicketBuilder builder){
         this.parkingTicketID = builder.parkingTicketID;
@@ -35,21 +33,12 @@ public class ParkingTicket {
         this.parkingTicketID = parkingTicketID;
     }
 
-   // public ParkingTicket(Vehicle vehicle, ParkingSlot parkingSlot, Customer customer) {
-
-//        this.vehicle = vehicle;
-  //      this.parkingSlot = parkingSlot;
-    //    this.customer = customer;
-      //  this.status = "present";
-        //arrivalTime = TimeCheck.getTime();
-   // }
 
     public static ParkingTicketBuilder newParkingTicket(){
         return new ParkingTicketBuilder();
     }
     public ParkingTicket(){
     }
-
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
@@ -67,16 +56,13 @@ public class ParkingTicket {
         this.parkingSlot = parkingSlot;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
 
     public void setLeftTime(LocalDateTime leftTime) {
         this.leftTime = leftTime;
     }
 
-    public void setStatus(String stat) {
-        status = stat;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
 
@@ -99,7 +85,7 @@ public class ParkingTicket {
        return cost;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 

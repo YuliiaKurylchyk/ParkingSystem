@@ -44,8 +44,16 @@
         </form>
     </div>
 </c:if>
-
+<input type="hidden" name="dateOfParkingTicket" value="${param.dateOfParkingTicket}">
+<input type="hidden" name="statusOfParkingTicket" value="${param.statusOfParkingTicket}">
+<c:if test="${param.dateOfParkingTicket!=null}">
 <div id="container">
+
+    <c:if test="${param.dateOfParkingTicket!=null}">
+        <h3>You have chosen <c:out value="${param.dateOfParkingTicket}"/>
+            and <c:out value="${param.statusOfParkingTicket}"/>
+        </h3>
+    </c:if>
     <table>
         <thead>
         <tr>
@@ -88,23 +96,14 @@
                     <c:out value="${currentTicket.cost}"/>
                 </td>
                 <td>
-                <c:if test="${action!='deleting'}">
-                        <a href="/edit?id=<c:out value='${currentTicket.parkingTicketID}'/>">Edit</a> &nbsp;&nbsp;&nbsp;
-                    </c:if>
-                    <c:if test="${currentTicket.status=='present'}">
-                        <a href="deletingServlet?action=remove&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Remove</a>
-                        </td>
-                     </c:if>
-                <c:if test="${currentTicket.status=='left'}">
-                    <a href="deletingServlet?action=delete&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">Delete
-                        completely</a></td>
-                </c:if>
+                    <a href="/edit?option=parkingTicket&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}'/>">Show
+                        details</a> &nbsp;&nbsp;&nbsp;
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </div>
-
+</c:if>
 <div id="containerButton">
     <div style="float:left;">
         <a href="/">

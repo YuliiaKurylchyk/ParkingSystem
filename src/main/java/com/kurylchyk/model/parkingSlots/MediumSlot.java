@@ -3,6 +3,7 @@ package com.kurylchyk.model.parkingSlots;
 
 public class MediumSlot extends ParkingSlot {
     public MediumSlot() {
-        super(2,SizeOfSlot.MEDIUM);
+        super(SizeOfSlot.MEDIUM);
+        super.parkingSlotID = 2;
     }
 }

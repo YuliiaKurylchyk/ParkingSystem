@@ -29,7 +29,7 @@
                 <div class="menu_sign">Delete parking ticket</div>
             </div>
         </a>
-        <a href="<%=request.getContextPath()%>/update">
+        <a href="<%=request.getContextPath()%>/updating">
             <div class="in_nav">
                 <div class="menu_icon"><i class="fas fa-pencil-alt"></i></div>
                 <div class="menu_sign">Update</div>

@@ -7,7 +7,6 @@ public class Car  extends  Vehicle{
     }
 
     public Car(){
-
         typeOfVehicle = TypeOfVehicle.CAR;
     }
     @Override

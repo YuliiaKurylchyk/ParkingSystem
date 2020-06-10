@@ -2,12 +2,12 @@ package com.kurylchyk.model.parkingSlots;
 
 public abstract class ParkingSlot {
 
-    protected SizeOfSlot sizeOfSlot;
-    protected final Integer parkingSlotID;
+    protected final SizeOfSlot sizeOfSlot;
+    protected Integer parkingSlotID;
+    protected  Integer pricePerDay;
 
 
-    public ParkingSlot(Integer parkingSlotID,SizeOfSlot sizeOfSlot) {
-        this.parkingSlotID  = parkingSlotID;
+    public ParkingSlot(SizeOfSlot sizeOfSlot) {
         this.sizeOfSlot = sizeOfSlot;
 
     }
@@ -19,6 +19,17 @@ public abstract class ParkingSlot {
     public Integer getParkingSlotID() {
         return parkingSlotID;
     }
+
+    public Integer getPrice(){
+        return pricePerDay;
+    }
+    public void setPrice(Integer price) {
+        this.pricePerDay = price;
+    }
+    public void setParkingSlotID(Integer parkingSlotID) {
+        this.parkingSlotID = parkingSlotID;
+    }
+
 
     @Override
     public int hashCode() {

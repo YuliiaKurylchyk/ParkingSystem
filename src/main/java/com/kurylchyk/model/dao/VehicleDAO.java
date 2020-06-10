@@ -137,8 +137,6 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
         return status;
     }
 
-
-
     public Integer countAllPresent(TypeOfVehicle typeOfVehicle){
 
         String query = "SELECT COUNT(status) AS allPresent " +
@@ -176,5 +174,8 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
         return vehicle;
     }
 
+    public boolean isPresent(String licencePlate) {
+        return  select(licencePlate).isPresent();
+    }
 
 }

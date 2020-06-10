@@ -9,15 +9,17 @@ public class Customer {
 
     public Customer(){}
 
+
     public static CustomerBuilder newCustomer(){
         return new CustomerBuilder();
     }
 
-    public Customer(String name, String surname, String phoneNumber) {
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-    }
+   // public Customer(String name, String surname, String phoneNumber) {
+     //   this.name = name;
+       // this.surname = surname;
+        //this.phoneNumber = phoneNumber;
+    //}
+    /*
 
     public Customer(Integer customerID,String name, String surname, String phoneNumber) {
         this.customerID = customerID;
@@ -26,6 +28,8 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
+
+     */
     public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
     }

@@ -159,6 +159,13 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
     }
 
 
+    public boolean isPresent(Integer customerID) {
+        return select(customerID).isPresent();
+    }
+    public boolean isPresent(String phoneNumber){
+        return select(phoneNumber).isPresent();
+    }
+
 
 }
 

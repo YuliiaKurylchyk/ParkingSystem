@@ -21,7 +21,7 @@
 <h3>Search by</h3>
 <div id="selectContainer">
 
-    <form action="searchPage.jsp" method="POST">
+    <form action="searchPage.jsp" method="GET">
         <select name="option" onchange="this.form.submit();">
             <option value="" disabled selected>Select your option</option>
             <option value="parkingTicket">Parking ticket info</option>
@@ -31,22 +31,22 @@
     </form>
 </div>
 <div id="searchContainer">
-    <form action="search" method="POST" id="searchForm">
+    <form action="search" method="GET" id="searchForm">
         <input type="hidden" name="option" value="${param.option}">
         <c:choose>
             <c:when test="${param.option == 'parkingTicket'}">
                 <p>Enter parking ticket ID</p>
-                <input type="text" placeholder="ID" name="id">
+                <input type="text" placeholder="ID" name="parkingTicketID">
                 <input type="submit" class="searchButton" value="${action=='update'?'Search':'Remove'}">
             </c:when>
             <c:when test="${param.option=='customer'}">
                 <p>Enter customer ID or phone number</p>
-                <input type="text" placeholder="phone number" name="phone_number">
+                <input type="text" placeholder="phone number" name="phoneNumber">
                 <input type="submit" class="searchButton"  value="${action=='update'?'Search':'Remove'}">
             </c:when>
             <c:when test="${param.option=='vehicle'}">
                 <p>Enter licence plate of vehicle</p>
-                <input type="text" placeholder="licence plate" name="licence_plate">
+                <input type="text" placeholder="licence plate" name="vehicleID">
                 <input type="submit" class="searchButton" value="${action=='update'?'Search':'Remove'}">
 
             </c:when>
@@ -55,9 +55,9 @@
 </div>
 <div id="container">
 
-    <c:if test="${notFound!=null}">
+    <c:if test="${requestScope.notFound!=null}">
         <h3 style="color:#ff0000">
-            <c:out value="${notFound}"/>
+            <c:out value="${requestScope.notFound}"/>
         </h3>
     </c:if>
 

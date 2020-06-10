@@ -3,15 +3,9 @@ package com.kurylchyk.model.dao;
 import com.kurylchyk.model.Connector;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
-import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
-import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.service.CustomerService;
-import com.kurylchyk.model.service.VehicleService;
-import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
-import com.sun.security.sasl.ClientFactoryImpl;
+import com.kurylchyk.model.parkingTicket.Status;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -35,7 +29,6 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
     }
 
-
     @Override
     public Integer insert(ParkingTicket parkingTicket) {
 
@@ -48,7 +41,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             preparedStatement.setInt(1, parkingTicket.getCustomer().getCustomerID());
             preparedStatement.setString(2, parkingTicket.getVehicle().getLicencePlate());
             preparedStatement.setInt(3, parkingTicket.getParkingSlot().getParkingSlotID());
-            preparedStatement.setString(4, parkingTicket.getStatus());
+            preparedStatement.setString(4, parkingTicket.getStatus().toString());
             preparedStatement.setObject(5, parkingTicket.getArrivalTime());
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -102,7 +95,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         Customer currentCustomer = customerDAO.select(resultSet.getInt("customer_id")).get();
         ParkingSlot currentParkingSlot = parkingSlotDao.select(resultSet.getInt("parking_slot_id")).get();
         Integer parkingTicketID = resultSet.getInt("parking_ticket_id");
-        String status  = resultSet.getString("status");
+        Status status  = Status.valueOf(resultSet.getString("status").toUpperCase());
         LocalDateTime arrivalTime = resultSet.getObject("from_time", LocalDateTime.class);
         LocalDateTime leftTime = resultSet.getObject("to_time",LocalDateTime.class);
         BigDecimal cost = resultSet.getBigDecimal("cost");
@@ -163,7 +156,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
 
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                    preparedStatement.setString(1,parkingTicket.getStatus());
+                    preparedStatement.setString(1,parkingTicket.getStatus().toString());
                     preparedStatement.setObject(2,parkingTicket.getLeftTime());
                     preparedStatement.setObject(3,parkingTicket.getCost());
                     preparedStatement.setInt(4,id);
@@ -210,6 +203,10 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         return listOfTickets;
 
 
+    }
+
+    public boolean isPresent(Integer parkingTicketID) {
+        return select(parkingTicketID).isPresent();
     }
 
     public List<ParkingTicket> selectAll(String currentStatus) {

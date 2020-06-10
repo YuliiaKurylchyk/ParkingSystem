@@ -19,12 +19,15 @@ public class ParkingTicketUtil extends HttpServlet {
     private static ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
        doPost(req, resp);
     }
 
+    //remove
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         String date = req.getParameter("dateOfParkingTicket");
         String status = req.getParameter("statusOfParkingTicket");
@@ -49,17 +52,17 @@ public class ParkingTicketUtil extends HttpServlet {
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
         requestDispatcher.forward(req, resp);
     }
-
+//remove
     private List<ParkingTicket> getAppropriateTickets(LocalDateTime date) {
 
         return parkingTicketDAO.selectInDate(date);
 
     }
-
+//remove
     private List<ParkingTicket> getAppropriateTickets(LocalDateTime date, String status) {
        return parkingTicketDAO.selectInDateAndStatus(date,status);
     }
-
+    //remove
     private LocalDateTime getAppropriateDate(String date) {
 
         LocalDateTime appropriateDate = null;
@@ -80,7 +83,6 @@ public class ParkingTicketUtil extends HttpServlet {
         }
 
         return appropriateDate;
-
 
     }
 

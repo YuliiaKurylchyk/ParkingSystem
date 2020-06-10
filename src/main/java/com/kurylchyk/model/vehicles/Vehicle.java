@@ -1,7 +1,7 @@
 package com.kurylchyk.model.vehicles;
 
 public abstract class Vehicle {
-    //maybe you should to make these protected
+
     protected String make;
     protected String model;
     protected  String licencePlate;

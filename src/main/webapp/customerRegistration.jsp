@@ -18,7 +18,7 @@
 <body>
 <h1>Parking ticket creation</h1>
 <c:if test="${customer != null}">
-<form action="updatingServlet?option=updateCustomer" method="post">
+<form action="updatingServlet" method="post">
     </c:if>
     <c:if test="${customer == null}">
     <form action="creationServlet?action=customer" method="post">

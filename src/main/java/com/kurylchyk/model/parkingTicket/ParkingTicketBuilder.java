@@ -16,7 +16,7 @@ public class ParkingTicketBuilder {
     protected LocalDateTime arrivalTime;
     protected LocalDateTime leftTime;
     protected BigDecimal cost;
-    protected String status;
+    protected Status status;
 
 
     public ParkingTicketBuilder withParkingTicketID(Integer id) {
@@ -54,7 +54,7 @@ public class ParkingTicketBuilder {
         return this;
     }
 
-    public ParkingTicketBuilder withStatus(String status) {
+    public ParkingTicketBuilder withStatus(Status status) {
         this.status = status;
         return this;
     }

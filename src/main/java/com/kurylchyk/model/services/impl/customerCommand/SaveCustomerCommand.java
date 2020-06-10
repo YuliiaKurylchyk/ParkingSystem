@@ -1,0 +1,22 @@
+package com.kurylchyk.model.services.impl.customerCommand;
+
+import com.kurylchyk.model.services.impl.Command;
+import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.dao.CustomerDAO;
+
+public class SaveCustomerCommand  implements Command<Customer> {
+
+    private CustomerDAO customerDAO = new CustomerDAO();
+    private Customer customer;
+    public SaveCustomerCommand(Customer customer) {
+        this.customer = customer;
+    }
+
+
+    @Override
+    public Customer execute() throws Exception {
+       Integer customerID  = customerDAO.insert(customer);
+       customer.setCustomerID(customerID);
+       return customer;
+    }
+}
