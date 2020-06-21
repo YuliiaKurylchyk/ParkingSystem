@@ -4,12 +4,12 @@ import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 
-public class SaveToBD implements Command<ParkingTicket> {
+public class SaveParkingTicketCommand implements Command<ParkingTicket> {
 
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
     private ParkingTicket parkingTicket;
 
-    public SaveToBD(ParkingTicket parkingTicket){
+    public SaveParkingTicketCommand(ParkingTicket parkingTicket){
         this.parkingTicket = parkingTicket;
     }
     @Override

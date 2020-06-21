@@ -8,11 +8,12 @@ import java.util.List;
 public interface CustomerService {
 
     Customer create(String name,String surname,String phoneNumber);
-
+    Customer create(Integer customerID,String name,String surname,String phoneNumber);
     Customer getFromDB(Integer customerID) throws Exception;
     Customer getFromDB(String phoneNumber) throws Exception;
     Customer saveToDB(Customer customer) throws Exception;
     void update(Customer customer) throws Exception;
+    List<Customer> getAll() throws Exception;
     //викликати з deleteTicketCommand
     void deleteCompletely(Customer customer) throws Exception;
     boolean isPresent(String phoneNumber) throws Exception;

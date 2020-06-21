@@ -30,7 +30,7 @@ public class VehicleCommandTest {
 
        Assert.assertEquals(make,vehicle.getMake());
        Assert.assertEquals(model,vehicle.getModel());
-       Assert.assertEquals(licencePlate,vehicle.getLicencePlate());
+       Assert.assertEquals(licencePlate,vehicle.getLicensePlate());
        Assert.assertEquals(typeOfVehicle,vehicle.getTypeOfVehicle());
    }
 

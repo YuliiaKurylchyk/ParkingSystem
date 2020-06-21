@@ -3,6 +3,7 @@ package com.kurylchyk.model.services;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
+import  com.kurylchyk.model.parkingTicket.Status;
 
 import java.util.List;
 
@@ -23,7 +24,8 @@ public interface VehicleService {
     boolean isPresent(String licencePlate) throws Exception;
 
     String getVehicleStatus(String licencePlate) throws Exception;
-
+    List<Vehicle> getAll() throws Exception;
+    List<Vehicle> getAll(Status status) throws Exception;
     void connectCustomerToVehicle(Vehicle vehicle, Customer customer) throws Exception;
     Integer countAllPresent(TypeOfVehicle typeOfVehicle) throws Exception;
     List<String> validate(String make, String model, String licencePlate, String typeOfVehicle) throws Exception;

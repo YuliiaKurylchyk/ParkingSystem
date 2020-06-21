@@ -14,7 +14,8 @@
 <header>Parking system</header>
 <div id="main_container">
     <nav>
-        <a href="<%=request.getContextPath()%>/new">
+       <!-- <a href="<%=request.getContextPath()%>/new">-->
+        <a href="/vehicle/form">
             <div class="in_nav">
                 <div class="menu_icon">
                     <i class="fas fa-plus"></i>
@@ -22,25 +23,47 @@
                 <div class="menu_sign">Create parking ticket</div>
             </div>
         </a>
-
-        <a href="<%=request.getContextPath()%>/remove">
+<!--
+       <a href="/home/remove">
             <div class="in_nav">
                 <div class="menu_icon"><i class="fas fa-minus"></i></div>
                 <div class="menu_sign">Delete parking ticket</div>
             </div>
         </a>
-        <a href="<%=request.getContextPath()%>/updating">
+        <a href="/home/updating">
             <div class="in_nav">
                 <div class="menu_icon"><i class="fas fa-pencil-alt"></i></div>
                 <div class="menu_sign">Update</div>
             </div>
         </a>
-        <a href="<%=request.getContextPath()%>/show">
+        -->
+        <a href="/searchPage.jsp">
+            <div class="in_nav">
+                <div class="menu_icon"><i class="fas fa-search"></i></div>
+                <div class="menu_sign">Find parking ticket</div>
+            </div>
+        </a>
+        <a href="/parkingTicket/showAll?date=allTickets&status=PRESENT">
             <div class="in_nav">
                 <div class="menu_icon"><i class="fas fa-eye"></i></div>
                 <div class="menu_sign">Show all parking tickets</div>
             </div>
         </a>
+
+        <a href="/vehicle/show?status=PRESENT">
+            <div class="in_nav">
+                <div class="menu_icon"><i class="fas fa-car-side"></i></div>
+                <div class="menu_sign">Show all vehicles</div>
+            </div>
+        </a>
+
+        <a href="/customer/show">
+            <div class="in_nav">
+                <div class="menu_icon"><i class="fas fa-user-friends"></i></div>
+                <div class="menu_sign">Show all customers</div>
+            </div>
+        </a>
+
     </nav>
 
     <div class="container" >

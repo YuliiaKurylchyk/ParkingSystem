@@ -1,10 +1,8 @@
 package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.vehicles.*;
-
+import com.kurylchyk.model.parkingTicket.Status;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +63,14 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicle.getMake());
             preparedStatement.setString(2, vehicle.getModel());
-            preparedStatement.setString(3, vehicle.getLicencePlate());
+            preparedStatement.setString(3, vehicle.getLicensePlate());
             preparedStatement.setString(4, vehicle.getTypeOfVehicle().toString());
             preparedStatement.execute();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return vehicle.getLicencePlate();
+        return vehicle.getLicensePlate();
     }
 
     @Override
@@ -84,7 +82,7 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicle.getMake());
             preparedStatement.setString(2, vehicle.getModel());
-            preparedStatement.setString(3, vehicle.getLicencePlate());
+            preparedStatement.setString(3, vehicle.getLicensePlate());
             preparedStatement.setString(4, vehicle.getTypeOfVehicle().toString());
             preparedStatement.setString(5, previousLicencePlate);
             preparedStatement.execute();
@@ -99,7 +97,7 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, vehicle.getLicencePlate());
+            preparedStatement.setString(1, vehicle.getLicensePlate());
             preparedStatement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -143,7 +141,7 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
                 "FROM parking_ticket AS p " +
                 "JOIN vehicle AS V " +
                 "ON p.vehicle_id = v.licence_plate " +
-                "WHERE p.status = 'present' and v.type=? ";
+                "WHERE p.status = 'PRESENT' and v.type=? ";
         Integer count = 0;
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -158,6 +156,28 @@ public class VehicleDAO extends Connector implements GetUpdateDAO<Vehicle, Strin
         return count;
     }
 
+    public List<Vehicle> selectAll(Status status){
+        List<Vehicle> allVehicles= new ArrayList<>();
+        String query = "SELECT * " +
+                "FROM VEHICLE AS V " +
+                "JOIN PARKING_TICKET AS P " +
+                "ON P.vehicle_id = V.licence_plate " +
+                "WHERE P.status =?";
+
+        try(Connection connection = Connector.getDataSource().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,status.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Vehicle vehicle = getVehicle(resultSet);
+                allVehicles.add(vehicle);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return allVehicles;
+
+    }
     private Vehicle getVehicle(ResultSet resultSet) throws SQLException {
 
         TypeOfVehicle typeOfVehicle = TypeOfVehicle.valueOf(resultSet.getString("type"));

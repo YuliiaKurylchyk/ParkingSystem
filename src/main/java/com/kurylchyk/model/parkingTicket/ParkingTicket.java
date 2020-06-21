@@ -14,7 +14,7 @@ public class ParkingTicket {
     private Vehicle vehicle;
     private ParkingSlot parkingSlot;
     private LocalDateTime arrivalTime;
-    private LocalDateTime leftTime;
+    private LocalDateTime departureTime;
     private BigDecimal cost;
     private Status status;
 
@@ -25,7 +25,7 @@ public class ParkingTicket {
         this.parkingSlot = builder.parkingSlot;
         this.status = builder.status;
         this.arrivalTime = builder.arrivalTime;
-        this.leftTime = builder.leftTime;
+        this.departureTime = builder.departureTime;
         this.cost = builder.cost;
     }
 
@@ -57,8 +57,8 @@ public class ParkingTicket {
     }
 
 
-    public void setLeftTime(LocalDateTime leftTime) {
-        this.leftTime = leftTime;
+    public void setDepartureTime(LocalDateTime leftTime) {
+        this.departureTime = leftTime;
     }
 
     public void setStatus(Status status) {
@@ -93,8 +93,8 @@ public class ParkingTicket {
         return arrivalTime;
     }
 
-    public LocalDateTime getLeftTime(){
-        return leftTime;
+    public LocalDateTime getDepartureTime(){
+        return departureTime;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ParkingTicket {
                 + "Place №" + parkingSlot + "\n"
                 + "Data and time : " + arrivalTime + "\n"
                 + "Customer: " + customer + "\n"
-                + "Status: " + status;
+                + "Status: " + status.toString();
     }
 
     @Override

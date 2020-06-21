@@ -6,7 +6,7 @@ import com.kurylchyk.model.services.VehicleService;
 import com.kurylchyk.model.services.impl.BusinessServiceFactory;
 import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
-
+import com.kurylchyk.model.parkingTicket.Status;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,8 +50,8 @@ public class HomeAction implements Action {
 
     private void getParkingTicketInfo(HttpServletRequest req) throws Exception {
         Integer countOfTodayEntities = parkingTicketService.getAllInDate(LocalDateTime.now()).size();
-        Integer countOfAllLeft = parkingTicketService.getAll("left").size();
-        Integer countOfAllPresent = parkingTicketService.getAll("present").size();
+        Integer countOfAllLeft = parkingTicketService.getAll(Status.LEFT).size();
+        Integer countOfAllPresent = parkingTicketService.getAll(Status.PRESENT).size();
         req.setAttribute("countOfTodayEntities", countOfTodayEntities);
         req.setAttribute("countOfAllPresent", countOfAllPresent);
         req.setAttribute("countOfAllLeft", countOfAllLeft);

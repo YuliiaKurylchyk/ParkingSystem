@@ -20,12 +20,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer create(Integer customerID, String name, String surname, String phoneNumber) {
+        return Customer.newCustomer()
+                .setCustomerID(customerID)
+                .setName(name)
+                .setSurname(surname)
+                .setPhoneNumber(phoneNumber)
+                .buildCustomer();
+    }
+
+    @Override
     public Customer getFromDB(Integer customerID) throws Exception {
         return executor.execute(new GetCustomerCommand(customerID));
     }
 
     @Override
     public Customer getFromDB(String phoneNumber) throws Exception {
+        System.out.println("In getFromDB with phoneNumber "+phoneNumber);
         return executor.execute(new GetCustomerCommand(phoneNumber));
     }
 
@@ -41,6 +52,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void update(Customer customer) throws Exception {
         executor.execute(new UpdateCustomerCommand(customer));
+    }
+
+    @Override
+    public List<Customer> getAll() throws Exception {
+        return executor.execute(new GetAllCustomersCommand());
     }
 
     @Override

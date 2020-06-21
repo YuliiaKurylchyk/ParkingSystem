@@ -3,14 +3,14 @@ package com.kurylchyk.model.services.impl.ticketCommand;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.Command;
-
+import com.kurylchyk.model.parkingTicket.Status;
 import java.util.List;
 
 public class GetAllTicketCommand  implements Command<List<ParkingTicket>> {
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
-    private String status;
+    private Status status;
     public GetAllTicketCommand(){ }
-    public GetAllTicketCommand(String status){
+    public GetAllTicketCommand(Status status){
         this.status = status;
     }
 

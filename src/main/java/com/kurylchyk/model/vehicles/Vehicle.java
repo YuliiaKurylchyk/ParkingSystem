@@ -4,7 +4,7 @@ public abstract class Vehicle {
 
     protected String make;
     protected String model;
-    protected  String licencePlate;
+    protected  String licensePlate;
     protected TypeOfVehicle typeOfVehicle;
 
     public static VehicleBuilder newVehicle(){
@@ -18,8 +18,8 @@ public abstract class Vehicle {
         this.model = model;
     }
 
-    public void setLicencePlate(String licencePlate) {
-        this.licencePlate = licencePlate;
+    public void setLicensePlate(String licencePlate) {
+        this.licensePlate = licencePlate;
     }
 
 
@@ -27,13 +27,13 @@ public abstract class Vehicle {
     public Vehicle(String make, String model, String licencePlate,TypeOfVehicle type) {
         this.make = make;
         this.model = model;
-        this.licencePlate = licencePlate;
+        this.licensePlate = licencePlate;
         this.typeOfVehicle = type;
     }
 
     @Override
     public String toString() {
-        return  make + "\t" + model + "\t" + licencePlate;
+        return  make + "\t" + model + "\t" + licensePlate;
     }
 
     public String getMake(){
@@ -45,8 +45,8 @@ public abstract class Vehicle {
     }
 
 
-    public String getLicencePlate() {
-        return licencePlate;
+    public String getLicensePlate() {
+        return licensePlate;
     }
     public TypeOfVehicle getTypeOfVehicle(){
         return typeOfVehicle;
@@ -56,7 +56,7 @@ public abstract class Vehicle {
     public boolean equals(Object obj) {
 
         Vehicle anotherVehicle = (Vehicle) obj;
-        return this.licencePlate.equals(anotherVehicle.licencePlate)
+        return this.licensePlate.equals(anotherVehicle.licensePlate)
                 && this.make.equals(anotherVehicle.make)
                 && this.model.equals(anotherVehicle.model);
     }
@@ -66,7 +66,7 @@ public abstract class Vehicle {
         int result = 17;
         result = 31 * result + make.hashCode();
         result = 31 * result + model.hashCode();
-        result = 31 * result + licencePlate.hashCode();
+        result = 31 * result + licensePlate.hashCode();
         return result;
     }
 

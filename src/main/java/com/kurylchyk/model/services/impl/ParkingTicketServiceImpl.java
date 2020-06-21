@@ -4,12 +4,11 @@ import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.impl.ticketCommand.*;
 import com.kurylchyk.model.customer.Customer;
-
+import com.kurylchyk.model.parkingTicket.Status;
 import java.time.LocalDateTime;
 import java.util.List;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.vehicles.Vehicle;
-import com.kurylchyk.model.parkingTicket.Status;
 
 public class ParkingTicketServiceImpl implements ParkingTicketService {
 
@@ -21,7 +20,7 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
     }
 
     @Override
-    public List<ParkingTicket> getAll(String status) throws Exception {
+    public List<ParkingTicket> getAll(Status status) throws Exception {
         return executor.execute(new GetAllTicketCommand(status));
     }
 
@@ -31,19 +30,13 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
     }
 
     @Override
-    public List<ParkingTicket> getAllInDateAndStatus(LocalDateTime localDateTime, String status) throws Exception {
+    public List<ParkingTicket> getAllInDateAndStatus(LocalDateTime localDateTime, Status status) throws Exception {
         return executor.execute(new GetInDateCommand(localDateTime,status));
     }
 
     @Override
-    public ParkingTicket createParkingTicket(Vehicle vehicle, Customer customer, ParkingSlot parkingSlot) {
-        ParkingTicket parkingTicket = ParkingTicket.newParkingTicket()
-                .withVehicle(vehicle)
-                .withCustomer(customer)
-                .withParkingSlot(parkingSlot)
-                .withArrivalTime(LocalDateTime.now())
-                .withStatus(Status.PRESENT).buildTicket();
-        return parkingTicket;
+    public ParkingTicket createParkingTicket(Vehicle vehicle, Customer customer, ParkingSlot parkingSlot) throws Exception {
+       return executor.execute(new CreateParkingTicketCommand(vehicle,customer,parkingSlot));
     }
 
 
@@ -65,7 +58,7 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
 
     @Override
     public ParkingTicket saveToDB(ParkingTicket parkingTicket) throws Exception {
-        return executor.execute(new SaveToBD(parkingTicket));
+        return executor.execute(new SaveParkingTicketCommand(parkingTicket));
     }
 
     @Override
@@ -76,7 +69,7 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
 
     @Override
     public ParkingTicket remove(ParkingTicket parkingTicket) throws Exception {
-        return executor.execute(new RemoveTicket(parkingTicket));
+        return executor.execute(new RemoveParkingTicketCommand(parkingTicket));
     }
 
     @Override

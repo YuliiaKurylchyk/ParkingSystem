@@ -20,47 +20,45 @@
 <h1>Choose the option to search</h1>
 <h3>Search by</h3>
 <div id="selectContainer">
-
-    <form action="searchPage.jsp" method="GET">
+    <form action="/searchPage.jsp" method="GET">
         <select name="option" onchange="this.form.submit();">
             <option value="" disabled selected>Select your option</option>
-            <option value="parkingTicket">Parking ticket info</option>
-            <option value="customer">Customer info</option>
-            <option value="vehicle">Vehicle info</option>
+            <option value="parkingTicket" ${param.option == 'parkingTicket' ? 'selected="selected"':''}  >Parking ticket info</option>
+            <option value="customer" ${param.option == 'customer' ? 'selected="selected"':''}>Customer info</option>
+            <option value="vehicle" ${param.option == 'vehicle' ? 'selected="selected"':''}>Vehicle info</option>
         </select>
     </form>
 </div>
 <div id="searchContainer">
-    <form action="search" method="GET" id="searchForm">
+    <form action="/${param.option}/get" method="GET" id="searchForm">
         <input type="hidden" name="option" value="${param.option}">
         <c:choose>
             <c:when test="${param.option == 'parkingTicket'}">
                 <p>Enter parking ticket ID</p>
                 <input type="text" placeholder="ID" name="parkingTicketID">
-                <input type="submit" class="searchButton" value="${action=='update'?'Search':'Remove'}">
+                <input type="submit" class="searchButton" value="Search">
             </c:when>
             <c:when test="${param.option=='customer'}">
-                <p>Enter customer ID or phone number</p>
+                <p>Enter customer phone number</p>
                 <input type="text" placeholder="phone number" name="phoneNumber">
-                <input type="submit" class="searchButton"  value="${action=='update'?'Search':'Remove'}">
+                <input type="submit" class="searchButton"  value="Search">
             </c:when>
             <c:when test="${param.option=='vehicle'}">
-                <p>Enter licence plate of vehicle</p>
-                <input type="text" placeholder="licence plate" name="vehicleID">
-                <input type="submit" class="searchButton" value="${action=='update'?'Search':'Remove'}">
-
+                <p>Enter license plate of vehicle</p>
+                <input type="text" placeholder="license plate" name="vehicleID">
+                <input type="submit" class="searchButton" value="Search">
             </c:when>
         </c:choose>
     </form>
 </div>
+
+<c:if test="${requestScope.NotFound!=null}">
 <div id="container">
-
-    <c:if test="${requestScope.notFound!=null}">
         <h3 style="color:#ff0000">
-            <c:out value="${requestScope.notFound}"/>
+            <c:out value="${requestScope.NotFound}"/>
         </h3>
-    </c:if>
-
 </div>
+</c:if>
+
 </body>
 </html>

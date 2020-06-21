@@ -18,7 +18,7 @@ public class ConnectCustomerToVehicleCommand  implements Command<Void> {
 
     @Override
     public Void execute() throws Exception {
-        vehicleDAO.updateCustomerID(vehicle.getLicencePlate(),customer.getCustomerID());
+        vehicleDAO.updateCustomerID(vehicle.getLicensePlate(),customer.getCustomerID());
         return  null;
     }
 }

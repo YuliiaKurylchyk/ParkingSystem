@@ -25,7 +25,7 @@ public class VehicleBuilder {
     }
 
     public  VehicleBuilder setLicencePlate(String licencePlate){
-        vehicle.setLicencePlate(licencePlate);
+        vehicle.setLicensePlate(licencePlate);
         return this;
     }
 

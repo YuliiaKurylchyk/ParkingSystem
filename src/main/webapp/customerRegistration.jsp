@@ -17,29 +17,27 @@
 </head>
 <body>
 <h1>Parking ticket creation</h1>
-<c:if test="${customer != null}">
-<form action="updatingServlet" method="post">
+<c:if test="${requestScope.customer != null}">
+<form action="/customer/update" method="post">
+    <input type="hidden" name="customerID" value="${param.customerID}">
     </c:if>
-    <c:if test="${customer == null}">
-    <form action="creationServlet?action=customer" method="post">
+    <c:if test="${requestScope.customer == null}">
+        <form action="/customer/create" method="post">
         </c:if>
-
         <h3>Customer information: </h3>
-
         <p><input placeholder="Name" name="name"
         <c:choose>
-        <c:when test="${customer!=null}">
-                  value="${customer.name}"
+        <c:when test="${requestScope.customer!=null}">
+                  value="${requestScope.customer.name}"
         </c:when>
         <c:otherwise>
                   value="${name}"
         </c:otherwise>
-            </c:choose>
-            >
+            </c:choose>>
         </p>
         <p><input placeholder="Surname" name="surname"
         <c:choose>
-                  <c:when test="${customer!=null}">value="${customer.surname}"
+                  <c:when test="${requestScope.customer!=null}">value="${requestScope.customer.surname}"
         </c:when>
         <c:otherwise> value="${surname}"</c:otherwise>
             </c:choose>
@@ -49,7 +47,7 @@
         <p><input placeholder="Phone number" name="phoneNumber"
 
         <c:choose>
-                  <c:when test="${customer!=null}">value="${customer.phoneNumber}"</c:when>
+                  <c:when test="${requestScope.customer!=null}">value="${requestScope.customer.phoneNumber}"</c:when>
         <c:otherwise> value="${phoneNumber}"</c:otherwise>
             </c:choose>
             >
@@ -67,11 +65,11 @@
         <div style="overflow:auto;">
             <div style="float:right;">
 
-                <c:if test="${customer != null}">
+                <c:if test="${requestScope.customer != null}">
                     <button type="submit">Done</button>
                 </c:if>
 
-                <c:if test="${customer == null}">
+                <c:if test="${requestScope.customer == null}">
                     <button type="submit">Get parking ticket!</button>
                 </c:if>
 

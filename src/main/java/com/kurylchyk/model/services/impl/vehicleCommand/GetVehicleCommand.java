@@ -7,16 +7,16 @@ import com.kurylchyk.model.vehicles.Vehicle;
 
 public class GetVehicleCommand implements Command<Vehicle> {
     private VehicleDAO vehicleDAO = new VehicleDAO();
-    private String licencePlate;
+    private String licensePlate;
 
-    public GetVehicleCommand(String licencePlate) {
-        this.licencePlate = licencePlate;
+    public GetVehicleCommand(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
 
     @Override
     public Vehicle execute() throws NoSuchVehicleFoundException {
-        return vehicleDAO.select(licencePlate).orElseThrow(()->
-                new NoSuchVehicleFoundException("No vehicle with " + licencePlate + " was found"));
+        return vehicleDAO.select(licensePlate).orElseThrow(()->
+                new NoSuchVehicleFoundException("No vehicle with " + licensePlate + " was found"));
     }
 }

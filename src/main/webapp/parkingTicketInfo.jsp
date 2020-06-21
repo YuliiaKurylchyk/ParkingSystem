@@ -9,7 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Parking Ticket Information</title>
     <style type="text/css">
         <%@include file="WebContent/parkingInfo-style.css" %>
     </style>
@@ -19,7 +19,6 @@
 
 <h1>Parking ticket Information: </h1>
 
-<h3 style="color:red;"><c:out value="${requestScope.alreadyLeft}"></c:out></h3>
 <h3 style="color:red;"><c:out value="${requestScope.deleted}"></c:out></h3>
 
 <div class="container">
@@ -38,7 +37,7 @@
             </td>
             <td><c:out value="${currentTicket.vehicle}"/></td>
             <td>
-                <a href="search?action=update&option=vehicle&vehicleID=<c:out value='${currentTicket.vehicle.licencePlate}'/>">Edit</a>
+                <a href="/vehicle/edit?vehicleID=<c:out value='${currentTicket.vehicle.licensePlate}'/>">Edit</a>
                 &nbsp;&nbsp;&nbsp;
             </td>
         </tr>
@@ -55,7 +54,7 @@
                 <jsp:text>Customer</jsp:text>
             </td>
             <td><c:out value="${currentTicket.customer}"/></td>
-            <td><a href="search?action=update&option=customer&phoneNumber=<c:out value='${currentTicket.customer.phoneNumber}' />">Edit</a>
+            <td><a href="/customer/edit?customerID=<c:out value='${currentTicket.customer.customerID}' />">Edit</a>
             </td>&nbsp;&nbsp;&nbsp;&nbsp;
         </tr>
         <tr>
@@ -66,7 +65,7 @@
             &nbsp;&nbsp;<td></td>
         <tr>
             <td>Left time:</td>
-            <td><c:out value="${currentTicket.leftTime}"/></td>
+            <td><c:out value="${currentTicket.departureTime}"/></td>
             <td></td>
         </tr>
 
@@ -92,20 +91,20 @@
         </a>
     </div>
     <div style="float:left;">
-        <a href="/">
+        <a href="<%request.getContextPath();%>/parkingTicket/end">
             <button type="button" value="" name="BackToMenu">Back to menu</button>
         </a>
     </div>
-    <c:if test="${currentTicket.status=='present'}">
+    <c:if test="${currentTicket.status=='PRESENT'}">
         <div style="float:left;">
-            <a href="search?action=remove&option=parkingTicket&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">
+            <a href="/parkingTicket/remove?parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">
                 <button type="button" value="" name="Remove">Remove</button>
             </a>
         </div>
     </c:if>
-    <c:if test="${currentTicket.status=='left' and requestScope.deleted==null}">
+    <c:if test="${currentTicket.status=='LEFT' and requestScope.deleted==null}">
         <div style="float:left;">
-            <a href="search?action=delete&option=parkingTicket&parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">
+            <a href="/parkingTicket/delete?parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">
                 <button type="button" value="" name="deleteCompletely">Delete Completely</button>
             </a>
         </div>

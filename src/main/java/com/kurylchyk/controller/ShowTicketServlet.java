@@ -1,9 +1,8 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.dao.ParkingTicketDAO;
-
-import javax.servlet.RequestDispatcher;
+import com.kurylchyk.model.services.ParkingTicketService;
+import com.kurylchyk.model.services.impl.BusinessServiceFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,9 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet("/showTicket")
-public class ParkingTicketUtil extends HttpServlet {
+public class ShowTicketServlet extends HttpServlet {
 
-    private static ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+   private ParkingTicketService parkingTicketService = new BusinessServiceFactory().forParkingTicket();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -24,45 +23,59 @@ public class ParkingTicketUtil extends HttpServlet {
        doPost(req, resp);
     }
 
-    //remove
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        String date = req.getParameter("dateOfParkingTicket");
-        String status = req.getParameter("statusOfParkingTicket");
+/*
+        String date = req.getParameter("date");
+        String status = req.getParameter("status");
         List<ParkingTicket> appropriateTickets = null;
         LocalDateTime dateTime = getAppropriateDate(date);
 
         if (status.equals("all")) {
             if(date.equals("allTickets")) {
-                appropriateTickets = parkingTicketDAO.selectAll();
+                try {
+                    appropriateTickets = parkingTicketService.getAllTickets();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }else {
+                try {
                     appropriateTickets = getAppropriateTickets(dateTime);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         } else{
             if(date.equals("allTickets")){
-                appropriateTickets = parkingTicketDAO.selectAll(status);
+                try {
+                    appropriateTickets = parkingTicketService.getAll(status);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }else {
-                appropriateTickets = getAppropriateTickets(dateTime, status);
+                try {
+                    appropriateTickets = getAppropriateTickets(dateTime, status);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         }
 
         req.setAttribute("appropriateTickets", appropriateTickets);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("showAllTickets.jsp");
         requestDispatcher.forward(req, resp);
-    }
-//remove
-    private List<ParkingTicket> getAppropriateTickets(LocalDateTime date) {
 
-        return parkingTicketDAO.selectInDate(date);
+ */
+    }
+    private List<ParkingTicket> getAppropriateTickets(LocalDateTime date) throws Exception {
+        return parkingTicketService.getAllInDate(date);
 
     }
-//remove
-    private List<ParkingTicket> getAppropriateTickets(LocalDateTime date, String status) {
-       return parkingTicketDAO.selectInDateAndStatus(date,status);
+    private List<ParkingTicket> getAppropriateTickets(LocalDateTime date, String status) throws Exception {
+       return null;//parkingTicketService.getAllInDateAndStatus(date,status);
     }
-    //remove
+
     private LocalDateTime getAppropriateDate(String date) {
 
         LocalDateTime appropriateDate = null;
@@ -76,14 +89,12 @@ public class ParkingTicketUtil extends HttpServlet {
             case "oneWeekAgo":
                 appropriateDate = LocalDateTime.now().minusWeeks(1);
                 break;
-            case "MonthAgo":
+            case "monthAgo":
                 appropriateDate = LocalDateTime.now().minusMonths(1);
                 break;
 
         }
-
         return appropriateDate;
-
     }
 
 }

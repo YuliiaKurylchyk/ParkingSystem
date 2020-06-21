@@ -13,7 +13,7 @@ import java.util.Optional;
 public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Integer>, AddDeleteDAO<Customer, Integer> {
 
 
-    //винести з 2 наступних методів реалізацію в окремий клас
+
     @Override
     public Optional<Customer> select(Integer id)  {
 
@@ -35,7 +35,7 @@ public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Int
 
     public Optional<Customer> select(String phoneNumber) {
 
-        String query = "SELECT * FROM customer WHERE phone_number =?";
+        String query = "SELECT * FROM customer WHERE phone_number = ?";
         Customer customer = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();

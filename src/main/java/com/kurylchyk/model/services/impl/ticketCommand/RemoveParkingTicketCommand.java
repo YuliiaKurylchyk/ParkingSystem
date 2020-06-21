@@ -3,21 +3,22 @@ package com.kurylchyk.model.services.impl.ticketCommand;
 import com.kurylchyk.model.services.ParkingLotService;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.Payment;
-import com.kurylchyk.model.TimeCheck;
+import com.kurylchyk.model.Timer;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
 import  com.kurylchyk.model.parkingTicket.Status;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.time.LocalDateTime;
 
-public class RemoveTicket implements Command<ParkingTicket> {
+public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
 
     private ParkingTicketDAO parkingTicketDAO =  new ParkingTicketDAO();
     private ParkingTicket parkingTicket;
 
-    public  RemoveTicket(ParkingTicket parkingTicket){
+    public RemoveParkingTicketCommand(ParkingTicket parkingTicket){
         this.parkingTicket = parkingTicket;
     }
 
@@ -25,8 +26,8 @@ public class RemoveTicket implements Command<ParkingTicket> {
     @Override
     public ParkingTicket execute() throws Exception {
         ParkingLotService parkingLotService = new ParkingLotServiceImpl();
-        LocalDateTime leftTime = TimeCheck.getTime();
-        parkingTicket.setLeftTime(leftTime);
+
+        parkingTicket.setDepartureTime(LocalDateTime.now());
         parkingTicket.setStatus(Status.LEFT);
         parkingTicket.setCost(countTheCost(parkingTicket));
         parkingLotService.setParkingSlotBack(parkingTicket.getParkingSlot());
@@ -37,10 +38,13 @@ public class RemoveTicket implements Command<ParkingTicket> {
     private BigDecimal countTheCost(ParkingTicket parkingTicket) {
 
         Integer pricePerDay = parkingTicket.getParkingSlot().getPrice();
+        parkingTicket.setDepartureTime(LocalDateTime.now());
+
         System.out.println("TimeArrival " + parkingTicket.getArrivalTime());
-        System.out.println("TimeLeft " + parkingTicket.getLeftTime());
-        BigDecimal cost = Payment.calculatePrice(TimeCheck.countOfDays(parkingTicket.getArrivalTime(),
-                parkingTicket.getLeftTime()), pricePerDay);
+        System.out.println("TimeLeft " + parkingTicket.getDepartureTime());
+
+        BigDecimal cost = Payment.calculatePrice(Timer.getTotalDays(parkingTicket.getArrivalTime(),
+                parkingTicket.getDepartureTime()), pricePerDay);
         return cost;
     }
 }

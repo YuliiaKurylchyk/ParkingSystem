@@ -21,8 +21,9 @@ public class GetCustomerCommand implements Command<Customer> {
     public Customer execute() throws Exception {
         Customer customer = null;
         if(phoneNumber!=null){
+            System.out.println("in GetCustomerCommand with pn "+phoneNumber);
             customer = customerDAO.select(phoneNumber).orElseThrow(() ->
-                    new NoSuchCustomerFoundException("No customer with phone number" +phoneNumber + " found"));;
+                    new NoSuchCustomerFoundException("No customer with phone number " +phoneNumber + " found"));;
         }else if(customerID!=null){
             customer = customerDAO.select(customerID).orElseThrow(() -> new NoSuchCustomerFoundException("No customer found"));
         }

@@ -39,7 +39,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setInt(1, parkingTicket.getCustomer().getCustomerID());
-            preparedStatement.setString(2, parkingTicket.getVehicle().getLicencePlate());
+            preparedStatement.setString(2, parkingTicket.getVehicle().getLicensePlate());
             preparedStatement.setInt(3, parkingTicket.getParkingSlot().getParkingSlotID());
             preparedStatement.setString(4, parkingTicket.getStatus().toString());
             preparedStatement.setObject(5, parkingTicket.getArrivalTime());
@@ -106,7 +106,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
                 .withCustomer(currentCustomer)
                 .withParkingSlot(currentParkingSlot)
                 .withArrivalTime(arrivalTime)
-                .withLeftTime(leftTime)
+                .withDepartureTime(leftTime)
                 .withStatus(status)
                 .withCost(cost)
                 .buildTicket();
@@ -157,7 +157,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                     preparedStatement.setString(1,parkingTicket.getStatus().toString());
-                    preparedStatement.setObject(2,parkingTicket.getLeftTime());
+                    preparedStatement.setObject(2,parkingTicket.getDepartureTime());
                     preparedStatement.setObject(3,parkingTicket.getCost());
                     preparedStatement.setInt(4,id);
                     preparedStatement.execute();
@@ -209,14 +209,14 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         return select(parkingTicketID).isPresent();
     }
 
-    public List<ParkingTicket> selectAll(String currentStatus) {
+    public List<ParkingTicket> selectAll(Status status) {
 
         String query = "SELECT * FROM parking_ticket WHERE status = ?";
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1,currentStatus);
+            preparedStatement.setString(1,status.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -252,7 +252,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         return listOfTickets;
     }
 
-    public List<ParkingTicket> selectInDateAndStatus(LocalDateTime date, String stat) {
+    public List<ParkingTicket> selectInDateAndStatus(LocalDateTime date, Status status) {
 
         String query = "SELECT * FROM parking_ticket WHERE from_time >= ? AND status = ?";
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
@@ -260,7 +260,7 @@ public class ParkingTicketDAO extends Connector implements GetUpdateDAO<ParkingT
         try(Connection connection = Connector.getDataSource().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, date.toLocalDate());
-            preparedStatement.setString(2, stat);
+            preparedStatement.setString(2, status.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 ParkingTicket currentTicket = getParkingTicket(resultSet);

@@ -4,13 +4,13 @@ import com.kurylchyk.model.services.impl.vehicleCommand.*;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.vehicles.TypeOfVehicle;
 import com.kurylchyk.model.vehicles.Vehicle;
-
+import com.kurylchyk.model.parkingTicket.Status;
 import java.util.List;
+
 
 public class VehicleServiceImpl implements VehicleService {
 
     private CommandExecutor executor = new CommandExecutor();
-
 
     @Override
     public Vehicle create(String make, String model, String licencePlate, TypeOfVehicle typeOfVehicle) throws Exception {
@@ -25,7 +25,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle saveToDB(Vehicle vehicle) throws Exception {
-        if(!isPresent(vehicle.getLicencePlate())) {
+        if(!isPresent(vehicle.getLicensePlate())) {
             executor.execute(new SaveVehicleCommand(vehicle));
         }
         return vehicle;
@@ -52,6 +52,17 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public String getVehicleStatus(String licencePlate) throws Exception {
         return executor.execute(new VehicleStatusCommand(licencePlate));
+    }
+
+    @Override
+    public List<Vehicle> getAll() throws Exception {
+        return executor.execute(new GetAllVehiclesCommand());
+    }
+
+
+    @Override
+    public List<Vehicle> getAll(Status status) throws Exception {
+        return executor.execute(new GetAllVehiclesCommand(status));
     }
 
     @Override

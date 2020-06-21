@@ -14,7 +14,7 @@ public class ParkingTicketBuilder {
     protected Customer customer;
     protected ParkingSlot parkingSlot;
     protected LocalDateTime arrivalTime;
-    protected LocalDateTime leftTime;
+    protected LocalDateTime departureTime;
     protected BigDecimal cost;
     protected Status status;
 
@@ -44,8 +44,8 @@ public class ParkingTicketBuilder {
         return this;
     }
 
-    public ParkingTicketBuilder withLeftTime(LocalDateTime localDateTime) {
-        leftTime = localDateTime;
+    public ParkingTicketBuilder withDepartureTime(LocalDateTime localDateTime) {
+        departureTime = localDateTime;
         return this;
     }
 
