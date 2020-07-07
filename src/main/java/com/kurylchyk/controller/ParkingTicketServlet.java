@@ -1,7 +1,10 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.dao.ParkingSlotIdentifier;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.parkingSlots.SlotSize;
+import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.CustomerService;
 import com.kurylchyk.model.services.ParkingLotService;
@@ -11,14 +14,16 @@ import com.kurylchyk.model.services.impl.BusinessServiceFactory;
 import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
 import com.kurylchyk.model.vehicles.Vehicle;
 import com.kurylchyk.model.parkingTicket.Status;
+
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +33,7 @@ public class ParkingTicketServlet extends HttpServlet {
     private ParkingTicketService parkingTicketService = new BusinessServiceFactory().forParkingTicket();
     private VehicleService vehicleService = new BusinessServiceFactory().forVehicle();
     private CustomerService customerService = new BusinessServiceFactory().forCustomer();
+    private ParkingLotService parkingLotService = new ParkingLotServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -60,6 +66,8 @@ public class ParkingTicketServlet extends HttpServlet {
             case "/showByVehicle":
                 doShowByVehicle(req, resp);
                 break;
+            case "/showBySlot": doShowBySlot(req,resp);
+                break;
             case "/updateVehicle":
                 doUpdateVehicle(req, resp);
                 break;
@@ -69,6 +77,9 @@ public class ParkingTicketServlet extends HttpServlet {
                 break;
             case "/delete":
                 doDeleteCompletely(req, resp);
+                break;
+            case "/getReceipt":
+                doGetReceipt(req, resp);
                 break;
             case "/end":
                 removeFromSession(req, resp);
@@ -107,6 +118,7 @@ public class ParkingTicketServlet extends HttpServlet {
         try {
             parkingTicket = parkingTicketService.createParkingTicket(vehicle, customer, parkingSlot);
             vehicleService.saveToDB(parkingTicket.getVehicle());
+            parkingLotService.updateStatus(parkingSlot, SlotStatus.OCCUPIED);
             customer = customerService.saveToDB(parkingTicket.getCustomer());
             vehicleService.connectCustomerToVehicle(vehicle, customer);
             parkingTicket = parkingTicketService.saveToDB(parkingTicket);
@@ -139,6 +151,29 @@ public class ParkingTicketServlet extends HttpServlet {
         }
         req.getRequestDispatcher("/parkingTicketInfo.jsp").forward(req, resp);
     }
+
+    protected void doGetReceipt(HttpServletRequest req, HttpServletResponse resp)
+            {
+
+        ParkingTicket parkingTicket = (ParkingTicket) req.getSession().getAttribute("currentTicket");
+
+        resp.setContentType("text/plain");
+        resp.setHeader("Content-Disposition", "attachment;filename=receipt.txt");
+        try {
+            OutputStream os = resp.getOutputStream();
+            String parkingTicketInfo = parkingTicket.toString();
+            os.write(parkingTicketInfo.getBytes());
+
+            os.flush();
+            os.close();
+
+        } catch (
+                Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
 
     protected void doShowAll(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -182,7 +217,8 @@ public class ParkingTicketServlet extends HttpServlet {
 
     protected void doShowByCustomer(HttpServletRequest req, HttpServletResponse resp) {
 
-        Integer customerID = Integer.parseInt(req.getParameter("customerID"));
+        Integer customerID = Integer.parseInt( req.getParameter("customerID"));
+        System.out.println("customerID = " +customerID);
         try {
             List<ParkingTicket> appropriateTickets = parkingTicketService.getByCustomer(customerID);
             System.out.println(appropriateTickets);
@@ -193,6 +229,25 @@ public class ParkingTicketServlet extends HttpServlet {
             exception.printStackTrace();
         }
     }
+
+    protected  void doShowBySlot(HttpServletRequest req, HttpServletResponse resp){
+
+        Integer parkingSlotID = Integer.parseInt(req.getParameter("parkingSlotID"));
+        SlotSize slotSize = SlotSize.valueOf(req.getParameter("slotSize"));
+
+        try{
+            ParkingTicket parkingTicket = parkingTicketService.getByParkingSlot(new ParkingSlotIdentifier(slotSize,parkingSlotID));
+            req.getSession().setAttribute("currentTicket",parkingTicket);
+            req.getRequestDispatcher("/parkingTicketInfo.jsp").forward(req,resp);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+
+
+    }
+
+
 
     /*
     protected void doShowByCustomer(HttpServletRequest req, HttpServletResponse resp)
@@ -249,10 +304,10 @@ public class ParkingTicketServlet extends HttpServlet {
                 parkingTicketService.update(currentTicket);
             }
 
-            if (currentVehicle.getTypeOfVehicle() != updatedVehicle.getTypeOfVehicle()) {
+            if (currentVehicle.getVehicleType() != updatedVehicle.getVehicleType()) {
                 ParkingLotService parkingLotService = new ParkingLotServiceImpl();
-                parkingLotService.setParkingSlotBack(currentTicket.getParkingSlot());
-                currentTicket.setParkingSlot(parkingLotService.getParkingSlot(updatedVehicle.getTypeOfVehicle()));
+              //  parkingLotService.setParkingSlotBack(currentTicket.getParkingSlot());
+                //currentTicket.setParkingSlot(parkingLotService.getParkingSlot(updatedVehicle.getTypeOfVehicle()));
                 parkingTicketService.update(currentTicket);
             }
         } catch (Exception exception) {
@@ -289,7 +344,7 @@ public class ParkingTicketServlet extends HttpServlet {
             throws ServletException, IOException {
 
         System.out.println("deleting in delete completely action");
-        Integer parkingTicketID  = Integer.parseInt(req.getParameter("parkingTicketID"));
+        Integer parkingTicketID = Integer.parseInt(req.getParameter("parkingTicketID"));
 
         try {
             ParkingTicket currentTicket = parkingTicketService.getByID(parkingTicketID);

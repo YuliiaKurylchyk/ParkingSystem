@@ -1,5 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page isELIgnored="false" %>
+<%@ page session="true" %>
+
+<fmt:setLocale value="${sessionScope.sessionLocale}"/>
+<fmt:setBundle basename="parkingTicketShow"/>
 <html>
 <head>
     <title>All tickets</title>
@@ -9,27 +15,27 @@
 </head>
 
 <body>
-<h1>Parking Tickets</h1>
+<h1><fmt:message key="allParkingTickets"/></h1>
 <c:if test="${requestScope.onlyCurrentCustomer==null}">
-    <h3>Choose the date and parking status</h3>
+    <h3><fmt:message key="choose"/></h3>
     <div id="selectContainer">
         <form action="/parkingTicket/showAll" method="GET">
             <select name="date">
-                <option value="today" ${param.date == 'today' ? 'selected="selected"':''}  >Today</option>
-                <option value="yesterday" ${param.date == 'yesterday' ? 'selected="selected"':''}>From yesterday
+                <option value="today" ${param.date == 'today' ? 'selected="selected"':''}  ><fmt:message key="today"/></option>
+                <option value="yesterday" ${param.date == 'yesterday' ? 'selected="selected"':''}><fmt:message key="fromYesterday"/>
                 </option>
-                <option value="oneWeekAgo" ${param.date == 'oneWeekAgo' ? 'selected="selected"':''}>For the last week
+                <option value="oneWeekAgo" ${param.date == 'oneWeekAgo' ? 'selected="selected"':''}><fmt:message key="fromWeek"/>
                 </option>
-                <option value="monthAgo" ${param.date == 'monthAgo' ? 'selected="selected"':''}>For the last month
+                <option value="monthAgo" ${param.date == 'monthAgo' ? 'selected="selected"':''}><fmt:message key="forMonth"/>
                 </option>
-                <option value="allTickets" ${param.date == 'allTickets' ? 'selected="selected"':''}>All</option>
+                <option value="allTickets" ${param.date == 'allTickets' ? 'selected="selected"':''}><fmt:message key="allOfTheTickets"/></option>
             </select>
             <select name="status">
-                <option value="ALL" ${param.status == 'ALL' ? 'selected="selected"':''}>all</option>
-                <option value="PRESENT" ${param.status == 'PRESENT' ? 'selected="selected"':''}>only present</option>
-                <option value="LEFT" ${param.status == 'LEFT' ? 'selected="selected"':''}>only left</option>
+                <option value="ALL" ${param.status == 'ALL' ? 'selected="selected"':''}><fmt:message key="all"/></option>
+                <option value="PRESENT" ${param.status == 'PRESENT' ? 'selected="selected"':''}><fmt:message key="present"/></option>
+                <option value="LEFT" ${param.status == 'LEFT' ? 'selected="selected"':''}><fmt:message key="left"/></option>
             </select>
-            <input id="showButton" type="submit" value="Show">
+            <input id="showButton" type="submit" value="<fmt:message key="show"/>">
         </form>
     </div>
 </c:if>
@@ -42,14 +48,14 @@
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Vehicle</th>
-                    <th>Customer</th>
-                    <th>Parking Slot</th>
-                    <th>Status</th>
-                    <th>Arrival time</th>
-                    <th>Left time</th>
-                    <th>Cost</th>
+                    <th><fmt:message key="ticketID"/></th>
+                    <th><fmt:message key="vehicle"/></th>
+                    <th><fmt:message key="customer"/></th>
+                    <th><fmt:message key="parkingSlot"/></th>
+                    <th><fmt:message key="status"/></th>
+                    <th><fmt:message key="arrivalTime"/></th>
+                    <th><fmt:message key="leftTime"/></th>
+                    <th><fmt:message key="cost"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -80,8 +86,8 @@
                             <c:out value="${currentTicket.cost}"/>
                         </td>
                         <td>
-                            <a href="/parkingTicket/show?parkingTicketID=<c:out value='${currentTicket.parkingTicketID}'/>">Show
-                                details</a> &nbsp;&nbsp;&nbsp;
+                            <a href="/parkingTicket/show?parkingTicketID=<c:out value='${currentTicket.parkingTicketID}'/>">
+                                <fmt:message key="details"/></a> &nbsp;&nbsp;&nbsp;
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -97,7 +103,7 @@
 <div id="containerButton">
     <div style="float:left;">
         <a href="/">
-            <button type="button" value="" name="BackToMenu">Back to menu</button>
+            <button type="button" value="" name="BackToMenu"><fmt:message key="backToHome"/></button>
         </a>
     </div>
 </div>

@@ -3,6 +3,7 @@ package com.kurylchyk.controller;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.services.CustomerService;
 import com.kurylchyk.model.services.impl.BusinessServiceFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import java.util.List;
 @WebServlet("/customer/*")
 public class CustomerServlet extends HttpServlet {
     private CustomerService customerService = new BusinessServiceFactory().forCustomer();
+    private Customer customer;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -31,7 +33,7 @@ public class CustomerServlet extends HttpServlet {
                 doCreate(req, resp);
                 break;
             case "/update":
-                doUpdate(req, resp);
+                 doUpdate(req, resp);
                 break;
             case "/show":
                 doShow(req, resp);
@@ -59,20 +61,7 @@ public class CustomerServlet extends HttpServlet {
         String surname = req.getParameter("surname");
         String phoneNumber = req.getParameter("phoneNumber");
         try {
-            List<String> violations = customerService.validate(name, surname, phoneNumber);
-            if (!violations.isEmpty()) {
-                setAttributeBack(name, surname, phoneNumber, req);
-                req.setAttribute("violations", violations);
-                req.getRequestDispatcher("/customerRegistration.jsp").forward(req, resp);
-                return;
-            }
-
-            if (customerService.isPresent(phoneNumber)) {
-                customer = customerService.getFromDB(phoneNumber);
-            } else {
-                customer = customerService.create(name, surname, phoneNumber);
-            }
-
+            customer = customerService.create(name, surname, phoneNumber);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -83,18 +72,17 @@ public class CustomerServlet extends HttpServlet {
 
     }
 
+
     protected void doEdit(HttpServletRequest req, HttpServletResponse resp) {
         Integer customerID = Integer.parseInt(req.getParameter("customerID"));
-        try{
-            Customer customer = customerService.getFromDB(customerID);
-            req.setAttribute("customer",customer);
+        try {
+            customer = customerService.getFromDB(customerID);
+            req.setAttribute("customer", customer);
             System.out.println("customer attribute was set");
-            req.getRequestDispatcher("/customerRegistration.jsp").forward(req,resp);
-        }catch (Exception exception){
+            req.getRequestDispatcher("/customerRegistration.jsp").forward(req, resp);
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
-
-
     }
 
     protected void doShow(HttpServletRequest req, HttpServletResponse resp) {
@@ -110,10 +98,10 @@ public class CustomerServlet extends HttpServlet {
     protected void doGetCustomer(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String phoneNumber = req.getParameter("phoneNumber");
-        System.out.println("Phone number "+phoneNumber);
+        System.out.println("Phone number " + phoneNumber);
         try {
             Customer customer = customerService.getFromDB(phoneNumber);
-            req.getRequestDispatcher("/parkingTicket/showByCustomer?customerID="+customer.getCustomerID()).forward(req, resp);
+            req.getRequestDispatcher("/parkingTicket/showByCustomer?customerID=" + customer.getCustomerID()).forward(req, resp);
         } catch (Exception exception) {
             req.setAttribute("NotFound", exception);
             System.out.println("exception in doCustomer");
@@ -121,27 +109,24 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    private void setAttributeBack(String name, String surname, String phoneNumber, HttpServletRequest req) {
-        req.setAttribute("name", name);
-        req.setAttribute("surname", surname);
-        req.setAttribute("phoneNumber", phoneNumber);
-
-    }
-
-    protected void doUpdate(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doUpdate(HttpServletRequest req, HttpServletResponse resp) {
         System.out.println("update customer action");
-        Integer customerID =  Integer.parseInt(req.getParameter("customerID"));
+        Integer customerID = Integer.parseInt(req.getParameter("customerID"));
         String name = req.getParameter("name");
         String surname = req.getParameter("surname");
         String phoneNumber = req.getParameter("phoneNumber");
-        Customer customer = customerService.create(customerID,name,surname,phoneNumber);
+
         try {
+            Customer customer = customerService.create(customerID, name, surname, phoneNumber);
             customerService.update(customer);
-        } catch (Exception exception) {
+            req.setAttribute("customerID", customerID);
+            req.getRequestDispatcher("/parkingTicket/showByCustomer").forward(req, resp);
+
+        } catch (
+                Exception exception) {
             exception.printStackTrace();
         }
-        req.setAttribute("customer", customer);
-        req.getRequestDispatcher("/parkingTicket/showByCustomer").forward(req, resp);
     }
+
+
 }

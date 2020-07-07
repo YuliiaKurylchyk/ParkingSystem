@@ -13,21 +13,23 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public Customer create(String name, String surname, String phoneNumber) {
-        return Customer.newCustomer().setName(name)
-                .setSurname(surname)
-                .setPhoneNumber(phoneNumber).buildCustomer();
+    public Customer create(String name, String surname, String phoneNumber) throws Exception {
+        if (!executor.execute(new CheckCustomerIsPresentCommand(phoneNumber))) {
+            return executor.execute(new CreateCustomerCommand(name, surname, phoneNumber));
+        } else {
+            return getFromDB(phoneNumber);
+        }
+    }
+    @Override
+    public Customer create(Integer customerID, String name, String surname, String phoneNumber)
+            throws Exception {
+        if (!executor.execute(new CheckCustomerIsPresentCommand(phoneNumber))) {
+            return executor.execute(new CreateCustomerCommand(customerID, name, surname, phoneNumber));
+        } else {
+            return getFromDB(phoneNumber);
+        }
     }
 
-    @Override
-    public Customer create(Integer customerID, String name, String surname, String phoneNumber) {
-        return Customer.newCustomer()
-                .setCustomerID(customerID)
-                .setName(name)
-                .setSurname(surname)
-                .setPhoneNumber(phoneNumber)
-                .buildCustomer();
-    }
 
     @Override
     public Customer getFromDB(Integer customerID) throws Exception {
@@ -36,16 +38,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getFromDB(String phoneNumber) throws Exception {
-        System.out.println("In getFromDB with phoneNumber "+phoneNumber);
+        System.out.println("In getFromDB with phoneNumber " + phoneNumber);
         return executor.execute(new GetCustomerCommand(phoneNumber));
     }
 
     @Override
     public Customer saveToDB(Customer customer) throws Exception {
-        if(!isPresent(customer.getPhoneNumber())) {
+        System.out.println(customer);
+        if (!isPresent(customer.getPhoneNumber())) {
             return executor.execute(new SaveCustomerCommand(customer));
-        }else {
-         return    getFromDB(customer.getPhoneNumber());
+        } else {
+            return getFromDB(customer.getPhoneNumber());
         }
     }
 
@@ -70,8 +73,5 @@ public class CustomerServiceImpl implements CustomerService {
         return executor.execute(new CustomerIsPresentCommand(phoneNumber));
     }
 
-    @Override
-    public List<String> validate(String name,String surname,String phoneNumber) throws Exception {
-        return executor.execute(new ValidateCustomerCommand(name,surname,phoneNumber));
-    }
+
 }

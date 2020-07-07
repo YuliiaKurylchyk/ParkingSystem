@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
+import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.services.ParkingLotService;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.Payment;
@@ -30,7 +31,7 @@ public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
         parkingTicket.setDepartureTime(LocalDateTime.now());
         parkingTicket.setStatus(Status.LEFT);
         parkingTicket.setCost(countTheCost(parkingTicket));
-        parkingLotService.setParkingSlotBack(parkingTicket.getParkingSlot());
+        parkingLotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);
         parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
         return  parkingTicket;
     }

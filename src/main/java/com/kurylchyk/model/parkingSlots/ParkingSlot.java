@@ -1,18 +1,19 @@
 package com.kurylchyk.model.parkingSlots;
 
-public abstract class ParkingSlot {
+public class ParkingSlot {
 
-    protected final SizeOfSlot sizeOfSlot;
-    protected Integer parkingSlotID;
-    protected  Integer pricePerDay;
+    private Integer parkingSlotID;
+    private final SlotSize sizeOfSlot;
+    private SlotStatus status;
+    private Integer price;
 
 
-    public ParkingSlot(SizeOfSlot sizeOfSlot) {
+    public ParkingSlot(SlotSize sizeOfSlot) {
         this.sizeOfSlot = sizeOfSlot;
 
     }
 
-    public SizeOfSlot getSizeOfSlot(){
+    public SlotSize getSizeOfSlot() {
         return sizeOfSlot;
     }
 
@@ -20,21 +21,43 @@ public abstract class ParkingSlot {
         return parkingSlotID;
     }
 
-    public Integer getPrice(){
-        return pricePerDay;
-    }
-    public void setPrice(Integer price) {
-        this.pricePerDay = price;
-    }
     public void setParkingSlotID(Integer parkingSlotID) {
         this.parkingSlotID = parkingSlotID;
     }
 
+    public SlotStatus getStatus() {
+        return status;
+    }
 
+    public void setStatus(SlotStatus status) {
+        this.status = status;
+    }
+
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public ParkingSlot(Integer parkingSlotID, SlotSize sizeOfSlot, SlotStatus status, Integer price) {
+        this.parkingSlotID = parkingSlotID;
+        this.sizeOfSlot = sizeOfSlot;
+        this.status = status;
+        this.price = price;
+    }
+
+    public ParkingSlot(Integer parkingSlotID,SlotSize slotSize,SlotStatus slotStatus){
+        this.parkingSlotID = parkingSlotID;
+        this.sizeOfSlot = slotSize;
+        this.status = slotStatus;
+    }
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31*result + sizeOfSlot.hashCode();
+        result = 31 * result + sizeOfSlot.hashCode();
         return result;
     }
 
@@ -42,11 +65,11 @@ public abstract class ParkingSlot {
     public boolean equals(Object obj) {
 
         ParkingSlot anotherParkingSlot = (ParkingSlot) obj;
-        return  this.sizeOfSlot.equals(anotherParkingSlot.sizeOfSlot);
+        return this.sizeOfSlot.equals(anotherParkingSlot.sizeOfSlot);
     }
 
     @Override
     public String toString() {
-        return getSizeOfSlot().toString();
+        return sizeOfSlot.toString() +"_"+ parkingSlotID;
     }
 }

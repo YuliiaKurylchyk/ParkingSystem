@@ -2,7 +2,6 @@ package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.Connector;
 import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 
 
 import java.sql.*;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CustomerDAO extends Connector implements GetUpdateDAO<Customer, Integer>, AddDeleteDAO<Customer, Integer> {
+public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
 
 
 

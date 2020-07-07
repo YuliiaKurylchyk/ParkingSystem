@@ -20,6 +20,14 @@ header {
     font-family: Raleway;
     color: #00c3ff;
 }
+header div a{
+    color:lightskyblue;
+}
+
+header div a:hover {
+    color:dodgerblue;
+}
+
 nav {
     background-color: #FFFFFF;
     width: 20%;

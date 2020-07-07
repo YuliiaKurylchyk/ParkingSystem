@@ -4,11 +4,7 @@ package com.kurylchyk.model.vehicles;
 public class Motorbike extends  Vehicle {
 
     public Motorbike(String sort, String model, String registrationNumber) {
-        super(sort, model, registrationNumber, TypeOfVehicle.MOTORBIKE);
-    }
-
-    public Motorbike(){
-        typeOfVehicle = TypeOfVehicle.MOTORBIKE;
+        super(sort, model, registrationNumber, VehicleType.MOTORBIKE);
     }
     @Override
     public boolean equals(Object anotherVehicle) {

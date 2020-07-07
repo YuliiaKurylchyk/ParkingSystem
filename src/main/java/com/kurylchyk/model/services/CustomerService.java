@@ -7,8 +7,9 @@ import java.util.List;
 //add get All
 public interface CustomerService {
 
-    Customer create(String name,String surname,String phoneNumber);
-    Customer create(Integer customerID,String name,String surname,String phoneNumber);
+    Customer create(String name,String surname,String phoneNumber) throws Exception;
+
+    Customer create(Integer customerID,String name,String surname,String phoneNumber) throws Exception;
     Customer getFromDB(Integer customerID) throws Exception;
     Customer getFromDB(String phoneNumber) throws Exception;
     Customer saveToDB(Customer customer) throws Exception;
@@ -17,6 +18,5 @@ public interface CustomerService {
     //викликати з deleteTicketCommand
     void deleteCompletely(Customer customer) throws Exception;
     boolean isPresent(String phoneNumber) throws Exception;
-    List<String> validate(String name,String surname,String phoneNumber) throws Exception;
 
 }

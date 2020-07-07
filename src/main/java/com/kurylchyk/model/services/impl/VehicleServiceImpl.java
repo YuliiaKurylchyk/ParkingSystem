@@ -1,10 +1,15 @@
 package com.kurylchyk.model.services.impl;
+
+import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.services.VehicleService;
+import com.kurylchyk.model.services.impl.ticketCommand.UpdateTicket;
+import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
 import com.kurylchyk.model.services.impl.vehicleCommand.*;
 import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.vehicles.TypeOfVehicle;
+import com.kurylchyk.model.vehicles.VehicleType;
 import com.kurylchyk.model.vehicles.Vehicle;
 import com.kurylchyk.model.parkingTicket.Status;
+
 import java.util.List;
 
 
@@ -13,35 +18,48 @@ public class VehicleServiceImpl implements VehicleService {
     private CommandExecutor executor = new CommandExecutor();
 
     @Override
-    public Vehicle create(String make, String model, String licencePlate, TypeOfVehicle typeOfVehicle) throws Exception {
+    public Vehicle create(VehicleInfo vehicleInfo)
+            throws Exception {
+        Vehicle vehicle;
 
-      return executor.execute(new CreateVehicleCommand(make,model,licencePlate,typeOfVehicle));
+        if (!executor.execute(new CheckVehicleInDatabase(vehicleInfo.getLicensePlate()))) {
+            vehicle = vehicleInfo.createVehicle();
+        } else {
+            vehicle = getFromDB(vehicleInfo.getLicensePlate(), vehicleInfo.getVehicleType());
+        }
+        return vehicle;
     }
 
     @Override
-    public Vehicle getFromDB(String licencePlate) throws Exception {
-       return executor.execute(new GetVehicleCommand(licencePlate));
+    public Vehicle find(String licensePlate) throws Exception {
+        VehicleType currentType = executor.execute(new GetVehicleTypeCommand(licensePlate));
+        Vehicle vehicle = getFromDB(licensePlate,currentType);
+        return  vehicle;
+    }
+
+    @Override
+    public Vehicle getFromDB(String licencePlate, VehicleType typeOfVehicle) throws Exception {
+        return executor.execute(new GetVehicleCommand(licencePlate, typeOfVehicle));
     }
 
     @Override
     public Vehicle saveToDB(Vehicle vehicle) throws Exception {
-        if(!isPresent(vehicle.getLicensePlate())) {
+        if (!isPresent(vehicle.getLicensePlate())) {
             executor.execute(new SaveVehicleCommand(vehicle));
         }
         return vehicle;
     }
 
     @Override
-    public Vehicle update(Vehicle vehicle, String licencePlate) throws Exception {
-         executor.execute(new UpdateVehicleCommand(vehicle,licencePlate));
-         return  vehicle;
+    public Vehicle update(VehicleInfo vehicleInfo, String licencePlate) throws Exception {
 
+        return executor.execute(new UpdateVehicleCommand(vehicleInfo, licencePlate));
     }
 
     @Override
     public Vehicle deleteCompletely(Vehicle vehicle) throws Exception {
         executor.execute(new DeleteVehicleCommand(vehicle));
-        return  vehicle;
+        return vehicle;
     }
 
     @Override
@@ -50,34 +68,34 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public String getVehicleStatus(String licencePlate) throws Exception {
+    public Status getVehicleStatus(String licencePlate) throws Exception {
         return executor.execute(new VehicleStatusCommand(licencePlate));
     }
 
     @Override
-    public List<Vehicle> getAll() throws Exception {
-        return executor.execute(new GetAllVehiclesCommand());
+    public List<Vehicle> getAll(VehicleType vehicleType) throws Exception {
+        return executor.execute(new GetAllVehiclesCommand(vehicleType));
     }
 
 
     @Override
-    public List<Vehicle> getAll(Status status) throws Exception {
-        return executor.execute(new GetAllVehiclesCommand(status));
+    public List<Vehicle> getAll(Status status,VehicleType vehicleType) throws Exception {
+        return executor.execute(new GetAllVehiclesCommand(status,vehicleType));
     }
 
     @Override
     public void connectCustomerToVehicle(Vehicle vehicle, Customer customer) throws Exception {
-         executor.execute(new ConnectCustomerToVehicleCommand(vehicle,customer));
+        executor.execute(new ConnectCustomerToVehicleCommand(vehicle, customer));
     }
 
     @Override
-    public Integer countAllPresent(TypeOfVehicle typeOfVehicle) throws Exception {
-        return executor.execute(new CountVehiclePresentCommand(typeOfVehicle));
+    public Integer countAllPresent() throws Exception {
+        return executor.execute(new CountPresentVehiclesCommand());
     }
 
     @Override
-    public List<String> validate(String make, String model, String licencePlate, String typeOfVehicle) throws Exception {
-        return executor.execute(new ValidateVehicleCommand(make,model,licencePlate,typeOfVehicle));
+    public Integer countAllPresent(VehicleType vehicleType) throws Exception {
+        return executor.execute(new CountPresentVehiclesCommand(vehicleType));
     }
 
 

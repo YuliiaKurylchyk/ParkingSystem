@@ -1,7 +1,8 @@
 package com.kurylchyk.model.services;
 
 import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.vehicles.TypeOfVehicle;
+import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
+import com.kurylchyk.model.vehicles.VehicleType;
 import com.kurylchyk.model.vehicles.Vehicle;
 import  com.kurylchyk.model.parkingTicket.Status;
 
@@ -10,23 +11,26 @@ import java.util.List;
 //add validate
 public interface VehicleService {
 
-    Vehicle create(String make,String model,String licencePlate,TypeOfVehicle typeOfVehicle) throws Exception;
+    Vehicle create(VehicleInfo vehicleInfo) throws Exception;
 
-    Vehicle getFromDB(String licencePlate) throws Exception;
+    Vehicle find(String licensePlate) throws Exception;
+
+    Vehicle getFromDB(String licencePlate, VehicleType typeOfVehicle) throws Exception;
 
     Vehicle saveToDB(Vehicle vehicle) throws Exception;
 
-    Vehicle update(Vehicle vehicle, String licencePlate) throws Exception;
+    Vehicle update(VehicleInfo vehicleInfo, String licencePlate) throws Exception;
 
-    //мб оцього не треба// просто викликати в delete ticket
+    //мб цього не треба// просто викликати в delete ticket
     Vehicle deleteCompletely(Vehicle vehicle) throws Exception;
 
     boolean isPresent(String licencePlate) throws Exception;
 
-    String getVehicleStatus(String licencePlate) throws Exception;
-    List<Vehicle> getAll() throws Exception;
-    List<Vehicle> getAll(Status status) throws Exception;
+    Status getVehicleStatus(String licencePlate) throws Exception;
+    List<Vehicle> getAll(VehicleType vehicleType) throws Exception;
+    List<Vehicle> getAll(Status status,VehicleType vehicleType) throws Exception;
     void connectCustomerToVehicle(Vehicle vehicle, Customer customer) throws Exception;
-    Integer countAllPresent(TypeOfVehicle typeOfVehicle) throws Exception;
-    List<String> validate(String make, String model, String licencePlate, String typeOfVehicle) throws Exception;
+    Integer countAllPresent() throws Exception;
+    Integer countAllPresent(VehicleType vehicleType) throws Exception;
+
 }

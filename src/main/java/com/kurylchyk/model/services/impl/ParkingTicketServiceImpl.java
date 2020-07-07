@@ -1,10 +1,13 @@
 package com.kurylchyk.model.services.impl;
 
+import com.kurylchyk.model.dao.ParkingSlotIdentifier;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.impl.ticketCommand.*;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.parkingTicket.Status;
+
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
@@ -55,6 +58,11 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
         return executor.execute(new GetByCustomerCommand(customerID));
     }
 
+    @Override
+    public ParkingTicket getByParkingSlot(ParkingSlotIdentifier identifier) throws Exception {
+        return  executor.execute(new GetByParkingSlotCommand(identifier));
+    }
+
 
     @Override
     public ParkingTicket saveToDB(ParkingTicket parkingTicket) throws Exception {
@@ -67,6 +75,11 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
 
     }
 
+    public ParkingTicket updateVehicleInfo(Vehicle vehicle, String currentLicensePlate)
+            throws Exception {
+         return  executor.execute(new UpdateVehicleInTicketCommand(vehicle,currentLicensePlate));
+    }
+
     @Override
     public ParkingTicket remove(ParkingTicket parkingTicket) throws Exception {
         return executor.execute(new RemoveParkingTicketCommand(parkingTicket));
@@ -77,6 +90,7 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
         executor.execute(new DeleteTicketCompletely(parkingTicket));
         return parkingTicket;
     }
+
 
     @Override
     public boolean isPresent(Integer parkingTicketID) throws Exception {

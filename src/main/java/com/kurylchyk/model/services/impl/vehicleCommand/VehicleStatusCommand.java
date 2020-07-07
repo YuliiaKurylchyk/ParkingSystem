@@ -1,11 +1,13 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
+import com.kurylchyk.model.dao.VehicleDataUtil;
+import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.services.impl.Command;
-import com.kurylchyk.model.dao.VehicleDAO;
+import com.kurylchyk.model.dao.vehicles.VehicleDAO;
+import com.kurylchyk.model.vehicles.Vehicle;
 
-public class VehicleStatusCommand implements Command<String> {
+public class VehicleStatusCommand implements Command<Status> {
 
-    private VehicleDAO vehicleDAO = new VehicleDAO();
     private String licencePlate;
 
     public VehicleStatusCommand(String licencePlate){
@@ -13,7 +15,8 @@ public class VehicleStatusCommand implements Command<String> {
     }
 
     @Override
-    public String execute() throws Exception {
-        return vehicleDAO.getStatus(licencePlate);
+    public Status execute() throws Exception {
+        return VehicleDataUtil.getStatus(licencePlate);
+
     }
 }

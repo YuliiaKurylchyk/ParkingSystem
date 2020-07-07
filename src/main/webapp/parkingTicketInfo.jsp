@@ -7,6 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page isELIgnored="false" %>
+<%@ page session="true" %>
+
+<fmt:setLocale value="${sessionScope.sessionLocale}"/>
+<fmt:setBundle basename="TicketInfo"/>
+
 <html>
 <head>
     <title>Parking Ticket Information</title>
@@ -17,7 +25,7 @@
 </head>
 <body>
 
-<h1>Parking ticket Information: </h1>
+<h1><fmt:message key="parkingTicketInfo"/></h1>
 
 <h3 style="color:red;"><c:out value="${requestScope.deleted}"></c:out></h3>
 
@@ -25,7 +33,7 @@
     <table>
         <tr>
             <td>
-                <jsp:text>Parking Ticket ID</jsp:text>
+                <fmt:message key="parkingTicketID"/>
             </td>
             <td>
                 <c:out value="${currentTicket.parkingTicketID}"/>
@@ -33,50 +41,58 @@
         </tr>
         <tr>
             <td>
-                <jsp:text>Vehicle</jsp:text>
+                <fmt:message key="vehicle"/>
             </td>
             <td><c:out value="${currentTicket.vehicle}"/></td>
             <td>
-                <a href="/vehicle/edit?vehicleID=<c:out value='${currentTicket.vehicle.licensePlate}'/>">Edit</a>
+                <a href="/vehicle/edit?vehicleID=<c:out value='${currentTicket.vehicle.licensePlate}'/>&vehicleType=<c:out value='${currentTicket.vehicle.vehicleType}'/>"><fmt:message
+                        key="edit"/></a>
                 &nbsp;&nbsp;&nbsp;
             </td>
         </tr>
 
         <tr>
             <td>
-                <jsp:text>Parking Slot</jsp:text>
+                <fmt:message key="parkingSlot"/>
             </td>
             <td><c:out value="${currentTicket.parkingSlot}"/></td>
-            <td></td>
+            <td>
+                <c:if test="${currentTicket.status=='PRESENT'}">
+                    <a href="/parkingSlot/showAll?&slotSize=<c:out value='${currentTicket.parkingSlot.sizeOfSlot}'/>
+        &status='VACANT'"> <fmt:message
+                            key="edit"/></a>
+                </c:if>
+            </td>
         </tr>
         <tr>
             <td>
-                <jsp:text>Customer</jsp:text>
+                <fmt:message key="customer"/>
             </td>
             <td><c:out value="${currentTicket.customer}"/></td>
-            <td><a href="/customer/edit?customerID=<c:out value='${currentTicket.customer.customerID}' />">Edit</a>
+            <td><a href="/customer/edit?customerID=<c:out value='${currentTicket.customer.customerID}'/>"><fmt:message
+                    key="edit"/></a>
             </td>&nbsp;&nbsp;&nbsp;&nbsp;
         </tr>
         <tr>
             <td>
-                <jsp:text>Arrival time:</jsp:text>
+                <fmt:message key="arrivalTime"/>
             </td>
             <td><c:out value="${currentTicket.arrivalTime}"/></td>
             &nbsp;&nbsp;<td></td>
         <tr>
-            <td>Left time:</td>
+            <td><fmt:message key="leftTime"/></td>
             <td><c:out value="${currentTicket.departureTime}"/></td>
             <td></td>
         </tr>
 
         </tr>
         <tr>
-            <td>Status:</td>
+            <td><fmt:message key="status"/></td>
             <td><c:out value="${currentTicket.status}"/></td>&nbsp;
             <td></td>
         </tr>
         <tr>
-            <td>Cost:</td>
+            <td><fmt:message key="cost"/></td>
             <td><c:out value="${currentTicket.cost}"/></td>&nbsp;
             <td></td>
         </tr>
@@ -86,26 +102,26 @@
 
 <div id="containerButton">
     <div style="float: left;margin-left: 10%;">
-        <a>
-            <button type="button" value="" name="GetReceipt">Get receipt</button>
+        <a href="/parkingTicket/getReceipt">
+            <button type="button" value="" name="GetReceipt"><fmt:message key="getReceipt"/></button>
         </a>
     </div>
     <div style="float:left;">
         <a href="<%request.getContextPath();%>/parkingTicket/end">
-            <button type="button" value="" name="BackToMenu">Back to menu</button>
+            <button type="button" value="" name="BackToMenu"><fmt:message key="backToHome"/></button>
         </a>
     </div>
     <c:if test="${currentTicket.status=='PRESENT'}">
         <div style="float:left;">
             <a href="/parkingTicket/remove?parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">
-                <button type="button" value="" name="Remove">Remove</button>
+                <button type="button" value="" name="Remove"><fmt:message key="remove"/></button>
             </a>
         </div>
     </c:if>
     <c:if test="${currentTicket.status=='LEFT' and requestScope.deleted==null}">
         <div style="float:left;">
             <a href="/parkingTicket/delete?parkingTicketID=<c:out value='${currentTicket.parkingTicketID}' />">
-                <button type="button" value="" name="deleteCompletely">Delete Completely</button>
+                <button type="button" value="" name="deleteCompletely"><fmt:message key="delete"/></button>
             </a>
         </div>
     </c:if>

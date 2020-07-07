@@ -4,13 +4,13 @@ import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.VehicleDAO;
+import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.vehicles.Vehicle;
 
 public class DeleteTicketCompletely implements Command<Void> {
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
-    private VehicleDAO vehicleDAO = new VehicleDAO();
+    private VehicleDAO vehicleDAO;
     private CustomerDAO customerDAO = new CustomerDAO();
     private ParkingTicket parkingTicket;
 

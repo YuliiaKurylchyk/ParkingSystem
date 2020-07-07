@@ -101,10 +101,12 @@ public class ParkingTicket {
     public String toString() {
 
         return "The vehicle: " + vehicle + "\n"
-                + "Place №" + parkingSlot + "\n"
-                + "Data and time : " + arrivalTime + "\n"
+                + "Place: " + parkingSlot + "\n"
+                + "Arrival time: " + arrivalTime + "\n"
                 + "Customer: " + customer + "\n"
-                + "Status: " + status.toString();
+                + "Status: " + status.toString() +"\n"
+                + "Departure time: " + (departureTime==null?" ":departureTime) + "\n"
+                + "Cost: " + (cost==null?" ":cost) + "\n";
     }
 
     @Override

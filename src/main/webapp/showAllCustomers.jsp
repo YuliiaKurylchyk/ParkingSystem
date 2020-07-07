@@ -1,5 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page isELIgnored="false" %>
+<%@ page session="true" %>
+
+<fmt:setLocale value="${sessionScope.sessionLocale}"/>
+<fmt:setBundle basename="customerShow"/>
 <html>
 <head>
     <title>The list of customers</title>
@@ -8,15 +15,15 @@
     </style>
 </head>
 <body>
-<h3>All Customers</h3>
+<h1 style="color: deepskyblue"><fmt:message key="allCustomer"/></h1>
 <div id="container">
     <table>
         <thead>
         <tr>
-            <th>CustomerID</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>phoneNumber</th>
+            <th><fmt:message key="customerID"/></th>
+            <th><fmt:message key="name"/></th>
+            <th><fmt:message key="surname"/></th>
+            <th><fmt:message key="phoneNumber"/></th>
         </tr>
         </thead>
         <tbody>
@@ -35,8 +42,7 @@
                     <c:out value="${customer.phoneNumber}"/>
                 </td>
                 <td>
-                    <a href="/parkingTicket/showByCustomer?customerID=<c:out value='${customer.customerID}'/>">Show
-                        details</a> &nbsp;&nbsp;&nbsp;
+                    <a href="/parkingTicket/showByCustomer?customerID=<c:out value='${customer.customerID}'/>"><fmt:message key="details"/></a> &nbsp;&nbsp;&nbsp;
                 </td>
             </tr>
         </c:forEach>

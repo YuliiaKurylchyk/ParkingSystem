@@ -1,15 +1,14 @@
 package com.kurylchyk.controller;
 
 
-import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
-import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.services.VehicleService;
 import com.kurylchyk.model.services.impl.BusinessServiceFactory;
-import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
-import com.kurylchyk.model.vehicles.TypeOfVehicle;
+import com.kurylchyk.model.services.impl.utilVehicle.*;
+import com.kurylchyk.model.vehicles.CarSize;
+import com.kurylchyk.model.vehicles.VehicleType;
 import com.kurylchyk.model.vehicles.Vehicle;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +22,6 @@ import java.util.List;
 public class VehicleServlet extends HttpServlet {
 
     private VehicleService vehicleService = new BusinessServiceFactory().forVehicle();
-    private Vehicle vehicle;
 
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -50,7 +48,7 @@ public class VehicleServlet extends HttpServlet {
                 doEdit(req, resp);
                 break;
             case "/update":
-                doUpdate(req, resp);
+                 doUpdate(req, resp);
                 break;
             case "/form":
                 showRegistrationFrom(req, resp);
@@ -62,11 +60,12 @@ public class VehicleServlet extends HttpServlet {
         }
     }
 
-    protected void doGetVehicle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGetVehicle(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         String licensePlate = req.getParameter("vehicleID");
         try {
-            Vehicle vehicle = vehicleService.getFromDB(licensePlate);
+            Vehicle vehicle = vehicleService.find(licensePlate);
             req.setAttribute("vehicle", vehicle);
             req.getRequestDispatcher("/parkingTicket/showByVehicle?").forward(req, resp);
         } catch (Exception exception) {
@@ -81,8 +80,8 @@ public class VehicleServlet extends HttpServlet {
             throws ServletException, IOException {
 
         System.out.println("In vehicle do create!");
-        RequestDispatcher requestDispatcher = null;
         Vehicle vehicle = null;
+        RequestDispatcher requestDispatcher = null;
 
         String typeOfVehicle = req.getParameter("typeOfVehicle");
         String make = req.getParameter("make");
@@ -90,96 +89,107 @@ public class VehicleServlet extends HttpServlet {
         String licencePlate = req.getParameter("licensePlate");
 
         try {
-            List<String> violations = vehicleService.validate(make, model, licencePlate, typeOfVehicle);
-            if (!violations.isEmpty()) {
-                setAttributeBack(typeOfVehicle, make, model, licencePlate, req);
-                req.setAttribute("violations", violations);
-                requestDispatcher = req.getRequestDispatcher("/vehicleRegistration.jsp");
-
+            switch (VehicleType.valueOf(typeOfVehicle)) {
+                case MOTORBIKE:
+                    vehicle = vehicleService.create(new MotorbikeInfo(make, model, licencePlate));
+                    break;
+                case CAR:
+                    vehicle = vehicleService.create(new CarInfo(make, model, licencePlate, CarSize.valueOf(req.getParameter("carSize"))));
+                    break;
+                case TRUCK:
+                    vehicle = vehicleService.create(new TruckInfo(make, model, licencePlate, Boolean.parseBoolean(req.getParameter("trailerPresent"))));
+                    break;
+                case BUS:
+                    vehicle = vehicleService.create(new BusInfo(make, model, licencePlate, Integer.parseInt(req.getParameter("countOfSeats"))));
             }
-            if (vehicleService.isPresent(licencePlate)) {
-                if (vehicleService.getVehicleStatus(licencePlate).equals("present")) {
-                    req.setAttribute("exception", new SuchVehiclePresentException("Such vehicle with licence plate"
-                            + licencePlate + " is already present"));
-                    requestDispatcher = req.getRequestDispatcher("errorPage.jsp");
-                } else {
-                    vehicle = vehicleService.getFromDB(licencePlate);
-                }
-            } else {
-                vehicle = vehicleService.create(make, model, licencePlate, TypeOfVehicle.valueOf(typeOfVehicle));
-            }
-
         } catch (Exception exception) {
+            System.out.println("Exception  is vehicle create");
             exception.printStackTrace();
+            req.setAttribute("exception", exception);
+            requestDispatcher = req.getRequestDispatcher("/errorPage.jsp");
         }
 
+        System.out.println(vehicle);
         if (requestDispatcher == null) {
-            ParkingSlot parkingSlot = null;
-            try {
-                parkingSlot = getAppropriateSlot(vehicle.getTypeOfVehicle());
-            } catch (NoAvailableParkingSlotException exception) {
-                req.setAttribute("exception", exception);
-                req.getRequestDispatcher("errorPage.jsp").forward(req, resp);
-            }
+
             req.getSession().setAttribute("vehicle", vehicle);
-            req.getSession().setAttribute("parkingSlot", parkingSlot);
-            System.out.println("Forward to customer Registration");
-            requestDispatcher = req.getRequestDispatcher(req.getContextPath() + "/customer/form");
+            requestDispatcher = req.getRequestDispatcher(req.getContextPath() + "/parkingSlot/showAvailable");
         }
+
         requestDispatcher.forward(req, resp);
     }
 
     protected void doEdit(HttpServletRequest req, HttpServletResponse resp) {
-        String vehicleID =req.getParameter("vehicleID");
-        try{
-            vehicle = vehicleService.getFromDB(vehicleID);
-            System.out.println("Vehicle " + vehicle);
-            req.setAttribute("vehicle",vehicle);
+        String vehicleID = req.getParameter("vehicleID");
+        VehicleType vehicleType = VehicleType.valueOf(req.getParameter("vehicleType"));
+
+        System.out.println("In vehicle/edit "+vehicleID + " "+vehicleType);
+        try {
+            Vehicle currentVehicle = vehicleService.getFromDB(vehicleID, vehicleType);
+            System.out.println("currentVehicle " + currentVehicle);
+            req.getSession().setAttribute("vehicle", currentVehicle);
             System.out.println("vehicle attribute was set");
-            req.getRequestDispatcher("/vehicleRegistration.jsp").forward(req,resp);
-        }catch (Exception exception){
+            req.getRequestDispatcher("/vehicleRegistration.jsp").forward(req, resp);
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
     }
 
-    protected void doUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    protected void doUpdate(HttpServletRequest req, HttpServletResponse resp) {
 
         System.out.println("In vehicle updation");
 
-        Vehicle currentVehicle = vehicle;
+        Vehicle currentVehicle = (Vehicle) req.getSession().getAttribute("vehicle");
+        req.getSession().removeAttribute("vehicle");
         System.out.println("Current vehicle " + currentVehicle);
 
         String make = req.getParameter("make");
         String model = req.getParameter("model");
         String licensePlate = req.getParameter("licensePlate");
-        TypeOfVehicle typeOfVehicle = TypeOfVehicle.valueOf(req.getParameter("typeOfVehicle"));
+        VehicleType vehicleType = VehicleType.valueOf(req.getParameter("typeOfVehicle"));
+        VehicleInfo vehicleInfo = null;
 
-        Vehicle updatedVehicle = Vehicle.newVehicle().setType(typeOfVehicle)
-                .setModel(model).setMake(make).setLicencePlate(licensePlate).buildVehicle();
-        System.out.println("Updated vehicle " + updatedVehicle);
         try {
-            vehicleService.update(updatedVehicle, currentVehicle.getLicensePlate());
+            switch (vehicleType) {
+                case MOTORBIKE:
+                    vehicleInfo = new MotorbikeInfo(make, model, licensePlate);
+                    break;
+                case CAR:
+                    vehicleInfo = new CarInfo(make, model, licensePlate, CarSize.valueOf(req.getParameter("carSize")));
+                    break;
+                case TRUCK:
+                    vehicleInfo = new TruckInfo(make, model, licensePlate, Boolean.parseBoolean(req.getParameter("trailerPresent")));
+                    break;
+                case BUS:
+                    vehicleInfo = new BusInfo(make, model, licensePlate, Integer.parseInt(req.getParameter("countOfSeats")));
+            }
+            Vehicle updatedVehicle = vehicleService.update(vehicleInfo, currentVehicle.getLicensePlate());
+
+            req.getRequestDispatcher("/parkingTicket/showByVehicle?vehicleID="+updatedVehicle.getLicensePlate()).forward(req, resp);
 
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        req.setAttribute("currentVehicle", currentVehicle);
-        req.setAttribute("updatedVehicle", updatedVehicle);
-        req.getRequestDispatcher("/parkingTicket/updateVehicle").forward(req,resp);
+
 
     }
 
     protected void showAll(HttpServletRequest req, HttpServletResponse resp) {
 
         String vehicleStatus = req.getParameter("status");
+        VehicleType vehicleType = VehicleType.valueOf(req.getParameter("vehicleType"));
+
+
+        System.out.println("in do show "+vehicleType);
         List<Vehicle> allVehicles;
         try {
             if (vehicleStatus.equalsIgnoreCase("ALL")) {
-                allVehicles = vehicleService.getAll();
+                 allVehicles = vehicleService.getAll(vehicleType);
             } else {
                 Status status = Status.valueOf(vehicleStatus);
-                allVehicles = vehicleService.getAll(status);
+                 allVehicles = vehicleService.getAll(status,vehicleType);
             }
             req.setAttribute("allVehicles", allVehicles);
             req.getRequestDispatcher("/showAllVehicle.jsp").forward(req, resp);
@@ -196,18 +206,6 @@ public class VehicleServlet extends HttpServlet {
         req.getRequestDispatcher("/vehicleRegistration.jsp").forward(req, resp);
     }
 
-    private void setAttributeBack(String typeOfVehicle, String make, String model, String licensePlate, HttpServletRequest req)
-    {
-        req.setAttribute("typeOfVehicle", typeOfVehicle);
-        req.setAttribute("make", make);
-        req.setAttribute("model", model);
-        req.setAttribute("licensePlate", licensePlate);
-    }
-
-    private ParkingSlot getAppropriateSlot(TypeOfVehicle typeOfVehicle) throws NoAvailableParkingSlotException {
-
-        return new ParkingLotServiceImpl().getParkingSlot(typeOfVehicle);
-    }
 
 }
 

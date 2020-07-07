@@ -1,15 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: admin
-  Date: 05.05.2020
-  Time: 20:31
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page isELIgnored="false" %>
+<%@ page session="true" %>
+
+<fmt:setLocale value="${sessionScope.sessionLocale}"/>
+<fmt:setBundle basename="search"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Search</title>
 
     <style type="text/css">
         <%@include file="WebContent/searchPage-style.css" %>
@@ -17,15 +16,15 @@
 
 </head>
 <body>
-<h1>Choose the option to search</h1>
-<h3>Search by</h3>
+<h1><fmt:message key="toSearch"/></h1>
+<h3><fmt:message key="searchBy"/></h3>
 <div id="selectContainer">
     <form action="/searchPage.jsp" method="GET">
         <select name="option" onchange="this.form.submit();">
-            <option value="" disabled selected>Select your option</option>
-            <option value="parkingTicket" ${param.option == 'parkingTicket' ? 'selected="selected"':''}  >Parking ticket info</option>
-            <option value="customer" ${param.option == 'customer' ? 'selected="selected"':''}>Customer info</option>
-            <option value="vehicle" ${param.option == 'vehicle' ? 'selected="selected"':''}>Vehicle info</option>
+            <option value="" disabled selected><fmt:message key="select"/></option>
+            <option value="parkingTicket" ${param.option == 'parkingTicket' ? 'selected="selected"':''}  ><fmt:message key="ticketID"/></option>
+            <option value="customer" ${param.option == 'customer' ? 'selected="selected"':''}><fmt:message key="cus"/></option>
+            <option value="vehicle" ${param.option == 'vehicle' ? 'selected="selected"':''}><fmt:message key="veh"/></option>
         </select>
     </form>
 </div>
@@ -34,19 +33,19 @@
         <input type="hidden" name="option" value="${param.option}">
         <c:choose>
             <c:when test="${param.option == 'parkingTicket'}">
-                <p>Enter parking ticket ID</p>
-                <input type="text" placeholder="ID" name="parkingTicketID">
+                <p><fmt:message key="enterTicket"/></p>
+                <input type="text" placeholder="<fmt:message key="ticketID"/>" name="parkingTicketID">
                 <input type="submit" class="searchButton" value="Search">
             </c:when>
             <c:when test="${param.option=='customer'}">
-                <p>Enter customer phone number</p>
-                <input type="text" placeholder="phone number" name="phoneNumber">
+                <p><fmt:message key="enterCustomer"/></p>
+                <input type="text" placeholder="<fmt:message key="phoneNumber"/>" name="phoneNumber">
                 <input type="submit" class="searchButton"  value="Search">
             </c:when>
             <c:when test="${param.option=='vehicle'}">
-                <p>Enter license plate of vehicle</p>
-                <input type="text" placeholder="license plate" name="vehicleID">
-                <input type="submit" class="searchButton" value="Search">
+                <p><fmt:message key="enterVehicle"/></p>
+                <input type="text" placeholder="<fmt:message key="licensePlate"/>" name="vehicleID">
+                <input type="submit" class="searchButton" value="<fmt:message key="searchTicket"/>">
             </c:when>
         </c:choose>
     </form>

@@ -43,6 +43,15 @@ input {
     border: 1px solid #aaaaaa;
 }
 
+.vehicleInput:invalid{
+    border: 2px dashed red;
+}
+
+#busAdditional,
+#carAdditional,
+#truckAdditional {
+    display: none;
+}
 
 button {
     background-color: #74D3DC;

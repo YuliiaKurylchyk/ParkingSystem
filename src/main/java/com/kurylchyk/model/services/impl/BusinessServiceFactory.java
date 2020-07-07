@@ -7,7 +7,7 @@ import com.kurylchyk.model.services.VehicleService;
 
 public class BusinessServiceFactory implements ServiceFactory {
     @Override
-    public ParkingTicketService forParkingTicket() {
+    public  ParkingTicketService forParkingTicket() {
         return  new ParkingTicketServiceImpl();
     }
 

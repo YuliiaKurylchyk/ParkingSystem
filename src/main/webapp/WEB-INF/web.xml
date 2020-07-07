@@ -15,5 +15,16 @@
         <location>/errorPage.jsp</location>
     </error-page>
     -->
+
+    <filter>
+        <filter-name>utf8filter</filter-name>
+        <filter-class>com.kurylchyk.controller.EncodingFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>utf8filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>
 

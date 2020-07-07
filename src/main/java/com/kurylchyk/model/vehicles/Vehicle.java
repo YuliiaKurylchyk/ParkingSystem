@@ -2,10 +2,18 @@ package com.kurylchyk.model.vehicles;
 
 public abstract class Vehicle {
 
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
     protected String make;
     protected String model;
     protected  String licensePlate;
-    protected TypeOfVehicle typeOfVehicle;
+    protected VehicleType vehicleType;
 
     public static VehicleBuilder newVehicle(){
         return new VehicleBuilder();
@@ -24,16 +32,16 @@ public abstract class Vehicle {
 
 
     public Vehicle() {}
-    public Vehicle(String make, String model, String licencePlate,TypeOfVehicle type) {
+    public Vehicle(String make, String model, String licencePlate, VehicleType vehicleType) {
         this.make = make;
         this.model = model;
         this.licensePlate = licencePlate;
-        this.typeOfVehicle = type;
+        this.vehicleType = vehicleType;
     }
 
     @Override
     public String toString() {
-        return  make + "\t" + model + "\t" + licensePlate;
+        return  make + "\t" + model + "\t" + licensePlate + "\t" + vehicleType;
     }
 
     public String getMake(){
@@ -47,9 +55,6 @@ public abstract class Vehicle {
 
     public String getLicensePlate() {
         return licensePlate;
-    }
-    public TypeOfVehicle getTypeOfVehicle(){
-        return typeOfVehicle;
     }
 
     @Override
@@ -67,6 +72,7 @@ public abstract class Vehicle {
         result = 31 * result + make.hashCode();
         result = 31 * result + model.hashCode();
         result = 31 * result + licensePlate.hashCode();
+
         return result;
     }
 
