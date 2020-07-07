@@ -1,8 +1,6 @@
 package com.kurylchyk.model.services.impl;
 
-import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.services.VehicleService;
-import com.kurylchyk.model.services.impl.ticketCommand.UpdateTicket;
 import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
 import com.kurylchyk.model.services.impl.vehicleCommand.*;
 import com.kurylchyk.model.customer.Customer;

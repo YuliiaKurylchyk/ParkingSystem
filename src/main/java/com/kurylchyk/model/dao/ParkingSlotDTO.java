@@ -4,7 +4,7 @@ import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
 
-public class ParkingSlotIdentifier {
+public class ParkingSlotDTO {
     private SlotSize slotSize;
     private Integer parkingSlotID;
 
@@ -17,7 +17,7 @@ public class ParkingSlotIdentifier {
         return parkingSlotID;
     }
 
-    public ParkingSlotIdentifier(SlotSize slotSize, Integer parkingSlotID){
+    public ParkingSlotDTO(SlotSize slotSize, Integer parkingSlotID){
         this.slotSize = slotSize;
         this.parkingSlotID = parkingSlotID;
     }

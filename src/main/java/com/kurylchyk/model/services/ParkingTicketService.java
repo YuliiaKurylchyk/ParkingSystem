@@ -1,11 +1,11 @@
 package com.kurylchyk.model.services;
 
 import com.kurylchyk.model.customer.Customer;
-import java.io.File;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kurylchyk.model.dao.ParkingSlotIdentifier;
+import com.kurylchyk.model.dao.ParkingSlotDTO;
 import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
@@ -24,10 +24,11 @@ public interface ParkingTicketService {
     ParkingTicket getByID(Integer parkingTicketID) throws Exception;
     ParkingTicket getByVehicle(String licencePlate) throws Exception;
     List<ParkingTicket> getByCustomer(Integer customerID) throws Exception;
-    ParkingTicket getByParkingSlot(ParkingSlotIdentifier identifier) throws Exception;
-    ParkingTicket  saveToDB(ParkingTicket parkingTicket) throws Exception;
+    ParkingTicket getByParkingSlot(ParkingSlotDTO identifier) throws Exception;
+    ParkingTicket saveToDB(ParkingTicket parkingTicket) throws Exception;
     ParkingTicket update(ParkingTicket parkingTicket) throws Exception;
     ParkingTicket remove(ParkingTicket parkingTicket) throws Exception;
     ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws Exception;
+    void updateParkingSlot(ParkingTicket parkingTicket,ParkingSlot newParkingSlot) throws Exception;
     boolean isPresent(Integer ParkingTicketID) throws Exception;
 }

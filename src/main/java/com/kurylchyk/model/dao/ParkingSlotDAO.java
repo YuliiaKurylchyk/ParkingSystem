@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, ParkingSlotIdentifier> {
+public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, ParkingSlotDTO> {
 
 
     @Override
-    public ParkingSlotIdentifier insert(ParkingSlot parkingSlot) {
+    public ParkingSlotDTO insert(ParkingSlot parkingSlot) {
 
         String query = "INSERT INTO parking_slot(parking_slot_id,size,slot_status) VALUES(?,?,?)";
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -28,7 +28,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return new ParkingSlotIdentifier(parkingSlot.getSizeOfSlot(), parkingSlot.getParkingSlotID());
+        return new ParkingSlotDTO(parkingSlot.getSizeOfSlot(), parkingSlot.getParkingSlotID());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     }
 
     @Override
-    public Optional<ParkingSlot> select(ParkingSlotIdentifier parkingSlotIdentifier) {
+    public Optional<ParkingSlot> select(ParkingSlotDTO parkingSlotIdentifier) {
 
         ParkingSlot parkingSlot = null;
 
@@ -85,7 +85,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     }
 
     @Override
-    public void update(ParkingSlot parkingSlot, ParkingSlotIdentifier parkingSlotIdentifier) {
+    public void update(ParkingSlot parkingSlot, ParkingSlotDTO parkingSlotIdentifier) {
 
         String query = "UPDATE parking_slot SET slot_status = ? WHERE parking_slot_ID = ? AND SIZE=?";
 
@@ -102,7 +102,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     }
 
-    public SlotStatus getSlotStatus(ParkingSlotIdentifier parkingSlotIdentifier) {
+    public SlotStatus getSlotStatus(ParkingSlotDTO parkingSlotIdentifier) {
 
         String query = "SELECT SLOT_STATUS FROM PARKING_SLOT WHERE PARKING_SLOT_ID = ? AND SIZE=?";
         SlotStatus slotStatus = null;

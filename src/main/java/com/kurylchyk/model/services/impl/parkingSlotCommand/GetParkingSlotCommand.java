@@ -1,16 +1,16 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
-import com.kurylchyk.model.dao.ParkingSlotIdentifier;
+import com.kurylchyk.model.dao.ParkingSlotDTO;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.impl.Command;
 
 public class GetParkingSlotCommand implements Command<ParkingSlot> {
 
     private ParkingSlotDAO parkingSlotDAO  = new ParkingSlotDAO();
-    private ParkingSlotIdentifier parkingSlotIdentifier;
+    private ParkingSlotDTO parkingSlotIdentifier;
 
-    public GetParkingSlotCommand(ParkingSlotIdentifier parkingSlotIdentifier){
+    public GetParkingSlotCommand(ParkingSlotDTO parkingSlotIdentifier){
         this.parkingSlotIdentifier = parkingSlotIdentifier;
     }
 

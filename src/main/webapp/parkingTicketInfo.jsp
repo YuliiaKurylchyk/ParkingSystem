@@ -58,8 +58,7 @@
             <td><c:out value="${currentTicket.parkingSlot}"/></td>
             <td>
                 <c:if test="${currentTicket.status=='PRESENT'}">
-                    <a href="/parkingSlot/showAll?&slotSize=<c:out value='${currentTicket.parkingSlot.sizeOfSlot}'/>
-        &status='VACANT'"> <fmt:message
+                    <a href="/parkingSlot/showAvailable?slotSize=<c:out value='${currentTicket.parkingSlot.sizeOfSlot}'/>"> <fmt:message
                             key="edit"/></a>
                 </c:if>
             </td>

@@ -3,7 +3,7 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.services.VehicleService;
-import com.kurylchyk.model.services.impl.BusinessServiceFactory;
+import com.kurylchyk.model.services.impl.ServiceFacade;
 import com.kurylchyk.model.services.impl.utilVehicle.*;
 import com.kurylchyk.model.vehicles.CarSize;
 import com.kurylchyk.model.vehicles.VehicleType;
@@ -21,7 +21,7 @@ import java.util.List;
 @WebServlet("/vehicle/*")
 public class VehicleServlet extends HttpServlet {
 
-    private VehicleService vehicleService = new BusinessServiceFactory().forVehicle();
+    private VehicleService vehicleService = new ServiceFacade().forVehicle();
 
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

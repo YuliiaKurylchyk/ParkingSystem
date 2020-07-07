@@ -2,7 +2,7 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.services.CustomerService;
-import com.kurylchyk.model.services.impl.BusinessServiceFactory;
+import com.kurylchyk.model.services.impl.ServiceFacade;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet("/customer/*")
 public class CustomerServlet extends HttpServlet {
-    private CustomerService customerService = new BusinessServiceFactory().forCustomer();
+    private CustomerService customerService = new ServiceFacade().forCustomer();
     private Customer customer;
 
     @Override

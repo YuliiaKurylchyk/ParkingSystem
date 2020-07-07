@@ -96,7 +96,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
         VehicleType vehicleType = VehicleDataUtil.getType(resultSet.getString("vehicle_id")).get();
         Vehicle currentVehicle = (Vehicle) VehicleDAOFactory.getVehicleDAO(vehicleType).select(resultSet.getString("vehicle_id")).get();
         Customer currentCustomer = customerDAO.select(resultSet.getInt("customer_id")).get();
-        ParkingSlotIdentifier psi = new ParkingSlotIdentifier(SlotSize.valueOf(resultSet.getString("parking_slot_size")), resultSet.getInt("parking_slot_id"));
+        ParkingSlotDTO psi = new ParkingSlotDTO(SlotSize.valueOf(resultSet.getString("parking_slot_size")), resultSet.getInt("parking_slot_id"));
         ParkingSlot currentParkingSlot = parkingSlotDao.select(psi).get();
         Integer parkingTicketID = resultSet.getInt("parking_ticket_id");
         Status status = Status.valueOf(resultSet.getString("status").toUpperCase());
@@ -154,7 +154,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
         return allTickets;
     }
 
-    public Optional<ParkingTicket> selectByParkingSlot(ParkingSlotIdentifier identifier) {
+    public Optional<ParkingTicket> selectByParkingSlot(ParkingSlotDTO identifier) {
 
         ParkingTicket parkingTicket = null;
         String query = "SELECT * FROM parking_ticket WHERE parking_slot_id = ? AND parking_slot_size = ?";
@@ -174,7 +174,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
     @Override
     public void update(ParkingTicket parkingTicket, Integer id) {
-        String query = "UPDATE parking_ticket SET status = ?,to_time = ?,  cost = ? WHERE parking_ticket_id = ?";
+        String query = "UPDATE parking_ticket SET status = ?,to_time = ?, cost = ? WHERE parking_ticket_id = ?";
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -188,6 +188,22 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
         }
     }
 
+    public void updateParkingSlotID(ParkingTicket parkingTicket,ParkingSlot parkingSlot){
+
+        String query = "UPDATE parking_ticket SET parking_slot_id = ?,parking_slot_size = ? WHERE parking_ticket_id = ?";
+
+        try (Connection connection = Connector.getDataSource().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, parkingSlot.getParkingSlotID());
+            preparedStatement.setString(2, parkingSlot.getSizeOfSlot().toString());
+            preparedStatement.setInt(3, parkingTicket.getParkingTicketID());
+            preparedStatement.execute();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+
+    }
     public void updateVehicleID(Integer parkingTicketID, String vehicleID) {
 
         String query = "UPDATE parking_ticket SET vehicle_id = ? WHERE parking_ticket_id=?";

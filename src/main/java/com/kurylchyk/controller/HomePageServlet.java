@@ -3,11 +3,9 @@ package com.kurylchyk.controller;
 import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.VehicleService;
-import com.kurylchyk.model.services.impl.BusinessServiceFactory;
-import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
+import com.kurylchyk.model.services.impl.ServiceFacade;
 import com.kurylchyk.model.vehicles.VehicleType;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,7 +50,7 @@ public class HomePageServlet extends HttpServlet {
 
     protected void getVehicleInfo(HttpServletRequest req) throws Exception {
 
-        VehicleService vehicleService = new BusinessServiceFactory().forVehicle();
+        VehicleService vehicleService = new ServiceFacade().forVehicle();
 
         Integer numberOfBikes = vehicleService.countAllPresent(VehicleType.MOTORBIKE);
         Integer numberOfCars = vehicleService.countAllPresent(VehicleType.CAR);
@@ -69,7 +67,7 @@ public class HomePageServlet extends HttpServlet {
 
     protected void getParkingTicketInfo(HttpServletRequest req) throws Exception {
 
-        ParkingTicketService  parkingTicketService = new BusinessServiceFactory().forParkingTicket();
+        ParkingTicketService  parkingTicketService = new ServiceFacade().forParkingTicket();
 
         Integer countOfTodayEntities = parkingTicketService.getAllInDate(LocalDateTime.now()).size();
         Integer countOfAllLeft = parkingTicketService.getAll(Status.LEFT).size();
@@ -90,11 +88,6 @@ public class HomePageServlet extends HttpServlet {
             }
         }
     }
-
-
-
-
-
 
 /*
 

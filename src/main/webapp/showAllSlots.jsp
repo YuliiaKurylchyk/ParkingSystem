@@ -18,7 +18,7 @@
 </head>
 <body>
 <h1 style="color: deepskyblue">The list slots</h1>
-<c:if test="${sessionScope.vehicle==null}">
+<c:if test="${sessionScope.vehicle==null && requestScope.change==null}">
 <div id="selectContainer">
     <form action="/parkingSlot/showAll" method="GET">
         <input type="radio" id="all" name="slotSize" value="ALL" onchange="this.form.submit();"
@@ -70,7 +70,7 @@
                             </c:if>
                         </c:when>
 
-                        <c:when test="${param.change}">
+                        <c:when test="${requestScope.change!=null}">
                             <a href="/parkingSlot/change?parkingSlotID=<c:out value='${slot.parkingSlotID}'/>&slotSize=<c:out value='${slot.sizeOfSlot}'/>">
                                 Choose</a> &nbsp;
                         </c:when>

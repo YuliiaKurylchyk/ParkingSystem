@@ -1,12 +1,12 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
-import com.kurylchyk.model.dao.ParkingSlotIdentifier;
+import com.kurylchyk.model.dao.ParkingSlotDTO;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.services.impl.Command;
 
-public class UpdateSlotStatusCommand implements Command<Void> {
+public class UpdateSlotStatusCommand implements Command<ParkingSlot> {
 
     private ParkingSlotDAO parkingSlotDAO = new ParkingSlotDAO();
     private ParkingSlot parkingSlot;
@@ -19,10 +19,10 @@ public class UpdateSlotStatusCommand implements Command<Void> {
     }
 
     @Override
-    public Void execute() throws Exception {
+    public ParkingSlot execute() throws Exception {
 
         parkingSlot.setStatus(slotStatus);
-        parkingSlotDAO.update(parkingSlot,new ParkingSlotIdentifier(parkingSlot.getSizeOfSlot(),parkingSlot.getParkingSlotID()));
-        return null;
+        parkingSlotDAO.update(parkingSlot,new ParkingSlotDTO(parkingSlot.getSizeOfSlot(),parkingSlot.getParkingSlotID()));
+        return parkingSlot;
     }
 }

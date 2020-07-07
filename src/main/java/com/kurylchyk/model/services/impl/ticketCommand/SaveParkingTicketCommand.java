@@ -1,18 +1,16 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
-import com.kurylchyk.model.dao.ParkingSlotDAO;
-import com.kurylchyk.model.dao.ParkingSlotIdentifier;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
-import com.kurylchyk.model.services.ParkingLotService;
+import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
+import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 
 public class SaveParkingTicketCommand implements Command<ParkingTicket> {
 
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
-    ParkingLotService parkingLotService  = new ParkingLotServiceImpl();
+    ParkingSlotService parkingLotService  = new ParkingSlotServiceImpl();
     private ParkingTicket parkingTicket;
 
     public SaveParkingTicketCommand(ParkingTicket parkingTicket){

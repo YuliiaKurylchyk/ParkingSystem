@@ -1,13 +1,12 @@
 package com.kurylchyk.model.services.impl;
 
-import com.kurylchyk.model.dao.ParkingSlotIdentifier;
+import com.kurylchyk.model.dao.ParkingSlotDTO;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.impl.ticketCommand.*;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.parkingTicket.Status;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
@@ -59,7 +58,7 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
     }
 
     @Override
-    public ParkingTicket getByParkingSlot(ParkingSlotIdentifier identifier) throws Exception {
+    public ParkingTicket getByParkingSlot(ParkingSlotDTO identifier) throws Exception {
         return  executor.execute(new GetByParkingSlotCommand(identifier));
     }
 
@@ -71,7 +70,7 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
 
     @Override
     public ParkingTicket update(ParkingTicket parkingTicket) throws Exception {
-        return executor.execute(new UpdateTicket(parkingTicket));
+        return executor.execute(new UpdateTicketCommand(parkingTicket));
 
     }
 
@@ -89,6 +88,11 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
     public ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws Exception {
         executor.execute(new DeleteTicketCompletely(parkingTicket));
         return parkingTicket;
+    }
+
+    @Override
+    public void updateParkingSlot(ParkingTicket parkingTicket, ParkingSlot newParkingSlot) throws Exception {
+        executor.execute(new UpdateSlotInTicketCommand(parkingTicket,newParkingSlot));
     }
 
 

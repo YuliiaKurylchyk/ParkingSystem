@@ -1,22 +1,21 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.dao.ParkingSlotIdentifier;
+import com.kurylchyk.model.dao.ParkingSlotDTO;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.CustomerService;
-import com.kurylchyk.model.services.ParkingLotService;
+import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.VehicleService;
-import com.kurylchyk.model.services.impl.BusinessServiceFactory;
-import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
+import com.kurylchyk.model.services.impl.ServiceFacade;
+import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.vehicles.Vehicle;
 import com.kurylchyk.model.parkingTicket.Status;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,10 +29,10 @@ import java.util.List;
 
 @WebServlet("/parkingTicket/*")
 public class ParkingTicketServlet extends HttpServlet {
-    private ParkingTicketService parkingTicketService = new BusinessServiceFactory().forParkingTicket();
-    private VehicleService vehicleService = new BusinessServiceFactory().forVehicle();
-    private CustomerService customerService = new BusinessServiceFactory().forCustomer();
-    private ParkingLotService parkingLotService = new ParkingLotServiceImpl();
+    private ParkingTicketService parkingTicketService = new ServiceFacade().forParkingTicket();
+    private VehicleService vehicleService = new ServiceFacade().forVehicle();
+    private CustomerService customerService = new ServiceFacade().forCustomer();
+    private ParkingSlotService parkingLotService = new ParkingSlotServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -66,12 +65,12 @@ public class ParkingTicketServlet extends HttpServlet {
             case "/showByVehicle":
                 doShowByVehicle(req, resp);
                 break;
-            case "/showBySlot": doShowBySlot(req,resp);
+            case "/showBySlot":
+                doShowBySlot(req, resp);
                 break;
             case "/updateVehicle":
                 doUpdateVehicle(req, resp);
                 break;
-            //case "updateParkingSlot" : doUpdateParkingSlot(req,resp);break;
             case "/remove":
                 doRemove(req, resp);
                 break;
@@ -152,8 +151,7 @@ public class ParkingTicketServlet extends HttpServlet {
         req.getRequestDispatcher("/parkingTicketInfo.jsp").forward(req, resp);
     }
 
-    protected void doGetReceipt(HttpServletRequest req, HttpServletResponse resp)
-            {
+    protected void doGetReceipt(HttpServletRequest req, HttpServletResponse resp) {
 
         ParkingTicket parkingTicket = (ParkingTicket) req.getSession().getAttribute("currentTicket");
 
@@ -217,8 +215,8 @@ public class ParkingTicketServlet extends HttpServlet {
 
     protected void doShowByCustomer(HttpServletRequest req, HttpServletResponse resp) {
 
-        Integer customerID = Integer.parseInt( req.getParameter("customerID"));
-        System.out.println("customerID = " +customerID);
+        Integer customerID = Integer.parseInt(req.getParameter("customerID"));
+        System.out.println("customerID = " + customerID);
         try {
             List<ParkingTicket> appropriateTickets = parkingTicketService.getByCustomer(customerID);
             System.out.println(appropriateTickets);
@@ -230,23 +228,22 @@ public class ParkingTicketServlet extends HttpServlet {
         }
     }
 
-    protected  void doShowBySlot(HttpServletRequest req, HttpServletResponse resp){
+    protected void doShowBySlot(HttpServletRequest req, HttpServletResponse resp) {
 
         Integer parkingSlotID = Integer.parseInt(req.getParameter("parkingSlotID"));
         SlotSize slotSize = SlotSize.valueOf(req.getParameter("slotSize"));
 
-        try{
-            ParkingTicket parkingTicket = parkingTicketService.getByParkingSlot(new ParkingSlotIdentifier(slotSize,parkingSlotID));
-            req.getSession().setAttribute("currentTicket",parkingTicket);
-            req.getRequestDispatcher("/parkingTicketInfo.jsp").forward(req,resp);
+        try {
+            ParkingTicket parkingTicket = parkingTicketService.getByParkingSlot(new ParkingSlotDTO(slotSize, parkingSlotID));
+            req.getSession().setAttribute("currentTicket", parkingTicket);
+            req.getRequestDispatcher("/parkingTicketInfo.jsp").forward(req, resp);
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
 
     }
-
 
 
     /*
@@ -305,8 +302,8 @@ public class ParkingTicketServlet extends HttpServlet {
             }
 
             if (currentVehicle.getVehicleType() != updatedVehicle.getVehicleType()) {
-                ParkingLotService parkingLotService = new ParkingLotServiceImpl();
-              //  parkingLotService.setParkingSlotBack(currentTicket.getParkingSlot());
+                ParkingSlotService parkingLotService = new ParkingSlotServiceImpl();
+                //  parkingLotService.setParkingSlotBack(currentTicket.getParkingSlot());
                 //currentTicket.setParkingSlot(parkingLotService.getParkingSlot(updatedVehicle.getTypeOfVehicle()));
                 parkingTicketService.update(currentTicket);
             }
@@ -361,5 +358,6 @@ public class ParkingTicketServlet extends HttpServlet {
         System.out.println("current ticket was removed from session");
         req.getRequestDispatcher(req.getContextPath() + "/home").forward(req, resp);
     }
+
 
 }

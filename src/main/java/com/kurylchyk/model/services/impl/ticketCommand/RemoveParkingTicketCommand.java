@@ -1,17 +1,16 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
 import com.kurylchyk.model.parkingSlots.SlotStatus;
-import com.kurylchyk.model.services.ParkingLotService;
+import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.Payment;
 import com.kurylchyk.model.Timer;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.services.impl.ParkingLotServiceImpl;
+import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import  com.kurylchyk.model.parkingTicket.Status;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
@@ -26,7 +25,7 @@ public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
 
     @Override
     public ParkingTicket execute() throws Exception {
-        ParkingLotService parkingLotService = new ParkingLotServiceImpl();
+        ParkingSlotService parkingLotService = new ParkingSlotServiceImpl();
 
         parkingTicket.setDepartureTime(LocalDateTime.now());
         parkingTicket.setStatus(Status.LEFT);
