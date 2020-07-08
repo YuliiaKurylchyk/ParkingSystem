@@ -8,15 +8,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
-public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
+public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
 
+    private Properties prop;
 
+    {
+        prop = PropertyValues.getPropValues(CustomerDAO.class, "queries/customerQueries.properties");
+
+    }
 
     @Override
-    public Optional<Customer> select(Integer id)  {
+    public Optional<Customer> select(Integer id) {
 
-        String query = "SELECT * FROM customer WHERE customer_id =?";
+        String query = prop.getProperty("selectCustomerID");
         Customer customer = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -24,7 +30,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-               customer = getCustomer(resultSet);
+                customer = getCustomer(resultSet);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -34,7 +40,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
 
     public Optional<Customer> select(String phoneNumber) {
 
-        String query = "SELECT * FROM customer WHERE phone_number = ?";
+        String query = prop.getProperty("selectCustomerPhoneNumber");
         Customer customer = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -54,7 +60,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
     public List<Customer> selectAll() {
 
         List<Customer> allCustomers = new ArrayList<>();
-        String query = "SELECT * FROM customer";
+        String query = prop.getProperty("selectAll");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
@@ -74,7 +80,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
     @Override
     public Integer insert(Customer customer) {
 
-        String query = "INSERT INTO customer(name, surname,phone_number) VALUES(?,?,?)";
+        String query = prop.getProperty("insertCustomer");
         Integer id = null;
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -97,7 +103,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
     @Override
     public void update(Customer customer, Integer id) {
 
-        String query = "UPDATE CUSTOMER SET NAME=?,SURNAME = ?,phone_number = ? WHERE customer_id = ?";
+        String query = prop.getProperty("updateCustomer");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, customer.getName());
@@ -113,7 +119,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
     @Override
     public void delete(Customer customer) {
 
-        String query = "DELETE FROM customer WHERE customer_id = ?";
+        String query = prop.getProperty("deleteCustomer");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -124,26 +130,26 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
         }
     }
 
-
-    public Integer countCustomersVehicle(Integer customerID) {
-        String query = "SELECT COUNT(*) AS COUNT FROM vehicle WHERE customer_id=?";
-        Integer count = null;
-        try(Connection connection = Connector.getDataSource().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, customerID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                count = resultSet.getInt("COUNT");
+    /*
+        public Integer countCustomersVehicle(Integer customerID) {
+            String query = "SELECT COUNT(*) AS COUNT FROM VEHICLES WHERE customer_id=?";
+            Integer count = null;
+            try(Connection connection = Connector.getDataSource().getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, customerID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if(resultSet.next()){
+                    count = resultSet.getInt("COUNT");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            return count;
         }
-        return count;
-    }
-
-    private   Customer getCustomer(ResultSet resultSet) throws SQLException {
+    */
+    private Customer getCustomer(ResultSet resultSet) throws SQLException {
         Integer customerID = resultSet.getInt("customer_id");
-        String name  = resultSet.getString("name");
+        String name = resultSet.getString("name");
         String surname = resultSet.getString("surname");
         String phoneNumber = resultSet.getString("phone_number");
 
@@ -161,11 +167,13 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer>{
     public boolean isPresent(Integer customerID) {
         return select(customerID).isPresent();
     }
-    public boolean isPresent(String phoneNumber){
+
+    public boolean isPresent(String phoneNumber) {
         return select(phoneNumber).isPresent();
     }
 
 
 }
+
 
 

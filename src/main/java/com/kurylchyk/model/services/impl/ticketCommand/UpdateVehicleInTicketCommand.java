@@ -21,6 +21,7 @@ public class UpdateVehicleInTicketCommand implements Command<ParkingTicket> {
 
     @Override
     public ParkingTicket execute() throws ParkingSystemException {
+
         ParkingTicket parkingTicket  = executor.execute(new GetByVehicleCommand(currentLicensePlate));
         parkingTicket.setVehicle(vehicle);
         executor.execute(new UpdateTicketCommand(parkingTicket));

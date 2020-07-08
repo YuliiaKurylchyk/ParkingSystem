@@ -35,7 +35,7 @@ public class MotorbikeDAO extends VehicleDAO<Motorbike,String> {
      //   VehicleType typeOfVehicle = VehicleType.valueOf(resultSet.getString("type"));
         String make = resultSet.getString("make");
         String model = resultSet.getString("model");
-        String licencePlate = resultSet.getString("licence_plate");
+        String licencePlate = resultSet.getString("license_plate");
 
         return new Motorbike(make,model,licencePlate);
     }

@@ -9,15 +9,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 
 public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, ParkingSlotDTO> {
 
+    private Properties prop;
+
+    {
+        prop = PropertyValues.getPropValues(ParkingSlotDAO.class,"queries/slotQueries.properties");
+    }
 
     @Override
     public ParkingSlotDTO insert(ParkingSlot parkingSlot) {
 
-        String query = "INSERT INTO parking_slot(parking_slot_id,size,slot_status) VALUES(?,?,?)";
+        String query = prop.getProperty("insertSlot");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, parkingSlot.getParkingSlotID());
@@ -33,7 +39,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     @Override
     public void delete(ParkingSlot parkingSlot) {
-        String query = "DELETE FROM parking_slot WHERE parking_slot_id = ? AND size = ?";
+        String query = prop.getProperty("deleteSlot");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, parkingSlot.getParkingSlotID());
@@ -50,7 +56,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
         ParkingSlot parkingSlot = null;
 
-        String query = "SELECT * FROM parking_slot WHERE parking_slot_id = ? AND SIZE = ?";
+        String query = prop.getProperty("selectSlot");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -70,7 +76,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     public List<ParkingSlot> selectAll() {
 
         List<ParkingSlot> allParkingSlots = new ArrayList<>();
-        String query = "SELECT * FROM parking_slot";
+        String query = prop.getProperty("selectAll");
         try (Connection connection = Connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
@@ -88,7 +94,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     @Override
     public void update(ParkingSlot parkingSlot, ParkingSlotDTO parkingSlotIdentifier) {
 
-        String query = "UPDATE parking_slot SET slot_status = ? WHERE parking_slot_ID = ? AND SIZE=?";
+        String query = prop.getProperty("updateSlot");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -103,9 +109,10 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     }
 
+    /*
     public SlotStatus getSlotStatus(ParkingSlotDTO parkingSlotIdentifier) {
 
-        String query = "SELECT SLOT_STATUS FROM PARKING_SLOT WHERE PARKING_SLOT_ID = ? AND SIZE=?";
+        String query = "SELECT SLOT_STATUS FROM PARKING_SLOTS WHERE PARKING_SLOT_ID = ? AND SIZE=?";
         SlotStatus slotStatus = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -124,9 +131,11 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         return slotStatus;
     }
 
+     */
+
     public List<ParkingSlot> selectAll(SlotSize slotSize) {
         List<ParkingSlot> allParkingSlots = new ArrayList<>();
-        String query = "SELECT * FROM parking_slot WHERE size = ?";
+        String query = prop.getProperty("selectAllWithSize");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, slotSize.toString());
@@ -144,7 +153,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     public List<ParkingSlot> selectAvailable(SlotSize slotSize) {
         List<ParkingSlot> allParkingSlots = new ArrayList<>();
-        String query = "SELECT * FROM parking_slot WHERE size = ? and slot_status = 'VACANT'";
+        String query = prop.getProperty("selectAvailable");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, slotSize.toString());
@@ -161,7 +170,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     }
 
     public Integer getPrice(SlotSize slotSize) {
-        String query = "SELECT price FROM PARKING_SLOT_PRICE WHERE SIZE = ?";
+        String query = prop.getProperty("selectPrice");
         Integer price = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -180,7 +189,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     public void updatePrice(SlotSize slotSize, Integer price) {
 
-        String query = "UPDATE PARKING_SLOT_PRICE SET PRICE = ? WHERE  SIZE = ?";
+        String query = prop.getProperty("updatePrice");
 
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -193,11 +202,11 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         }
     }
 
-
+/*
     public Integer countOfAvailable(SlotSize slotSize) {
         Integer count = null;
 
-        String query = "SELECT COUNT(*) as COUNT FROM parking_slot WHERE slot_status = 'VACANT' AND size = ?";
+        String query = "SELECT COUNT(*) as COUNT FROM PARKING_SLOTS WHERE slot_status = 'VACANT' AND size = ?";
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, slotSize.toString());
@@ -211,10 +220,12 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         return count;
     }
 
+ */
+
     public List<ParkingSlotPriceDTO> getSlotsPrice() {
 
         List<ParkingSlotPriceDTO> list = new ArrayList<>();
-        String query = "SELECT * FROM parking_slot_price";
+        String query = prop.getProperty("selectSlotsPrice");
         try (Connection connection = Connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
@@ -235,7 +246,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     public Integer getLastID(SlotSize slotSize) {
 
         Integer lastID = null;
-        String query = "SELECT MAX(PARKING_SLOT_ID) as LAST_ID FROM PARKING_SLOT WHERE SIZE =?";
+        String query = prop.getProperty("selectLastID");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

@@ -3,17 +3,26 @@ package com.kurylchyk.model.dao;
 import com.kurylchyk.model.Connector;
 import com.kurylchyk.model.vehicles.VehicleType;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Optional;
+import java.util.Properties;
 
 import  com.kurylchyk.model.parkingTicket.Status;
 
 
 public class VehicleDataUtil extends Connector {
 
+    private static Properties prop;
+
+    static {
+        prop =  PropertyValues.getPropValues(VehicleDataUtil.class,"queries/vehicleQueries.properties");
+    }
+
     public static Optional<VehicleType> getType(String licensePlate){
 
-        String query = "SELECT type FROM vehicle WHERE licence_plate=?";
+        String query = prop.getProperty("vehicleType");
         VehicleType vehicleType = null;
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -34,7 +43,7 @@ public class VehicleDataUtil extends Connector {
 
         Boolean isPresent = false;
 
-        String query = "SELECT * FROM VEHICLE WHERE LICENCE_PLATE=?";
+        String query = prop.getProperty("vehicleIsPresent");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, licensePlate);
@@ -52,7 +61,7 @@ public class VehicleDataUtil extends Connector {
     }
 
     public static Status getStatus(String licensePlate){
-        String query = "SELECT status FROM parking_ticket WHERE vehicle_id = ?";
+        String query = prop.getProperty("vehicleStatus");
         Status status = null;
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -69,7 +78,7 @@ public class VehicleDataUtil extends Connector {
 
     public static void updateCustomerID(String licensePlate, Integer customerID){
 
-        String query = "UPDATE vehicle SET customer_id = ? WHERE licence_plate = ?";
+        String query = prop.getProperty("vehicleCustomerID");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -82,23 +91,20 @@ public class VehicleDataUtil extends Connector {
     }
 
     public static Integer countAllPresent(){
-        String query = "SELECT COUNT(*) AS allPresent " +
-                "FROM parking_ticket AS p " +
-                "JOIN vehicle AS V " +
-                "ON p.vehicle_id = v.licence_plate " +
-                "WHERE p.status = 'PRESENT'";
+        String query = prop.getProperty("countAll");
         Integer count = 0;
         try(Connection connection = Connector.getDataSource().getConnection();
             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             if(resultSet.next()){
-                count = resultSet.getInt("allPresent");
+                count = resultSet.getInt("ALL_PRESENT");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return count;
     }
+
 
 
 }

@@ -13,19 +13,17 @@ import com.kurylchyk.model.vehicles.VehicleType;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, Integer> {
 
     private CustomerDAO customerDAO;
     private VehicleDAO vehicleDAO;
     private ParkingSlotDAO parkingSlotDao;
+    private Properties prop;
 
     {
-
+        prop = PropertyValues.getPropValues(ParkingTicketDAO.class,"queries/ticketQueries.properties");
         customerDAO = new CustomerDAO();
         parkingSlotDao = new ParkingSlotDAO();
 
@@ -34,8 +32,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     @Override
     public Integer insert(ParkingTicket parkingTicket) {
 
-        String query = "INSERT INTO parking_ticket(customer_id,vehicle_id,parking_slot_id,parking_slot_size,status,from_time)" +
-                "VALUES (?,?,?,?,?,?)";
+        String query = prop.getProperty("insertTicket");
         Integer id = null;
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -61,7 +58,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     @Override
     public void delete(ParkingTicket parkingTicket) {
 
-        String query = "DELETE FROM parking_ticket WHERE parking_ticket_id = ?";
+        String query = prop.getProperty("deleteTicket");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -76,7 +73,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     public Optional<ParkingTicket> select(Integer parkingSlotID) {
 
         ParkingTicket parkingTicket = null;
-        String query = "SELECT * FROM parking_ticket WHERE parking_ticket_id = ?";
+        String query = prop.getProperty("selectTicket");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, parkingSlotID);
@@ -121,7 +118,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     public Optional<ParkingTicket> selectByVehicleID(String vehicleID) {
 
         ParkingTicket parkingTicket = null;
-        String query = "SELECT * FROM parking_ticket WHERE vehicle_id = ?";
+        String query = prop.getProperty("selectByVehicleID");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicleID);
@@ -138,7 +135,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     public List<ParkingTicket> selectByCustomerID(Integer customerID) {
 
         List<ParkingTicket> allTickets = new ArrayList<>();
-        String query = "SELECT * FROM parking_ticket WHERE customer_id = ?";
+        String query = prop.getProperty("selectByCustomerID");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, customerID);
@@ -157,7 +154,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     public Optional<ParkingTicket> selectByParkingSlot(ParkingSlotDTO identifier) {
 
         ParkingTicket parkingTicket = null;
-        String query = "SELECT * FROM parking_ticket WHERE parking_slot_id = ? AND parking_slot_size = ?";
+        String query = prop.getProperty("selectBySlot");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, identifier.getParkingSlotID());
@@ -174,7 +171,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
     @Override
     public void update(ParkingTicket parkingTicket, Integer id) {
-        String query = "UPDATE parking_ticket SET status = ?,to_time = ?, cost = ? WHERE parking_ticket_id = ?";
+        String query = prop.getProperty("updateTicket");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -190,7 +187,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
     public void updateParkingSlotID(ParkingTicket parkingTicket,ParkingSlot parkingSlot){
 
-        String query = "UPDATE parking_ticket SET parking_slot_id = ?,parking_slot_size = ? WHERE parking_ticket_id = ?";
+        String query = prop.getProperty("updateSlotID");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -206,7 +203,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     }
     public void updateVehicleID(Integer parkingTicketID, String vehicleID) {
 
-        String query = "UPDATE parking_ticket SET vehicle_id = ? WHERE parking_ticket_id=?";
+        String query = prop.getProperty("updateVehicleID");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -222,7 +219,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     @Override
     public List<ParkingTicket> selectAll() {
 
-        String query = "SELECT * FROM parking_ticket";
+        String query = prop.getProperty("selectAll");
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -249,7 +246,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
     public List<ParkingTicket> selectAll(Status status) {
 
-        String query = "SELECT * FROM parking_ticket WHERE status = ?";
+        String query = prop.getProperty("selectAllByStatus");
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -271,7 +268,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
     public List<ParkingTicket> selectInDate(LocalDateTime date) {
 
-        String query = "SELECT * FROM parking_ticket WHERE from_time >= ?";
+        String query = prop.getProperty("selectAllInDate");
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -293,7 +290,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
     public List<ParkingTicket> selectInDateAndStatus(LocalDateTime date, Status status) {
 
-        String query = "SELECT * FROM parking_ticket WHERE from_time >= ? AND status = ?";
+        String query = prop.getProperty("selectInDateAndStatus");
         LinkedList<ParkingTicket> listOfTickets = new LinkedList<>();
 
         try (Connection connection = Connector.getDataSource().getConnection();

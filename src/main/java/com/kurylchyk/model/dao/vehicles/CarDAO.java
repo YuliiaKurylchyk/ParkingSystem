@@ -20,11 +20,11 @@ public class CarDAO extends VehicleDAO<Car, String> {
     @Override
     public String insert(Car car) {
 
-        String insertBus = "INSERT INTO CARS(license_plate,car_size) VALUES (?,?)";
+        String insertCar = prop.getProperty("insertCar");
 
         super.insert(car);
         try (Connection connection = Connector.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertBus)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(insertCar)) {
             preparedStatement.setString(1, car.getLicensePlate());
             preparedStatement.setString(2, car.getCarSize().toString());
             preparedStatement.execute();
@@ -38,10 +38,10 @@ public class CarDAO extends VehicleDAO<Car, String> {
     @Override
     public void delete(Car car) {
 
-        String deleteBus = "DELETE FROM CARS WHERE license_plate = ?";
+        String deleteCar = prop.getProperty("deleteCar");
 
         try (Connection connection = Connector.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(deleteBus)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteCar)) {
             preparedStatement.setString(1, car.getLicensePlate());
             preparedStatement.execute();
         } catch (SQLException exception) {
@@ -54,7 +54,7 @@ public class CarDAO extends VehicleDAO<Car, String> {
     public Optional<Car> select(String licensePlate) {
 
 
-        String selectCar = "SELECT * FROM VEHICLE INNER JOIN CARS ON VEHICLE.LICENCE_PLATE = CARS.LICENSE_PLATE WHERE CARS.LICENSE_PLATE = ?";
+        String selectCar = prop.getProperty("selectCar");
         Car car = null;
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectCar)) {
@@ -75,8 +75,7 @@ public class CarDAO extends VehicleDAO<Car, String> {
     public List<Car> selectAll() {
         List<Car> allVehicles = new ArrayList<>();
 
-        String query = "SELECT * FROM VEHICLE INNER JOIN CARS ON VEHICLE.LICENCE_PLATE = CARS.LICENSE_PLATE";
-
+        String query = prop.getProperty("selectAllCars");
         try (Connection connection = Connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
@@ -98,9 +97,7 @@ public class CarDAO extends VehicleDAO<Car, String> {
     public List<Car> selectAll(Status status) {
         List<Car> allVehicles = new ArrayList<>();
 
-        String query = "SELECT  P.STATUS,V.MAKE,V.MODEL,V.LICENCE_PLATE, C.CAR_SIZE FROM VEHICLE AS V INNER JOIN PARKING_TICKET AS P ON V.LICENCE_PLATE = P.VEHICLE_ID INNER JOIN CARS AS C " +
-                " ON V.LICENCE_PLATE = C.LICENSE_PLATE " +
-                " WHERE P.STATUS = ?";
+        String query =prop.getProperty("selectAllCarsByStatus");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -124,7 +121,7 @@ public class CarDAO extends VehicleDAO<Car, String> {
     @Override
     public void update(Car car, String licensePlate) {
 
-        String query = "UPDATE CARS SET  LICENSE_PLATE = ?, CAR_SIZE = ? WHERE LICENSE_PLATE = ?";
+        String query = prop.getProperty("updateCar");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -146,7 +143,7 @@ public class CarDAO extends VehicleDAO<Car, String> {
        // VehicleType typeOfVehicle = VehicleType.valueOf(resultSet.getString("type"));
         String make = resultSet.getString("make");
         String model = resultSet.getString("model");
-        String licensePlate = resultSet.getString("licence_plate");
+        String licensePlate = resultSet.getString("license_plate");
         CarSize carSize = CarSize.valueOf(resultSet.getString("CAR_SIZE"));
 
         Car car = new Car(make, model, licensePlate, carSize);

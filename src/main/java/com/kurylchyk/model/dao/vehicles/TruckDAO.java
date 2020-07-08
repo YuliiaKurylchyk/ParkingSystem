@@ -13,7 +13,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
     @Override
     public String insert(Truck truck) {
 
-        String insertTruck = "INSERT INTO TRUCKS(license_plate,trailer_present) VALUES (?,?)";
+        String insertTruck = prop.getProperty("insertTruck");
 
         super.insert(truck);
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -32,7 +32,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
     @Override
     public void delete(Truck truck) {
 
-        String deleteTruck = "DELETE FROM TRUCK WHERE license_plate = ?";
+        String deleteTruck = prop.getProperty("deleteTruck");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(deleteTruck)) {
@@ -46,8 +46,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
 
     @Override
     public Optional<Truck> select(String licensePlate)  {
-        String selectTruck = "SELECT * FROM VEHICLE INNER JOIN TRUCKS ON VEHICLE.LICENCE_PLATE = TRUCKS.LICENSE_PLATE WHERE TRUCKS.LICENSE_PLATE = ?";
-
+        String selectTruck = prop.getProperty("selectTruck");
         Truck truck = null;
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectTruck)) {
@@ -65,7 +64,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
     @Override
     public List<Truck> selectAll() {
         List<Truck> allVehicles = new ArrayList<>();
-        String query = "SELECT * FROM VEHICLE INNER JOIN TRUCKS ON VEHICLE.LICENCE_PLATE = TRUCKS.LICENSE_PLATE";
+        String query = prop.getProperty("selectAllTrucks");
 
         try (Connection connection = Connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
@@ -91,8 +90,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
     @Override
     public void update(Truck truck, String licensePlate) {
 
-        String query = "UPDATE TRUCKS SET  LICENSE_PLATE = ?, trailer_present = ? WHERE LICENSE_PLATE = ?";
-
+        String query = prop.getProperty("updateTruck");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, truck.getLicensePlate());
@@ -106,9 +104,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
     }
 
     public List<Truck> selectAll(Status status){
-        String query = "SELECT  P.STATUS,V.MAKE,V.MODEL,V.LICENCE_PLATE, T.TRAILER_PRESENT FROM VEHICLE AS V INNER JOIN PARKING_TICKET AS P ON V.LICENCE_PLATE = P.VEHICLE_ID INNER JOIN TRUCKS AS T " +
-                " ON V.LICENCE_PLATE = T.LICENSE_PLATE " +
-                " WHERE P.STATUS = ?";
+        String query = prop.getProperty("selectAllTrucksByStatus");
 
         List<Truck> allVehicles = new ArrayList<>();
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -130,7 +126,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
         //VehicleType typeOfVehicle = VehicleType.valueOf(resultSet.getString("type"));
         String make = resultSet.getString("make");
         String model = resultSet.getString("model");
-        String licensePlate = resultSet.getString("licence_plate");
+        String licensePlate = resultSet.getString("license_plate");
         Boolean trailerPresent = resultSet.getBoolean("trailer_present");
 
         Truck truck = new Truck(make,model,licensePlate,trailerPresent);
