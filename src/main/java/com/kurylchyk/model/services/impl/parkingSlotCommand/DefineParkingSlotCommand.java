@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.services.impl.Command;
@@ -17,7 +18,7 @@ public class DefineParkingSlotCommand implements Command<SlotSize> {
     }
 
     @Override
-    public SlotSize execute() throws Exception {
+    public SlotSize execute() throws ParkingSystemException {
         SlotSize slotSize = ParkingSlotDefiner.defineSlotSize(vehicle);
         return slotSize;
     }

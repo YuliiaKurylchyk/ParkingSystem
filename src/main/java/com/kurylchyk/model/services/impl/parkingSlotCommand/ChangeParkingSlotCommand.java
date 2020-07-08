@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
@@ -22,7 +23,7 @@ public class ChangeParkingSlotCommand implements Command<Void> {
     }
 
     @Override
-    public Void execute() throws Exception {
+    public Void execute() throws ParkingSystemException {
         parkingSlotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);
         parkingSlot = parkingSlotService.updateStatus(parkingSlot, SlotStatus.OCCUPIED);
         parkingTicketService.updateParkingSlot(parkingTicket,parkingSlot);

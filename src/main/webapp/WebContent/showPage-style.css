@@ -7,6 +7,21 @@ h1, h3 {
     text-align: center;
 }
 
+
+nav {
+    display: block;
+    background-color: #FFFFFF;
+    width: 20%;
+    float: left;
+    font-size: 20px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+#smallContainer{
+
+    float:left;
+    width:90%;
+}
+
 button {
     margin-left: 15%;
     background-color: #74D3DC;
@@ -84,3 +99,9 @@ td {
     padding: 20px;
 }
 
+
+.container {
+    float: left;
+    width: 75%;
+    font-size: 20px;
+}

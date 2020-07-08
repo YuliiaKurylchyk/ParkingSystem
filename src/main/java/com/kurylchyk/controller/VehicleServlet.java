@@ -23,7 +23,6 @@ public class VehicleServlet extends HttpServlet {
 
     private VehicleService vehicleService = new ServiceFacade().forVehicle();
 
-
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         doPost(req, resp);
@@ -48,7 +47,7 @@ public class VehicleServlet extends HttpServlet {
                 doEdit(req, resp);
                 break;
             case "/update":
-                 doUpdate(req, resp);
+                doUpdate(req, resp);
                 break;
             case "/form":
                 showRegistrationFrom(req, resp);
@@ -81,49 +80,29 @@ public class VehicleServlet extends HttpServlet {
 
         System.out.println("In vehicle do create!");
         Vehicle vehicle = null;
-        RequestDispatcher requestDispatcher = null;
-
-        String typeOfVehicle = req.getParameter("typeOfVehicle");
-        String make = req.getParameter("make");
-        String model = req.getParameter("model");
-        String licencePlate = req.getParameter("licensePlate");
-
+        VehicleInfo vehicleInfo = null;
         try {
-            switch (VehicleType.valueOf(typeOfVehicle)) {
-                case MOTORBIKE:
-                    vehicle = vehicleService.create(new MotorbikeInfo(make, model, licencePlate));
-                    break;
-                case CAR:
-                    vehicle = vehicleService.create(new CarInfo(make, model, licencePlate, CarSize.valueOf(req.getParameter("carSize"))));
-                    break;
-                case TRUCK:
-                    vehicle = vehicleService.create(new TruckInfo(make, model, licencePlate, Boolean.parseBoolean(req.getParameter("trailerPresent"))));
-                    break;
-                case BUS:
-                    vehicle = vehicleService.create(new BusInfo(make, model, licencePlate, Integer.parseInt(req.getParameter("countOfSeats"))));
-            }
+            vehicleInfo = VehicleInfoFactory.getVehicleInformation(req);
+            vehicle = vehicleService.create(vehicleInfo);
         } catch (Exception exception) {
             System.out.println("Exception  is vehicle create");
             exception.printStackTrace();
             req.setAttribute("exception", exception);
-            requestDispatcher = req.getRequestDispatcher("/errorPage.jsp");
+            req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
+            return;
         }
 
         System.out.println(vehicle);
-        if (requestDispatcher == null) {
-
-            req.getSession().setAttribute("vehicle", vehicle);
-            requestDispatcher = req.getRequestDispatcher(req.getContextPath() + "/parkingSlot/showAvailable");
-        }
-
-        requestDispatcher.forward(req, resp);
+        req.getSession().setAttribute("vehicle", vehicle);
+       // req.getRequestDispatcher(req.getContextPath() + "/parkingSlot/showAvailable").forward(req,resp);
+        resp.sendRedirect("/parkingSlot/showAvailable");
     }
 
     protected void doEdit(HttpServletRequest req, HttpServletResponse resp) {
         String vehicleID = req.getParameter("vehicleID");
         VehicleType vehicleType = VehicleType.valueOf(req.getParameter("vehicleType"));
 
-        System.out.println("In vehicle/edit "+vehicleID + " "+vehicleType);
+        System.out.println("In vehicle/edit " + vehicleID + " " + vehicleType);
         try {
             Vehicle currentVehicle = vehicleService.getFromDB(vehicleID, vehicleType);
             System.out.println("currentVehicle " + currentVehicle);
@@ -144,30 +123,11 @@ public class VehicleServlet extends HttpServlet {
         Vehicle currentVehicle = (Vehicle) req.getSession().getAttribute("vehicle");
         req.getSession().removeAttribute("vehicle");
         System.out.println("Current vehicle " + currentVehicle);
-
-        String make = req.getParameter("make");
-        String model = req.getParameter("model");
-        String licensePlate = req.getParameter("licensePlate");
-        VehicleType vehicleType = VehicleType.valueOf(req.getParameter("typeOfVehicle"));
-        VehicleInfo vehicleInfo = null;
-
+        VehicleInfo vehicleInfo;
         try {
-            switch (vehicleType) {
-                case MOTORBIKE:
-                    vehicleInfo = new MotorbikeInfo(make, model, licensePlate);
-                    break;
-                case CAR:
-                    vehicleInfo = new CarInfo(make, model, licensePlate, CarSize.valueOf(req.getParameter("carSize")));
-                    break;
-                case TRUCK:
-                    vehicleInfo = new TruckInfo(make, model, licensePlate, Boolean.parseBoolean(req.getParameter("trailerPresent")));
-                    break;
-                case BUS:
-                    vehicleInfo = new BusInfo(make, model, licensePlate, Integer.parseInt(req.getParameter("countOfSeats")));
-            }
+            vehicleInfo = VehicleInfoFactory.getVehicleInformation(req);
             Vehicle updatedVehicle = vehicleService.update(vehicleInfo, currentVehicle.getLicensePlate());
-
-            req.getRequestDispatcher("/parkingTicket/showByVehicle?vehicleID="+updatedVehicle.getLicensePlate()).forward(req, resp);
+            req.getRequestDispatcher("/parkingTicket/showByVehicle?vehicleID=" + updatedVehicle.getLicensePlate()).forward(req, resp);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -182,14 +142,14 @@ public class VehicleServlet extends HttpServlet {
         VehicleType vehicleType = VehicleType.valueOf(req.getParameter("vehicleType"));
 
 
-        System.out.println("in do show "+vehicleType);
+        System.out.println("in do show " + vehicleType);
         List<Vehicle> allVehicles;
         try {
             if (vehicleStatus.equalsIgnoreCase("ALL")) {
-                 allVehicles = vehicleService.getAll(vehicleType);
+                allVehicles = vehicleService.getAll(vehicleType);
             } else {
                 Status status = Status.valueOf(vehicleStatus);
-                 allVehicles = vehicleService.getAll(status,vehicleType);
+                allVehicles = vehicleService.getAll(status, vehicleType);
             }
             req.setAttribute("allVehicles", allVehicles);
             req.getRequestDispatcher("/showAllVehicle.jsp").forward(req, resp);

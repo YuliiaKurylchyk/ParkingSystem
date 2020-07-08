@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
@@ -16,10 +17,9 @@ public class GetByCustomerCommand implements Command<List<ParkingTicket>> {
         this.customerID = customerID;
     }
 
-
     //or else throw
     @Override
-    public List<ParkingTicket> execute() throws Exception {
+    public List<ParkingTicket> execute() throws ParkingSystemException {
         return  parkingTicketDAO.selectByCustomerID(customerID);
     }
 }

@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
 import com.kurylchyk.model.dao.VehicleDAOFactory;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
@@ -25,11 +26,11 @@ public class UpdateVehicleCommand implements Command<Vehicle> {
     }
 
     @Override
-    public Vehicle execute() throws Exception {
+    public Vehicle execute() throws ParkingSystemException {
 
         Vehicle vehicle = vehicleInfo.createVehicle();
         if(!vehicle.getLicensePlate().equals(currentLicensePlate)) {
-            boolean isPresent = executor.execute(new CheckVehicleInDatabase(vehicle.getLicensePlate()));
+            boolean isPresent = executor.execute(new CheckVehicleInDatabaseCommand(vehicle.getLicensePlate()));
             if (isPresent) {
                 throw new SuchVehiclePresentException("Vehicle with " + vehicle.getLicensePlate() + " is already present in database");
             } else {

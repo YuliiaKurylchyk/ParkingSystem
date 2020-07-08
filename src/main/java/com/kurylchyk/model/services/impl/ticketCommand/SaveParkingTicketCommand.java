@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
@@ -17,7 +18,7 @@ public class SaveParkingTicketCommand implements Command<ParkingTicket> {
         this.parkingTicket = parkingTicket;
     }
     @Override
-    public ParkingTicket execute() throws Exception {
+    public ParkingTicket execute() throws ParkingSystemException {
 
         parkingLotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.OCCUPIED);
         Integer parkingTicketID =  parkingTicketDAO.insert(parkingTicket);

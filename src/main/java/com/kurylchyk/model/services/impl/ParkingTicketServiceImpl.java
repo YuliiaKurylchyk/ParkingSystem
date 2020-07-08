@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl;
 
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.impl.ticketCommand.*;
@@ -17,87 +18,88 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
     private CommandExecutor executor = new CommandExecutor();
 
     @Override
-    public List<ParkingTicket> getAllTickets() throws Exception {
-        return executor.execute(new GetAllTicketCommand());
+    public List<ParkingTicket> getAllTickets() throws ParkingSystemException {
+        return executor.execute(new GetAllTicketsCommand());
     }
 
     @Override
-    public List<ParkingTicket> getAll(Status status) throws Exception {
-        return executor.execute(new GetAllTicketCommand(status));
+    public List<ParkingTicket> getAll(Status status) throws ParkingSystemException {
+        return executor.execute(new GetAllTicketsCommand(status));
     }
 
     @Override
-    public List<ParkingTicket> getAllInDate(LocalDateTime localDateTime) throws Exception {
+    public List<ParkingTicket> getAllInDate(LocalDateTime localDateTime) throws ParkingSystemException {
         return executor.execute(new GetInDateCommand(localDateTime));
     }
 
     @Override
-    public List<ParkingTicket> getAllInDateAndStatus(LocalDateTime localDateTime, Status status) throws Exception {
+    public List<ParkingTicket> getAllInDateAndStatus(LocalDateTime localDateTime, Status status) throws ParkingSystemException {
         return executor.execute(new GetInDateCommand(localDateTime,status));
     }
 
     @Override
-    public ParkingTicket createParkingTicket(Vehicle vehicle, Customer customer, ParkingSlot parkingSlot) throws Exception {
+    public ParkingTicket createParkingTicket(Vehicle vehicle, Customer customer, ParkingSlot parkingSlot) throws ParkingSystemException{
        return executor.execute(new CreateParkingTicketCommand(vehicle,customer,parkingSlot));
     }
 
 
     @Override
-    public ParkingTicket getByID(Integer parkingTicketID) throws Exception {
+    public ParkingTicket getByID(Integer parkingTicketID) throws ParkingSystemException {
         return executor.execute(new GetParkingTicketCommand(parkingTicketID));
     }
 
     @Override
-    public ParkingTicket getByVehicle(String licencePlate) throws Exception {
+    public ParkingTicket getByVehicle(String licencePlate) throws ParkingSystemException{
         return executor.execute(new GetByVehicleCommand(licencePlate));
     }
 
     @Override
-    public List<ParkingTicket> getByCustomer(Integer customerID) throws Exception {
+    public List<ParkingTicket> getByCustomer(Integer customerID) throws ParkingSystemException{
         return executor.execute(new GetByCustomerCommand(customerID));
     }
 
     @Override
-    public ParkingTicket getByParkingSlot(ParkingSlotDTO identifier) throws Exception {
+    public ParkingTicket getByParkingSlot(ParkingSlotDTO identifier) throws ParkingSystemException {
         return  executor.execute(new GetByParkingSlotCommand(identifier));
     }
 
 
     @Override
-    public ParkingTicket saveToDB(ParkingTicket parkingTicket) throws Exception {
+    public ParkingTicket saveToDB(ParkingTicket parkingTicket) throws ParkingSystemException {
         return executor.execute(new SaveParkingTicketCommand(parkingTicket));
     }
 
     @Override
-    public ParkingTicket update(ParkingTicket parkingTicket) throws Exception {
+    public ParkingTicket update(ParkingTicket parkingTicket) throws ParkingSystemException {
         return executor.execute(new UpdateTicketCommand(parkingTicket));
 
     }
 
+
     public ParkingTicket updateVehicleInfo(Vehicle vehicle, String currentLicensePlate)
-            throws Exception {
+            throws ParkingSystemException {
          return  executor.execute(new UpdateVehicleInTicketCommand(vehicle,currentLicensePlate));
     }
 
     @Override
-    public ParkingTicket remove(ParkingTicket parkingTicket) throws Exception {
+    public ParkingTicket remove(ParkingTicket parkingTicket) throws ParkingSystemException {
         return executor.execute(new RemoveParkingTicketCommand(parkingTicket));
     }
 
     @Override
-    public ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws Exception {
+    public ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws ParkingSystemException {
         executor.execute(new DeleteTicketCompletely(parkingTicket));
         return parkingTicket;
     }
 
     @Override
-    public void updateParkingSlot(ParkingTicket parkingTicket, ParkingSlot newParkingSlot) throws Exception {
+    public void updateParkingSlot(ParkingTicket parkingTicket, ParkingSlot newParkingSlot) throws ParkingSystemException {
         executor.execute(new UpdateSlotInTicketCommand(parkingTicket,newParkingSlot));
     }
 
 
     @Override
-    public boolean isPresent(Integer parkingTicketID) throws Exception {
+    public boolean isPresent(Integer parkingTicketID) throws ParkingSystemException {
        return executor.execute(new TicketIsPresentCommand(parkingTicketID));
     }
 }

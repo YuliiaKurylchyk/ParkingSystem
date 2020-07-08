@@ -33,10 +33,11 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     @Override
     public void delete(ParkingSlot parkingSlot) {
-        String query = "DELETE FROM parking_slot WHERE parking_slot_id = ?";
+        String query = "DELETE FROM parking_slot WHERE parking_slot_id = ? AND size = ?";
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, parkingSlot.getParkingSlotID());
+            preparedStatement.setString(2, parkingSlot.getSizeOfSlot().toString());
             preparedStatement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -176,6 +177,23 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         return price;
     }
 
+
+    public void updatePrice(SlotSize slotSize, Integer price) {
+
+        String query = "UPDATE PARKING_SLOT_PRICE SET PRICE = ? WHERE  SIZE = ?";
+
+
+        try (Connection connection = Connector.getDataSource().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, price);
+            preparedStatement.setString(2, slotSize.toString());
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     public Integer countOfAvailable(SlotSize slotSize) {
         Integer count = null;
 
@@ -220,8 +238,9 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         String query = "SELECT MAX(PARKING_SLOT_ID) as LAST_ID FROM PARKING_SLOT WHERE SIZE =?";
 
         try (Connection connection = Connector.getDataSource().getConnection();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,slotSize.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 lastID = resultSet.getInt("LAST_ID");
             }

@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl;
 
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
@@ -17,53 +18,57 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
 
     @Override
-    public void addSlot(SlotSize slotSize, SlotStatus slotStatus) throws Exception {
+    public void addSlot(SlotSize slotSize, SlotStatus slotStatus) throws ParkingSystemException {
 
         executor.execute(new AddParkingSlotCommand(slotSize, slotStatus));
     }
 
     @Override
-    public void deleteSlot(ParkingSlot parkingSlot) throws Exception {
+    public void deleteSlot(ParkingSlot parkingSlot) throws ParkingSystemException {
         executor.execute(new DeleteParkingSlot(parkingSlot));
     }
 
     @Override
     public ParkingSlot updateStatus(ParkingSlot parkingSlot, SlotStatus slotStatus)
-            throws Exception {
+            throws ParkingSystemException {
 
         return executor.execute(new UpdateSlotStatusCommand(parkingSlot,slotStatus));
     }
 
     @Override
-    public List<ParkingSlotPriceDTO> getSlotsPrice() throws Exception {
+    public List<ParkingSlotPriceDTO> getSlotsPrice() throws ParkingSystemException {
         return executor.execute(new GetSlotPriceCommand());
     }
 
     @Override
-    public ParkingSlot getParkingSlot(ParkingSlotDTO identifier) throws Exception {
+    public ParkingSlot getParkingSlot(ParkingSlotDTO identifier) throws ParkingSystemException {
         return executor.execute(new GetParkingSlotCommand(identifier));
     }
     @Override
-    public List<ParkingSlot> getAll(SlotSize slotSize) throws Exception {
+    public List<ParkingSlot> getAll(SlotSize slotSize) throws ParkingSystemException {
 
         return executor.execute(new GetAllSlotsCommand(slotSize));
     }
     @Override
-    public List<ParkingSlot> getAll() throws Exception {
+    public List<ParkingSlot> getAll() throws ParkingSystemException {
         return executor.execute(new GetAllSlotsCommand());
     }
 
     @Override
-    public void changeSlot(ParkingTicket parkingTicket, ParkingSlot parkingSlot) throws Exception{
+    public void changeSlot(ParkingTicket parkingTicket, ParkingSlot parkingSlot) throws ParkingSystemException{
         executor.execute(new ChangeParkingSlotCommand(parkingTicket,parkingSlot));
     }
-    public  List<ParkingSlot> getAvailableSlots(SlotSize slotSize) throws Exception {
+    public  List<ParkingSlot> getAvailableSlots(SlotSize slotSize) throws ParkingSystemException{
         return executor.execute(new GetAvailableSlotsCommand(slotSize));
     }
 
     @Override
-    public List<ParkingSlot> getAvailableSlots(Vehicle vehicle) throws Exception {
+    public List<ParkingSlot> getAvailableSlots(Vehicle vehicle) throws ParkingSystemException{
        SlotSize slotSize =  executor.execute(new DefineParkingSlotCommand(vehicle));
        return executor.execute(new GetAvailableSlotsCommand(slotSize));
+    }
+
+    public void updatePrice(List<ParkingSlotPriceDTO> prices) throws ParkingSystemException {
+        executor.execute(new UpdatePriceCommand(prices));
     }
 }

@@ -7,7 +7,6 @@ public class ParkingSlot {
     private SlotStatus status;
     private Integer price;
 
-
     public ParkingSlot(SlotSize sizeOfSlot) {
         this.sizeOfSlot = sizeOfSlot;
 

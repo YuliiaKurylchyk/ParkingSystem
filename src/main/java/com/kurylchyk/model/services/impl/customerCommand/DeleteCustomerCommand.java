@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.customerCommand;
 
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.dao.CustomerDAO;
@@ -15,7 +16,7 @@ public class DeleteCustomerCommand implements Command<Void> {
 
 
     @Override
-    public Void execute() throws Exception {
+    public Void execute() throws ParkingSystemException {
         customerDAO.delete(customer);
         return null;
     }

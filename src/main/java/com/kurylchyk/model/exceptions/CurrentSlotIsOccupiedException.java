@@ -1,8 +1,8 @@
 package com.kurylchyk.model.exceptions;
 
-import java.util.concurrent.ExecutorService;
 
-public class CurrentSlotIsOccupiedException extends Exception {
+public class CurrentSlotIsOccupiedException extends ParkingSystemException{
+
 
     public CurrentSlotIsOccupiedException(String message){
         super(message);

@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.services.impl.CommandExecutor;
@@ -19,7 +20,7 @@ public class UpdateVehicleInTicketCommand implements Command<ParkingTicket> {
 
 
     @Override
-    public ParkingTicket execute() throws Exception {
+    public ParkingTicket execute() throws ParkingSystemException {
         ParkingTicket parkingTicket  = executor.execute(new GetByVehicleCommand(currentLicensePlate));
         parkingTicket.setVehicle(vehicle);
         executor.execute(new UpdateTicketCommand(parkingTicket));

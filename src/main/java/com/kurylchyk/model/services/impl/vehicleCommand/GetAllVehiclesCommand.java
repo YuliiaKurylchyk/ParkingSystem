@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 import com.kurylchyk.model.dao.VehicleDAOFactory;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.vehicles.VehicleType;
@@ -23,7 +24,7 @@ public class GetAllVehiclesCommand implements Command<List<Vehicle>> {
     }
 
     @Override
-    public List<Vehicle> execute() throws Exception {
+    public List<Vehicle> execute() throws ParkingSystemException {
         List<Vehicle> allVehicles;
         if(status!=null) {
             allVehicles = vehicleDAO.selectAll(status);

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingTicket.Status;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
@@ -16,19 +17,19 @@ import com.kurylchyk.model.vehicles.Vehicle;
 //make some of them void
 public interface ParkingTicketService {
 
-    List<ParkingTicket> getAllTickets() throws Exception;
-    List<ParkingTicket> getAll(Status status) throws Exception;
-    List<ParkingTicket> getAllInDate(LocalDateTime localDateTime) throws Exception;
-    List<ParkingTicket> getAllInDateAndStatus(LocalDateTime localDateTime,Status status) throws Exception;
-    ParkingTicket createParkingTicket(Vehicle vehicle, Customer customer, ParkingSlot parkingSlot) throws Exception;
-    ParkingTicket getByID(Integer parkingTicketID) throws Exception;
-    ParkingTicket getByVehicle(String licencePlate) throws Exception;
-    List<ParkingTicket> getByCustomer(Integer customerID) throws Exception;
-    ParkingTicket getByParkingSlot(ParkingSlotDTO identifier) throws Exception;
-    ParkingTicket saveToDB(ParkingTicket parkingTicket) throws Exception;
-    ParkingTicket update(ParkingTicket parkingTicket) throws Exception;
-    ParkingTicket remove(ParkingTicket parkingTicket) throws Exception;
-    ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws Exception;
-    void updateParkingSlot(ParkingTicket parkingTicket,ParkingSlot newParkingSlot) throws Exception;
-    boolean isPresent(Integer ParkingTicketID) throws Exception;
+    List<ParkingTicket> getAllTickets() throws ParkingSystemException;
+    List<ParkingTicket> getAll(Status status) throws ParkingSystemException;
+    List<ParkingTicket> getAllInDate(LocalDateTime localDateTime) throws ParkingSystemException;
+    List<ParkingTicket> getAllInDateAndStatus(LocalDateTime localDateTime,Status status) throws ParkingSystemException;
+    ParkingTicket createParkingTicket(Vehicle vehicle, Customer customer, ParkingSlot parkingSlot) throws ParkingSystemException;
+    ParkingTicket getByID(Integer parkingTicketID) throws ParkingSystemException;
+    ParkingTicket getByVehicle(String licencePlate) throws ParkingSystemException;
+    List<ParkingTicket> getByCustomer(Integer customerID) throws ParkingSystemException;
+    ParkingTicket getByParkingSlot(ParkingSlotDTO identifier) throws ParkingSystemException;
+    ParkingTicket saveToDB(ParkingTicket parkingTicket) throws ParkingSystemException;
+    ParkingTicket update(ParkingTicket parkingTicket) throws ParkingSystemException;
+    ParkingTicket remove(ParkingTicket parkingTicket) throws ParkingSystemException;
+    ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws ParkingSystemException;
+    void updateParkingSlot(ParkingTicket parkingTicket,ParkingSlot newParkingSlot) throws ParkingSystemException;
+    boolean isPresent(Integer ParkingTicketID) throws ParkingSystemException;
 }

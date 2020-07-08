@@ -1,5 +1,6 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 
@@ -13,7 +14,7 @@ public class TicketIsPresentCommand  implements Command<Boolean> {
 
 
     @Override
-    public Boolean execute() throws Exception {
+    public Boolean execute() throws ParkingSystemException {
        return parkingTicketDAO.isPresent(parkingTicketID);
     }
 }

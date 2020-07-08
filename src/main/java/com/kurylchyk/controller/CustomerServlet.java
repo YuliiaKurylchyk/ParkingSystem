@@ -1,6 +1,7 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.CustomerService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 
@@ -14,8 +15,8 @@ import java.util.List;
 
 @WebServlet("/customer/*")
 public class CustomerServlet extends HttpServlet {
-    private CustomerService customerService = new ServiceFacade().forCustomer();
-    private Customer customer;
+
+    private CustomerService customerService = ServiceFacade.forCustomer();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -62,21 +63,21 @@ public class CustomerServlet extends HttpServlet {
         String phoneNumber = req.getParameter("phoneNumber");
         try {
             customer = customerService.create(name, surname, phoneNumber);
-        } catch (Exception exception) {
+        } catch (ParkingSystemException exception) {
             exception.printStackTrace();
         }
 
         req.getSession().setAttribute("customer", customer);
         System.out.println("In customer servlet doCreate " + req.getContextPath());
-        req.getRequestDispatcher(req.getContextPath() + "/parkingTicket/create").forward(req, resp);
-
+       // req.getRequestDispatcher(req.getContextPath() + "/parkingTicket/create").forward(req, resp);
+        resp.sendRedirect("/parkingTicket/create");
     }
 
 
     protected void doEdit(HttpServletRequest req, HttpServletResponse resp) {
         Integer customerID = Integer.parseInt(req.getParameter("customerID"));
         try {
-            customer = customerService.getFromDB(customerID);
+           Customer customer = customerService.getFromDB(customerID);
             req.setAttribute("customer", customer);
             System.out.println("customer attribute was set");
             req.getRequestDispatcher("/customerRegistration.jsp").forward(req, resp);

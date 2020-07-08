@@ -1,6 +1,8 @@
 package com.kurylchyk.model.services.impl.customerCommand;
 
 import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
+import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
 
 public class CreateCustomerCommand  implements Command<Customer> {
@@ -24,7 +26,7 @@ public class CreateCustomerCommand  implements Command<Customer> {
     }
 
     @Override
-    public Customer execute() throws Exception {
+    public Customer execute() throws ParkingSystemException {
         Customer customer = Customer.newCustomer()
                 .setCustomerID(customerID)
                 .setName(name)

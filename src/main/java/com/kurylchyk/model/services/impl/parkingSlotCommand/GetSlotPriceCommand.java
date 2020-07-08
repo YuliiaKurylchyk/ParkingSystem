@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.impl.Command;
 
@@ -11,7 +12,7 @@ public class GetSlotPriceCommand implements Command<List<ParkingSlotPriceDTO>> {
 
 
     @Override
-    public List<ParkingSlotPriceDTO> execute() throws Exception {
+    public List<ParkingSlotPriceDTO> execute() throws ParkingSystemException {
         return parkingSlotDAO.getSlotsPrice();
     }
 }

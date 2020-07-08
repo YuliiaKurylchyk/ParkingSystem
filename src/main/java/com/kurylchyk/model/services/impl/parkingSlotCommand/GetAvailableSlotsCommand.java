@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.services.impl.Command;
@@ -17,7 +18,7 @@ public class GetAvailableSlotsCommand implements Command<List<ParkingSlot>> {
     }
 
     @Override
-    public List<ParkingSlot> execute() throws Exception {
+    public List<ParkingSlot> execute() throws ParkingSystemException {
        return parkingSlotDAO.selectAvailable(slotSize);
     }
 }

@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
 import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.parkingTicket.Status;
@@ -20,7 +21,7 @@ public class CreateParkingTicketCommand implements Command<ParkingTicket> {
     }
 
     @Override
-    public ParkingTicket execute() throws Exception {
+    public ParkingTicket execute() throws ParkingSystemException {
 
         ParkingTicket parkingTicket = ParkingTicket.newParkingTicket()
                 .withVehicle(vehicle)

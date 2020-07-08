@@ -2,6 +2,7 @@ package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.impl.Command;
 
@@ -15,7 +16,7 @@ public class GetParkingSlotCommand implements Command<ParkingSlot> {
     }
 
     @Override
-    public ParkingSlot execute() throws Exception {
+    public ParkingSlot execute() throws ParkingSystemException {
         ParkingSlot parkingSlot = parkingSlotDAO.select(parkingSlotIdentifier).get();
         return  parkingSlot;
     }

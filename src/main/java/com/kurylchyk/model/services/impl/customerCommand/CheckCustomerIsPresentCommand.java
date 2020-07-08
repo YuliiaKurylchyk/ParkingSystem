@@ -2,6 +2,7 @@ package com.kurylchyk.model.services.impl.customerCommand;
 
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.ParkingSlotDAO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.impl.Command;
 
@@ -14,12 +15,8 @@ public class CheckCustomerIsPresentCommand implements Command<Boolean> {
     }
 
     @Override
-    public Boolean execute() throws Exception {
+    public Boolean execute() throws ParkingSystemException {
 
-        if (customerDAO.isPresent(phoneNumber)) {
-            return true;
-        } else {
-            return false;
-        }
+        return customerDAO.isPresent(phoneNumber);
     }
 }

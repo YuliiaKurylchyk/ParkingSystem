@@ -2,6 +2,7 @@ package com.kurylchyk.model.services.impl.vehicleCommand;
 
 import com.kurylchyk.model.dao.VehicleDAOFactory;
 import com.kurylchyk.model.dao.VehicleDataUtil;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.vehicles.VehicleType;
 
@@ -16,7 +17,7 @@ public class CountPresentVehiclesCommand implements Command<Integer> {
     }
 
     @Override
-    public Integer execute() throws Exception {
+    public Integer execute() throws ParkingSystemException {
 
         if(vehicleType!=null){
             Integer count = VehicleDAOFactory.getVehicleDAO(vehicleType).countAllPresent();

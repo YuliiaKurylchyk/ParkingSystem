@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
@@ -19,7 +20,7 @@ public class AddParkingSlotCommand implements Command<Void> {
     }
 
     @Override
-    public Void execute() throws Exception {
+    public Void execute() throws ParkingSystemException {
         Integer lastID = parkingSlotDAO.getLastID(slotSize);
         ParkingSlot parkingSlot = new ParkingSlot(lastID+1,slotSize,slotStatus);
         parkingSlotDAO.insert(parkingSlot);
