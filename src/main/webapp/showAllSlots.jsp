@@ -18,6 +18,7 @@
 </head>
 <body>
 <h1 style="color: deepskyblue">The list slots</h1>
+
 <c:if test="${sessionScope.vehicle==null && requestScope.change==null}">
 <div id="selectContainer">
     <form action="/parkingSlot/showAll" method="GET">
@@ -39,7 +40,6 @@
     </form>
 </div>
 </c:if>
-
 <div id="container">
     <table>
         <thead>

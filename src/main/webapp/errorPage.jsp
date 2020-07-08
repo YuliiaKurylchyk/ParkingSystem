@@ -23,6 +23,8 @@
     <h3>
         <c:if test="${requestScope.exception!=null}"><c:out value="${requestScope.exception}"/></c:if>
       </h3>
+
+
     <h3>
         <c:if test="${requestScope.javax.servlet.error.exception!=null}"><c:out value="${requestScope.javax.servlet.error.exception}"/></c:if>
     </h3>

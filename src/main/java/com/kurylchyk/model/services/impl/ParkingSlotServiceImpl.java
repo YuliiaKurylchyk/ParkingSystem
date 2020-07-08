@@ -1,6 +1,7 @@
 package com.kurylchyk.model.services.impl;
 
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.NoAvailableParkingSlotException;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
@@ -65,7 +66,11 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     @Override
     public List<ParkingSlot> getAvailableSlots(Vehicle vehicle) throws ParkingSystemException{
        SlotSize slotSize =  executor.execute(new DefineParkingSlotCommand(vehicle));
-       return executor.execute(new GetAvailableSlotsCommand(slotSize));
+       List<ParkingSlot> availableSlots = executor.execute(new GetAvailableSlotsCommand(slotSize));
+       if(availableSlots.isEmpty()){
+           throw  new NoAvailableParkingSlotException("No slots with appropriate size left");
+        }
+        return availableSlots;
     }
 
     public void updatePrice(List<ParkingSlotPriceDTO> prices) throws ParkingSystemException {

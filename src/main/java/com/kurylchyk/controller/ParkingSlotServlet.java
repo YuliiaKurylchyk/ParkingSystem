@@ -52,10 +52,7 @@ public class ParkingSlotServlet extends HttpServlet {
             case "/change":
                 doChange(req, resp);
                 break;
-            case "/add":
-                break;
-            case "/delete":
-                break;
+
 
 
         }
@@ -77,7 +74,7 @@ public class ParkingSlotServlet extends HttpServlet {
         }
     }
 
-    protected void doShowAvailable(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doShowAvailable(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
         List<ParkingSlot> allAvailableSlots;
@@ -93,7 +90,12 @@ public class ParkingSlotServlet extends HttpServlet {
             req.setAttribute("allSlots", allAvailableSlots);
             req.getRequestDispatcher("/showAllSlots.jsp").forward(req, resp);
         } catch (Exception exception) {
+            System.out.println("Exception  is parking slot show available");
             exception.printStackTrace();
+            req.getSession().removeAttribute("vehicle");
+            req.setAttribute("exception", exception);
+            req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
+            return;
         }
     }
 
@@ -135,8 +137,7 @@ public class ParkingSlotServlet extends HttpServlet {
 
     }
 
-    protected void doEdit(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doEdit(HttpServletRequest req, HttpServletResponse resp) {
 
         try {
             List<ParkingSlotPriceDTO> allSlots = parkingLotService.getSlotsPrice();
@@ -149,35 +150,4 @@ public class ParkingSlotServlet extends HttpServlet {
 
     }
 
-    protected void doAdd(HttpServletRequest req, HttpServletResponse resp) {
-
-        SlotSize slotSize = SlotSize.valueOf(req.getParameter("slotSize"));
-        SlotStatus slotStatus = SlotStatus.valueOf(req.getParameter("slotStatus"));
-        try {
-            parkingLotService.addSlot(slotSize, slotStatus);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-/*
-    protected void doUpdate(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
-        Integer countOfSmall = Integer.parseInt(req.getParameter("countOfSMALL"));
-        Integer priceOfSmall = Integer.parseInt(req.getParameter("priceOfSMALL"));
-        Integer countOfMedium = Integer.parseInt(req.getParameter("countOfMEDIUM"));
-        Integer priceOfMedium = Integer.parseInt(req.getParameter("priceOfMEDIUM"));
-        Integer countOfLarge = Integer.parseInt(req.getParameter("countOfLARGE"));
-        Integer priceOfLarge = Integer.parseInt(req.getParameter("priceOfLARGE"));
-
-        parkingLotService.update(SlotSize.SMALL, countOfSmall, priceOfSmall);
-        parkingLotService.update(SlotSize.MEDIUM, countOfMedium, priceOfMedium);
-        parkingLotService.update(SlotSize.LARGE, countOfLarge, priceOfLarge);
-
-        req.setAttribute("saved", "Changes were saved");
-        doEdit(req, resp);
-    }
-
- */
 }
