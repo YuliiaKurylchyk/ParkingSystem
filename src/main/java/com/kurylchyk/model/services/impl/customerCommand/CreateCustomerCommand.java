@@ -4,6 +4,9 @@ import com.kurylchyk.model.customer.Customer;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class CreateCustomerCommand  implements Command<Customer> {
 
@@ -11,6 +14,7 @@ public class CreateCustomerCommand  implements Command<Customer> {
     private String name;
     private String surname;
     private String phoneNumber;
+    private  static final Logger logger = LogManager.getLogger(CreateCustomerCommand.class);
 
     public CreateCustomerCommand(String name,String surname,String phoneNumber){
         this.name = name;
@@ -33,7 +37,8 @@ public class CreateCustomerCommand  implements Command<Customer> {
                 .setSurname(surname)
                 .setPhoneNumber(phoneNumber)
                 .buildCustomer();
-
+        logger.debug("Customer was created");
         return customer;
+
     }
 }

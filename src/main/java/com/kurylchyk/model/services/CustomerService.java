@@ -10,7 +10,7 @@ public interface CustomerService {
 
     Customer create(String name,String surname,String phoneNumber) throws ParkingSystemException;
     Customer create(Integer customerID,String name,String surname,String phoneNumber) throws ParkingSystemException;
-    Customer getFromDB(Integer customerID) throws Exception;
+    Customer getFromDB(Integer customerID) throws ParkingSystemException;
     Customer getFromDB(String phoneNumber) throws ParkingSystemException;
     Customer saveToDB(Customer customer) throws ParkingSystemException;
     void update(Customer customer) throws ParkingSystemException;

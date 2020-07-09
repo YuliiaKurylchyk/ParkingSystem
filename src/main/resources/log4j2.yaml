@@ -15,48 +15,41 @@ Configuration:
           HH:mm:ss.SSS}}{blue} %class{1}:%L - %highlight{%msg} %xEx{short}%n"
 
     File:
-      name: logFileError
-      filename: ${log-path}/logFileError.log
-      filePattern: ${log-path}/archive/logFileError.log.%d{yyyy-MM-dd}.gz
-      PatternLayout:
-        Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %class{1}:%L - %msg %xEx{short}%n"
-      Filters:
-        ThresholdFilter:
-        -
-          level: error
-          onMatch: NEUTRAL
-          onMismatch: ACCESS
-        -
-          level: fatal
-          onMatch: DENY
-          onMismatch: NEUTRAL
+      - name: logFileError
+        filename: ${log-path}/logFileError.log
+        PatternLayout:
+          Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %class{1}:%L - %msg %xEx{short}%n"
+
+    RollingFile:
+      - name: RollingInfoFile_Appender
+        fileName: ${log-path}/rollingInfoFile.log
+        filePattern: "logs/archive/rollingInfoFile.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Filters:
+          ThresholdFilter:
+            - level: debug
+              onMatch: NEUTRAL
+              onMismatch: ACCESS
+            - level: error
+              onMatch: DENY
+              onMismatch: NEUTRAL
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 20 KB
+        DefaultRollOverStrategy:
+          max: 30
+
 
 
   Loggers:
-
-   # Logger:
-    #  - name: com.kurylchyk.model.services.impl.ticketCommand.SaveParkingTicketCommand
-     #   level: all
-      #  AppenderRef:
-       #   - ref: Console_Appender
-        #    level: all
-      #- name: com.kurylchyk.model.services.impl.vehicleCommand.SaveVehicleCommand
-       # level: all
-        #AppenderRef:
-         # - ref: Console_Appender
-          #  level: all
-      #- name: com.kurylchyk.model.services.impl.customerCommand.SaveCustomerCommand
-       # level: all
-        #AppenderRef:
-         # - ref: Console_Appender
-          #  level: all
-      #- name: com.kurylchyk.model.services.impl.parkingSlotCommand.UpdateSlotStatusCommand
-       # level: all
-       # AppenderRef:
-        #  - ref: Console_Appender
-         #   level: all
     Root:
       level: all
       AppenderRef:
         - ref: Console_Appender
-        - ref: logFileError
+        - ref: RollingInfoFile_Appender
+    Logger:
+      - name: com.kurylchyk.controller
+        level: error
+        AppenderRef:
+          - ref: logFileError

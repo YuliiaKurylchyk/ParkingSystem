@@ -1,12 +1,15 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
 import com.kurylchyk.model.services.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,49 +20,50 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @WebServlet("/admin/*")
 public class ParkingSlotAdminServlet extends HttpServlet {
 
     private ParkingSlotService parkingSlotService = ServiceFacade.forParkingSlot();
+    private static final Logger logger = LogManager.getLogger(ParkingSlotAdminServlet.class);
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         doPost(req, resp);
 
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
-
-        System.out.println("In admin servlet");
 
         String command = req.getPathInfo();
-        System.out.println(command);
+        try {
+            if (command == null) {
+                showPage(req, resp);
+            } else {
 
-        if (command == null) {
-            showPage(req, resp);
-        } else {
+                switch (command) {
 
-            switch (command) {
-
-                case "/editPrice":
-                    doEditPrice(req, resp);
-                    break;
-                case "/addSlot":
-                    doAddSlot(req, resp);
-                    break;
-                case "/deleteSlot":
-                    doDeleteSlot(req, resp);
-                    break;
-                default:
-
+                    case "/editPrice":
+                        doEditPrice(req, resp);
+                        break;
+                    case "/addSlot":
+                        doAddSlot(req, resp);
+                        break;
+                    case "/deleteSlot":
+                        doDeleteSlot(req, resp);
+                        break;
+                }
             }
+        }catch (Exception exception){
+            logger.error(exception);
         }
+
     }
 
 
-    protected void showPage(HttpServletRequest req, HttpServletResponse resp) {
+    protected void showPage(HttpServletRequest req, HttpServletResponse resp)  {
         try {
             List<ParkingSlotPriceDTO> slotPrices = parkingSlotService.getSlotsPrice();
             System.out.println(slotPrices);
@@ -69,20 +73,20 @@ public class ParkingSlotAdminServlet extends HttpServlet {
             req.setAttribute("allSlots", allSlots);
             req.getRequestDispatcher("/parkingSlotInfo.jsp").forward(req, resp);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error(exception);
         }
     }
 
-    protected void doAddSlot(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doAddSlot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         SlotSize slotSize = SlotSize.valueOf(req.getParameter("newSlotSize"));
         SlotStatus slotStatus = SlotStatus.valueOf(req.getParameter("newSlotStatus"));
         try {
             parkingSlotService.addSlot(slotSize, slotStatus);
+            showPage(req, resp);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error(exception);
         }
-        showPage(req, resp);
     }
 
 
@@ -98,11 +102,12 @@ public class ParkingSlotAdminServlet extends HttpServlet {
 
         try {
             parkingSlotService.updatePrice(prices);
+            req.setAttribute("saved", "Changes were saved");
+            showPage(req, resp);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error(exception);
         }
-        req.setAttribute("saved", "Changes were saved");
-        showPage(req,resp);
+
     }
 
 
@@ -112,10 +117,10 @@ public class ParkingSlotAdminServlet extends HttpServlet {
         try {
             ParkingSlot parkingSlot = parkingSlotService.getParkingSlot(new ParkingSlotDTO(slotSize, parkingSlotID));
             parkingSlotService.deleteSlot(parkingSlot);
-
-        }catch (Exception exception){
-            exception.printStackTrace();
+            showPage(req, resp);
+        } catch (Exception exception) {
+            logger.error(exception);
         }
-        showPage(req,resp);
+
     }
 }

@@ -27,7 +27,6 @@ public class HomePageServlet extends HttpServlet {
     private void showHomePage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         //   clearSession(req.getSession());
-        System.out.println("in home servlet");
 
         try {
             setLanguage(req);

@@ -13,7 +13,7 @@ public class EncodingFilter extends HttpServlet implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
 
-        System.out.println("In the filter");
+
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("utf8");
 

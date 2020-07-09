@@ -5,6 +5,9 @@ import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.parkingTicket.Status;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,6 +15,7 @@ public class GetInDateCommand implements Command<List<ParkingTicket>> {
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
     private LocalDateTime localDateTime;
     private Status status;
+    private static final Logger logger = LogManager.getLogger(GetInDateCommand.class);
     public GetInDateCommand(LocalDateTime localDateTime){
         this.localDateTime = localDateTime;
     }
@@ -26,9 +30,11 @@ public class GetInDateCommand implements Command<List<ParkingTicket>> {
         List<ParkingTicket> allTickets;
         if(status!=null){
             allTickets = parkingTicketDAO.selectInDateAndStatus(localDateTime,status);
+            logger.debug("Getting tickets using date and status");
         }else
         {
             allTickets = parkingTicketDAO.selectInDate(localDateTime);
+            logger.debug("Getting tickets using date only");
         }
         return allTickets;
     }

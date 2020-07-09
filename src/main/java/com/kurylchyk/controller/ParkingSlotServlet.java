@@ -1,6 +1,7 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingSlots.SlotSize;
 import com.kurylchyk.model.parkingSlots.SlotStatus;
@@ -9,6 +10,8 @@ import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.vehicles.Vehicle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import javax.servlet.ServletException;
@@ -20,46 +23,47 @@ import java.io.IOException;
 
 @WebServlet("/parkingSlot/*")
 public class ParkingSlotServlet extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger(ParkingSlotServlet.class);
     private ParkingSlotService parkingLotService = new ParkingSlotServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         doPost(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        System.out.println("In parking slot servlet");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+
         String command = req.getPathInfo();
 
-        switch (command) {
-            case "/showAvailable":
-                doShowAvailable(req, resp);
-                break;
-            case "/get":
-                doGetParkingSlot(req, resp);
-                break;
-            case "/edit":
-                doEdit(req, resp);
-                break;
-            case "/update":
-                //  doUpdate(req, resp);
-                break;
-            case "/showAll":
-                doShowAll(req, resp);
-                break;
-            case "/change":
-                doChange(req, resp);
-                break;
-
-
-
+        try {
+            switch (command) {
+                case "/showAvailable":
+                    doShowAvailable(req, resp);
+                    break;
+                case "/get":
+                    doGetParkingSlot(req, resp);
+                    break;
+                case "/edit":
+                    doEdit(req, resp);
+                    break;
+                case "/update":
+                    //  doUpdate(req, resp);
+                    break;
+                case "/showAll":
+                    doShowAll(req, resp);
+                    break;
+                case "/change":
+                    doChange(req, resp);
+                    break;
+            }
+        }catch (Exception exception){
+            logger.error(exception);
         }
     }
 
 
-    protected void doGetParkingSlot(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGetParkingSlot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         Integer parkingSlotID = Integer.parseInt(req.getParameter("parkingSlotID"));
         SlotSize slotSize = SlotSize.valueOf(req.getParameter("slotSize"));
@@ -69,8 +73,8 @@ public class ParkingSlotServlet extends HttpServlet {
             ParkingSlot parkingSlot = parkingLotService.getParkingSlot(new ParkingSlotDTO(slotSize, parkingSlotID));
             req.getSession().setAttribute("parkingSlot", parkingSlot);
             req.getRequestDispatcher("/customer/form").forward(req, resp);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (ParkingSystemException exception) {
+            logger.error(exception);
         }
     }
 
@@ -82,24 +86,22 @@ public class ParkingSlotServlet extends HttpServlet {
             if (req.getSession().getAttribute("vehicle") != null) {
                 Vehicle vehicle = (Vehicle) req.getSession().getAttribute("vehicle");
                 allAvailableSlots = parkingLotService.getAvailableSlots(vehicle);
-            }else{
+            } else {
                 SlotSize slotSize = SlotSize.valueOf(req.getParameter("slotSize"));
                 allAvailableSlots = parkingLotService.getAvailableSlots(slotSize);
-                req.setAttribute("change","");
+                req.setAttribute("change", "");
             }
             req.setAttribute("allSlots", allAvailableSlots);
             req.getRequestDispatcher("/showAllSlots.jsp").forward(req, resp);
-        } catch (Exception exception) {
-            System.out.println("Exception  is parking slot show available");
-            exception.printStackTrace();
+        } catch (ParkingSystemException exception) {
+            logger.error(exception);
             req.getSession().removeAttribute("vehicle");
             req.setAttribute("exception", exception);
             req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
-            return;
         }
     }
 
-    protected void doShowAll(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doShowAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
         String size = req.getParameter("slotSize");
@@ -114,38 +116,37 @@ public class ParkingSlotServlet extends HttpServlet {
             }
             req.setAttribute("allSlots", allSlots);
             req.getRequestDispatcher("/showAllSlots.jsp?info").forward(req, resp);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (ParkingSystemException exception) {
+            logger.error(exception);
         }
 
     }
 
-    protected void doChange(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doChange(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println("In do change servlet");
         Integer parkingSlotID = Integer.parseInt(req.getParameter("parkingSlotID"));
         SlotSize slotSize = SlotSize.valueOf(req.getParameter("slotSize"));
 
         try {
-            ParkingSlot parkingSlot = parkingLotService.getParkingSlot(new ParkingSlotDTO(slotSize,parkingSlotID));
+            ParkingSlot parkingSlot = parkingLotService.getParkingSlot(new ParkingSlotDTO(slotSize, parkingSlotID));
             ParkingTicket parkingTicket = (ParkingTicket) req.getSession().getAttribute("currentTicket");
-            parkingLotService.changeSlot(parkingTicket,parkingSlot);
-            req.getRequestDispatcher("/parkingTicket/get?parkingTicketID="+parkingTicket.getParkingTicketID()).forward(req,resp);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            parkingLotService.changeSlot(parkingTicket, parkingSlot);
+            req.getRequestDispatcher("/parkingTicket/get?parkingTicketID=" + parkingTicket.getParkingTicketID()).forward(req, resp);
+        } catch (ParkingSystemException exception) {
+            logger.error(exception);
         }
 
     }
 
-    protected void doEdit(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
             List<ParkingSlotPriceDTO> allSlots = parkingLotService.getSlotsPrice();
             System.out.println(allSlots);
             req.setAttribute("allSlots", allSlots);
             req.getRequestDispatcher("/parkingSlotInfo.jsp").forward(req, resp);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (ParkingSystemException exception) {
+            logger.error(exception);
         }
 
     }

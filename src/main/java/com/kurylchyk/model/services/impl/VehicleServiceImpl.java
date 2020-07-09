@@ -15,7 +15,6 @@ import java.util.List;
 public class VehicleServiceImpl implements VehicleService {
 
     private CommandExecutor executor = new CommandExecutor();
-
     @Override
     public Vehicle create(VehicleInfo vehicleInfo)
             throws ParkingSystemException {

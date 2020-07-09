@@ -43,13 +43,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getFromDB(String phoneNumber) throws ParkingSystemException {
-        System.out.println("In getFromDB with phoneNumber " + phoneNumber);
         return executor.execute(new GetCustomerCommand(phoneNumber));
     }
 
     @Override
     public Customer saveToDB(Customer customer) throws ParkingSystemException {
-        System.out.println(customer);
         if (!isPresent(customer.getPhoneNumber())) {
             return executor.execute(new SaveCustomerCommand(customer));
         } else {
@@ -72,7 +70,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         executor.execute(new DeleteCustomerCommand(customer));
     }
-
 
     //check if it is used????
     @Override
