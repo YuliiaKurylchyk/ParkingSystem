@@ -191,7 +191,6 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
         String query = prop.getProperty("updatePrice");
 
-
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, price);

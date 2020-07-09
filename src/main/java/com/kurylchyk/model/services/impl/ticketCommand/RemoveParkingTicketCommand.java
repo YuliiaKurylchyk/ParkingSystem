@@ -10,6 +10,8 @@ import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import  com.kurylchyk.model.parkingTicket.Status;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +20,7 @@ public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
 
     private ParkingTicketDAO parkingTicketDAO =  new ParkingTicketDAO();
     private ParkingTicket parkingTicket;
+    private static final Logger logger = LogManager.getLogger(RemoveParkingTicketCommand.class);
 
     public RemoveParkingTicketCommand(ParkingTicket parkingTicket){
         this.parkingTicket = parkingTicket;
@@ -33,12 +36,14 @@ public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
         parkingTicket.setCost(countTheCost(parkingTicket));
         parkingLotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);
         parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
+        logger.info("Parking ticket "+parkingTicket.getParkingTicketID() +" was updated with departure time, status and cost");
         return  parkingTicket;
     }
 
     private BigDecimal countTheCost(ParkingTicket parkingTicket) {
 
         Integer pricePerDay = parkingTicket.getParkingSlot().getPrice();
+        System.out.println("Price per day "+pricePerDay);
         parkingTicket.setDepartureTime(LocalDateTime.now());
 
         System.out.println("TimeArrival " + parkingTicket.getArrivalTime());

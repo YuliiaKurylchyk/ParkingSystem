@@ -116,10 +116,6 @@ public class ParkingTicketServlet extends HttpServlet {
 
         try {
             parkingTicket = parkingTicketService.createParkingTicket(vehicle, customer, parkingSlot);
-            vehicleService.saveToDB(parkingTicket.getVehicle());
-            parkingLotService.updateStatus(parkingSlot, SlotStatus.OCCUPIED);
-            customer = customerService.saveToDB(parkingTicket.getCustomer());
-            vehicleService.connectCustomerToVehicle(vehicle, customer);
             parkingTicket = parkingTicketService.saveToDB(parkingTicket);
         } catch (Exception exception) {
             exception.printStackTrace();

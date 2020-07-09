@@ -5,12 +5,15 @@ import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UpdateSlotInTicketCommand  implements Command<Void> {
 
     private ParkingTicket parkingTicket;
     private ParkingSlot parkingSlot;
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private static final Logger logger = LogManager.getLogger(UpdateSlotInTicketCommand.class);
 
 
     public UpdateSlotInTicketCommand(ParkingTicket parkingTicket,ParkingSlot parkingSlot){
@@ -21,6 +24,7 @@ public class UpdateSlotInTicketCommand  implements Command<Void> {
     @Override
     public Void execute() throws ParkingSystemException {
         parkingTicketDAO.updateParkingSlotID(parkingTicket,parkingSlot);
+        logger.info("Parking ticket "+parkingTicket.getParkingTicketID() + " was updated with parking slot "+parkingSlot);
         return null;
     }
 }

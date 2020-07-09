@@ -9,6 +9,8 @@ import com.kurylchyk.model.services.impl.CommandExecutor;
 import com.kurylchyk.model.services.impl.ticketCommand.UpdateVehicleInTicketCommand;
 import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
 import com.kurylchyk.model.vehicles.Vehicle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UpdateVehicleCommand implements Command<Vehicle> {
 
@@ -16,6 +18,7 @@ public class UpdateVehicleCommand implements Command<Vehicle> {
     private VehicleInfo vehicleInfo;
     private String currentLicensePlate;
     private CommandExecutor executor = new CommandExecutor();
+    private static final Logger logger  = LogManager.getLogger(UpdateVehicleCommand.class);
 
 
     public UpdateVehicleCommand(VehicleInfo vehicleInfo, String licencePlate) {
@@ -38,6 +41,7 @@ public class UpdateVehicleCommand implements Command<Vehicle> {
             }
         }
         vehicleDAO.update(vehicle, currentLicensePlate);
+        logger.info("Vehicle(" + currentLicensePlate+") was updated to "+vehicle);
         return vehicle;
 
     }

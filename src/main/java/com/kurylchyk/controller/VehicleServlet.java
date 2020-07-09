@@ -8,6 +8,8 @@ import com.kurylchyk.model.services.impl.utilVehicle.*;
 import com.kurylchyk.model.vehicles.CarSize;
 import com.kurylchyk.model.vehicles.VehicleType;
 import com.kurylchyk.model.vehicles.Vehicle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +24,7 @@ import java.util.List;
 public class VehicleServlet extends HttpServlet {
 
     private VehicleService vehicleService = new ServiceFacade().forVehicle();
+    private static Logger logger = LogManager.getLogger(VehicleServlet.class);
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -73,6 +76,7 @@ public class VehicleServlet extends HttpServlet {
             req.getRequestDispatcher("/searchPage.jsp").forward(req, resp);
         }
 
+
     }
 
     protected void doCreate(HttpServletRequest req, HttpServletResponse resp)
@@ -86,7 +90,8 @@ public class VehicleServlet extends HttpServlet {
             vehicle = vehicleService.create(vehicleInfo);
         } catch (Exception exception) {
             System.out.println("Exception  is vehicle create");
-            exception.printStackTrace();
+            logger.error(exception);
+            //exception.printStackTrace();
             req.setAttribute("exception", exception);
             req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
             return;
