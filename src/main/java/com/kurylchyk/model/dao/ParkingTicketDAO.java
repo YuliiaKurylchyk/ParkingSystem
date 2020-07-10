@@ -1,14 +1,14 @@
 package com.kurylchyk.model.dao;
 
-import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
-import com.kurylchyk.model.parkingSlots.SlotSize;
-import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.parkingTicket.Status;
-import com.kurylchyk.model.vehicles.Vehicle;
-import com.kurylchyk.model.vehicles.VehicleType;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
+import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -23,7 +23,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     private Properties prop;
 
     {
-        prop = PropertyValues.getPropValues(ParkingTicketDAO.class,"queries/ticketQueries.properties");
+        prop = PropertyLoader.getPropValues(ParkingTicketDAO.class,"queries/ticketQueries.properties");
         customerDAO = new CustomerDAO();
         parkingSlotDao = new ParkingSlotDAO();
 

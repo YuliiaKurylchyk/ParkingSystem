@@ -2,12 +2,12 @@ package com.kurylchyk.model.services.impl;
 
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.VehicleService;
-import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
+import com.kurylchyk.model.services.impl.utilVehicle.VehicleCreator;
 import com.kurylchyk.model.services.impl.vehicleCommand.*;
-import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.vehicles.VehicleType;
-import com.kurylchyk.model.vehicles.Vehicle;
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.customer.Customer;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     private CommandExecutor executor = new CommandExecutor();
     @Override
-    public Vehicle create(VehicleInfo vehicleInfo)
+    public Vehicle create(VehicleCreator vehicleInfo)
             throws ParkingSystemException {
         Vehicle vehicle;
         if (!executor.execute(new CheckVehicleInDatabaseCommand(vehicleInfo.getLicensePlate()))) {
@@ -48,7 +48,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Vehicle update(VehicleInfo vehicleInfo, String licencePlate) throws ParkingSystemException {
+    public Vehicle update(VehicleCreator vehicleInfo, String licencePlate) throws ParkingSystemException {
         return executor.execute(new UpdateVehicleCommand(vehicleInfo, licencePlate));
     }
 

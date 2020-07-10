@@ -4,7 +4,7 @@ import com.kurylchyk.model.dao.VehicleDAOFactory;
 import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
-import com.kurylchyk.model.vehicles.VehicleType;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
 public class CountPresentVehiclesCommand implements Command<Integer> {
 

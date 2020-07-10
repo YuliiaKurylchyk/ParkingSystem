@@ -1,7 +1,7 @@
 package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.dao.vehicles.*;
-import com.kurylchyk.model.vehicles.VehicleType;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
 public class VehicleDAOFactory {
 

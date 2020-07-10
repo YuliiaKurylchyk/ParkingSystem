@@ -1,8 +1,10 @@
 package com.kurylchyk.model.dao;
 
-import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.parkingSlots.*;
-import com.kurylchyk.model.services.ParkingSlotPriceDTO;
+import com.kurylchyk.model.domain.parkingSlots.*;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
 
 
 import java.sql.*;
@@ -17,7 +19,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
     private Properties prop;
 
     {
-        prop = PropertyValues.getPropValues(ParkingSlotDAO.class,"queries/slotQueries.properties");
+        prop = PropertyLoader.getPropValues(ParkingSlotDAO.class,"queries/slotQueries.properties");
     }
 
     @Override

@@ -1,15 +1,15 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingSlots.SlotStatus;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
-import com.kurylchyk.model.Payment;
-import com.kurylchyk.model.Timer;
+import com.kurylchyk.model.services.Payment;
+import com.kurylchyk.model.services.TimeChecker;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
-import  com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
         System.out.println("TimeArrival " + parkingTicket.getArrivalTime());
         System.out.println("TimeLeft " + parkingTicket.getDepartureTime());
 
-        BigDecimal cost = Payment.calculatePrice(Timer.getTotalDays(parkingTicket.getArrivalTime(),
+        BigDecimal cost = Payment.calculatePrice(TimeChecker.getTotalDays(parkingTicket.getArrivalTime(),
                 parkingTicket.getDepartureTime()), pricePerDay);
         return cost;
     }

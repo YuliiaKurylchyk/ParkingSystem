@@ -4,7 +4,7 @@ import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
 import com.kurylchyk.model.services.impl.Command;
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

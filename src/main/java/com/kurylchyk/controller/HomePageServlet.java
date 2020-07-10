@@ -1,10 +1,10 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.VehicleService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
-import com.kurylchyk.model.vehicles.VehicleType;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

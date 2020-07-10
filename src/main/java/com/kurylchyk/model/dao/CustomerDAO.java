@@ -1,7 +1,6 @@
 package com.kurylchyk.model.dao;
 
-import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.domain.customer.Customer;
 
 
 import java.sql.*;
@@ -15,7 +14,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
     private Properties prop;
 
     {
-        prop = PropertyValues.getPropValues(CustomerDAO.class, "queries/customerQueries.properties");
+        prop = PropertyLoader.getPropValues(CustomerDAO.class, "queries/customerQueries.properties");
 
     }
 
@@ -82,7 +81,9 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
 
         String query = prop.getProperty("insertCustomer");
         Integer id = null;
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = Connector
+                .getDataSource()
+                .getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, customer.getName());
             preparedStatement.setString(2, customer.getSurname());

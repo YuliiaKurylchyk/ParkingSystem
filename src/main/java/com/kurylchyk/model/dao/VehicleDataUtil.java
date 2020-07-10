@@ -1,15 +1,12 @@
 package com.kurylchyk.model.dao;
 
-import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.vehicles.VehicleType;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.Optional;
 import java.util.Properties;
 
-import  com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
 
 public class VehicleDataUtil extends Connector {
@@ -17,7 +14,7 @@ public class VehicleDataUtil extends Connector {
     private static Properties prop;
 
     static {
-        prop =  PropertyValues.getPropValues(VehicleDataUtil.class,"queries/vehicleQueries.properties");
+        prop =  PropertyLoader.getPropValues(VehicleDataUtil.class,"queries/vehicleQueries.properties");
     }
 
     public static Optional<VehicleType> getType(String licensePlate){

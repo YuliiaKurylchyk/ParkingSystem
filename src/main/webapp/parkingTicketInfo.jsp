@@ -1,4 +1,4 @@
-<%@ page import="com.kurylchyk.model.parkingTicket.ParkingTicket" %><%--
+<%@ page import="com.kurylchyk.model.domain.parkingTicket.ParkingTicket" %><%--
   Created by IntelliJ IDEA.
   User: admin
   Date: 05.05.2020

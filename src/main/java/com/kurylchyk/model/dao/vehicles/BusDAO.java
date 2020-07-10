@@ -1,10 +1,9 @@
 package com.kurylchyk.model.dao.vehicles;
 
-import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.vehicles.Bus;
-import com.kurylchyk.model.vehicles.Vehicle;
-import com.kurylchyk.model.vehicles.VehicleType;
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.dao.Connector;
+import com.kurylchyk.model.domain.vehicles.Bus;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
 import java.sql.*;
 import java.util.ArrayList;

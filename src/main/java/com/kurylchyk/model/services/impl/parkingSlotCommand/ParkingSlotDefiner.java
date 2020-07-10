@@ -1,7 +1,9 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
-import com.kurylchyk.model.parkingSlots.SlotSize;
-import com.kurylchyk.model.vehicles.*;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
+import com.kurylchyk.model.domain.vehicles.*;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

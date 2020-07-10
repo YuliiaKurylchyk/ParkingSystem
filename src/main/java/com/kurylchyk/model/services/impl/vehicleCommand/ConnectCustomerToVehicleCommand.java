@@ -1,13 +1,10 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
-import com.kurylchyk.model.Connector;
-import com.kurylchyk.model.dao.VehicleDAOFactory;
 import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
-import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.dao.vehicles.VehicleDAO;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.domain.customer.Customer;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

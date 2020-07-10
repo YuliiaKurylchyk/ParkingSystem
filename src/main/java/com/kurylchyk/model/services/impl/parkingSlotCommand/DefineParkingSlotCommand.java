@@ -1,16 +1,14 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
-import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingSlots.SlotSize;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.services.impl.Command;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DefineParkingSlotCommand implements Command<SlotSize> {
 
-    private ParkingSlotDAO parkingSlotDAO = new ParkingSlotDAO();
     private Vehicle vehicle;
     private static final Logger logger = LogManager.getLogger(DefineParkingSlotCommand.class);
 

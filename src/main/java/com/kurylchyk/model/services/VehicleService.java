@@ -1,18 +1,18 @@
 package com.kurylchyk.model.services;
 
-import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
-import com.kurylchyk.model.vehicles.VehicleType;
-import com.kurylchyk.model.vehicles.Vehicle;
-import  com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.services.impl.utilVehicle.VehicleCreator;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
 import java.util.List;
 
 
 public interface VehicleService {
 
-    Vehicle create(VehicleInfo vehicleInfo) throws ParkingSystemException;
+    Vehicle create(VehicleCreator vehicleInfo) throws ParkingSystemException;
 
     Vehicle find(String licensePlate) throws ParkingSystemException;
 
@@ -20,7 +20,7 @@ public interface VehicleService {
 
     Vehicle saveToDB(Vehicle vehicle) throws ParkingSystemException;
 
-    Vehicle update(VehicleInfo vehicleInfo, String licencePlate) throws ParkingSystemException;
+    Vehicle update(VehicleCreator vehicleInfo, String licencePlate) throws ParkingSystemException;
 
     //мб цього не треба// просто викликати в delete ticket
     Vehicle deleteCompletely(Vehicle vehicle) throws ParkingSystemException;

@@ -1,15 +1,14 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.parkingSlots.SlotSize;
-import com.kurylchyk.model.parkingSlots.SlotStatus;
-import com.kurylchyk.model.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
+import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.ParkingSlotService;
-import com.kurylchyk.model.services.ParkingSlotPriceDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

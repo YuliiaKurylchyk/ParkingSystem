@@ -1,16 +1,16 @@
 package com.kurylchyk.model.services;
 
-import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.domain.customer.Customer;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kurylchyk.model.dao.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingTicket.Status;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
+import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 
 
 //make it business exception

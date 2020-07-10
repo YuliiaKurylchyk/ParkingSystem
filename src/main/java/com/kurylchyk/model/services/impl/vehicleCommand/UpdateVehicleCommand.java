@@ -7,21 +7,21 @@ import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.services.impl.CommandExecutor;
 import com.kurylchyk.model.services.impl.ticketCommand.UpdateVehicleInTicketCommand;
-import com.kurylchyk.model.services.impl.utilVehicle.VehicleInfo;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.services.impl.utilVehicle.VehicleCreator;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class UpdateVehicleCommand implements Command<Vehicle> {
 
     private VehicleDAO vehicleDAO;
-    private VehicleInfo vehicleInfo;
+    private VehicleCreator vehicleInfo;
     private String currentLicensePlate;
     private CommandExecutor executor = new CommandExecutor();
     private static final Logger logger  = LogManager.getLogger(UpdateVehicleCommand.class);
 
 
-    public UpdateVehicleCommand(VehicleInfo vehicleInfo, String licencePlate) {
+    public UpdateVehicleCommand(VehicleCreator vehicleInfo, String licencePlate) {
 
         this.vehicleInfo = vehicleInfo;
         this.currentLicensePlate = licencePlate;

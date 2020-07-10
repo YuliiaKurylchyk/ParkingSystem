@@ -1,6 +1,6 @@
 package com.kurylchyk.model.services.impl.customerCommand;
 
-import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;

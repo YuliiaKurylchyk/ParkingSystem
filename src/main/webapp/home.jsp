@@ -1,6 +1,6 @@
-<%@ page import="com.kurylchyk.model.vehicles.Vehicle" %>
+<%@ page import="com.kurylchyk.model.domain.vehicles.Vehicle" %>
 <%@ page import="com.kurylchyk.model.dao.vehicles.VehicleDAO" %>
-<%@ page import="com.kurylchyk.model.vehicles.VehicleType" %>
+<%@ page import="com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page isELIgnored="false" %>

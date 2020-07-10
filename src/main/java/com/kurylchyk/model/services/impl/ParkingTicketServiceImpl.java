@@ -1,17 +1,17 @@
 package com.kurylchyk.model.services.impl;
 
-import com.kurylchyk.model.dao.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.ParkingTicketService;
+import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
 import com.kurylchyk.model.services.impl.ticketCommand.*;
-import com.kurylchyk.model.customer.Customer;
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.customer.Customer;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import com.kurylchyk.model.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 
 public class ParkingTicketServiceImpl implements ParkingTicketService {
 

@@ -2,17 +2,15 @@ package com.kurylchyk.controller;
 
 
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.services.VehicleService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import com.kurylchyk.model.services.impl.utilVehicle.*;
-import com.kurylchyk.model.vehicles.CarSize;
-import com.kurylchyk.model.vehicles.VehicleType;
-import com.kurylchyk.model.vehicles.Vehicle;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -84,9 +82,9 @@ public class VehicleServlet extends HttpServlet {
             throws ServletException, IOException {
 
         Vehicle vehicle = null;
-        VehicleInfo vehicleInfo = null;
+        VehicleCreator vehicleInfo = null;
         try {
-            vehicleInfo = VehicleInfoFactory.getVehicleInformation(req);
+            vehicleInfo = VehicleCreatorFactory.getVehicleInformation(req);
             vehicle = vehicleService.create(vehicleInfo);
         } catch (Exception exception) {
             logger.error(exception);
@@ -119,9 +117,9 @@ public class VehicleServlet extends HttpServlet {
 
         Vehicle currentVehicle = (Vehicle) req.getSession().getAttribute("vehicle");
         req.getSession().removeAttribute("vehicle");
-        VehicleInfo vehicleInfo;
+        VehicleCreator vehicleInfo;
         try {
-            vehicleInfo = VehicleInfoFactory.getVehicleInformation(req);
+            vehicleInfo = VehicleCreatorFactory.getVehicleInformation(req);
             Vehicle updatedVehicle = vehicleService.update(vehicleInfo, currentVehicle.getLicensePlate());
             req.getRequestDispatcher("/parkingTicket/showByVehicle?vehicleID=" + updatedVehicle.getLicensePlate()).forward(req, resp);
 

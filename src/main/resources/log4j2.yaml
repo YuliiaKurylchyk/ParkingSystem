@@ -53,3 +53,7 @@ Configuration:
         level: error
         AppenderRef:
           - ref: logFileError
+      - name: com.kurylchyk.model.dao.Connector
+          level: error
+          AppenderRef:
+            - ref: logFileError

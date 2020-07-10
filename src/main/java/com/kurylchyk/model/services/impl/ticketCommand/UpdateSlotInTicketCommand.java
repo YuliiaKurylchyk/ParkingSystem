@@ -2,8 +2,8 @@ package com.kurylchyk.model.services.impl.ticketCommand;
 
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.parkingTicket.ParkingTicket;
+import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
+import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

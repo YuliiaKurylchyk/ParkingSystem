@@ -1,9 +1,7 @@
 package com.kurylchyk.model.services.impl.customerCommand;
 
 import com.kurylchyk.model.dao.CustomerDAO;
-import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

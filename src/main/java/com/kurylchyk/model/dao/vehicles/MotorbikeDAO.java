@@ -1,8 +1,8 @@
 package com.kurylchyk.model.dao.vehicles;
 
-import com.kurylchyk.model.vehicles.Motorbike;
-import com.kurylchyk.model.vehicles.Vehicle;
-import com.kurylchyk.model.vehicles.VehicleType;
+import com.kurylchyk.model.domain.vehicles.Motorbike;
+import com.kurylchyk.model.domain.vehicles.Vehicle;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

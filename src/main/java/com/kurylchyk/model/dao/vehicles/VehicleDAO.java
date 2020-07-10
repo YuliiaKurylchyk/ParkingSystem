@@ -1,10 +1,11 @@
 package com.kurylchyk.model.dao.vehicles;
 
-import com.kurylchyk.model.Connector;
+import com.kurylchyk.model.dao.Connector;
 import com.kurylchyk.model.dao.DAO;
-import com.kurylchyk.model.dao.PropertyValues;
-import com.kurylchyk.model.vehicles.*;
-import com.kurylchyk.model.parkingTicket.Status;
+import com.kurylchyk.model.dao.PropertyLoader;
+import com.kurylchyk.model.domain.vehicles.*;
+import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
+import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
     protected Properties prop;
 
     {
-        prop = PropertyValues.getPropValues(VehicleDAO.class,"queries/vehicleQueries.properties");
+        prop = PropertyLoader.getPropValues(VehicleDAO.class,"queries/vehicleQueries.properties");
     }
 
     @Override

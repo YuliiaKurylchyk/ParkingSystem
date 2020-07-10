@@ -1,6 +1,6 @@
 package com.kurylchyk.model.services;
 
-import com.kurylchyk.model.customer.Customer;
+import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 
 import java.util.List;
