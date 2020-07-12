@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-public class CustomerDAO  implements DAO<Customer, Integer> {
+public class CustomerDAO implements DAO<Customer, Integer> {
 
 
     private Properties prop;
@@ -17,7 +17,6 @@ public class CustomerDAO  implements DAO<Customer, Integer> {
 
     {
         prop = PropertyLoader.getPropValues(CustomerDAO.class, "queries/customerQueries.properties");
-
     }
 
     @Override
@@ -66,7 +65,6 @@ public class CustomerDAO  implements DAO<Customer, Integer> {
         try (Connection connection = connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
-
             Customer currentCustomer = null;
             while (resultSet.next()) {
                 currentCustomer = getCustomer(resultSet);
@@ -83,9 +81,7 @@ public class CustomerDAO  implements DAO<Customer, Integer> {
 
         String query = prop.getProperty("insertCustomer");
         Integer id = null;
-        try (Connection connection = connector
-                .getDataSource()
-                .getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, customer.getName());
             preparedStatement.setString(2, customer.getSurname());
@@ -157,8 +153,6 @@ public class CustomerDAO  implements DAO<Customer, Integer> {
 
         return customer;
     }
-
-
 
 
 }

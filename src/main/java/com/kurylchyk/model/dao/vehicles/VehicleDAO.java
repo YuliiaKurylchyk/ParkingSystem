@@ -14,9 +14,10 @@ import java.util.Optional;
 import java.util.Properties;
 
 
-public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Connector implements DAO<T, String> {
+public abstract class VehicleDAO<T extends Vehicle, S extends String> implements DAO<T, String> {
 
     protected Properties prop;
+    protected Connector connector = new Connector();
 
     {
         prop = PropertyLoader.getPropValues(VehicleDAO.class,"queries/vehicleQueries.properties");
@@ -30,7 +31,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
         String query = prop.getProperty("selectVehicle");
         ResultSet resultSet;
         Vehicle vehicle = null;
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, licensePlate);
             resultSet = preparedStatement.executeQuery();
@@ -48,7 +49,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
 
         List<T> allVehicles = new ArrayList<>();
         String query = prop.getProperty("selectAll");
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, defineTypeOfVehicle().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -69,7 +70,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
 
         String query = prop.getProperty("insertVehicle");
         Vehicle vehicle = (Vehicle) t;
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicle.getMake());
             preparedStatement.setString(2, vehicle.getModel());
@@ -88,7 +89,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
 
         String query = prop.getProperty("deleteVehicle");
         Vehicle vehicle = (Vehicle) t;
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicle.getLicensePlate());
             preparedStatement.execute();
@@ -104,7 +105,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
 
         Vehicle vehicle = (Vehicle) t;
 
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicle.getMake());
             preparedStatement.setString(2, vehicle.getModel());
@@ -121,7 +122,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
         List<T> allVehicles = new ArrayList<>();
 
         String query = prop.getProperty("selectAllByStatus");
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, status.toString());
             preparedStatement.setString(2, defineTypeOfVehicle().toString());
@@ -142,7 +143,7 @@ public abstract class VehicleDAO<T extends Vehicle, S extends String> extends Co
     public Integer countAllPresent() {
         String query = prop.getProperty("countAllPresent");
         Integer count = 0;
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, defineTypeOfVehicle().toString());
             ResultSet resultSet = preparedStatement.executeQuery();

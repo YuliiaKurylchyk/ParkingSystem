@@ -19,7 +19,7 @@ public class BusDAO extends VehicleDAO<Bus,String> {
         String insertBus = prop.getProperty("insertBus");
 
         super.insert(bus);
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertBus)) {
             preparedStatement.setString(1, bus.getLicensePlate());
             preparedStatement.setDouble(2, bus.getCountOfSeats());
@@ -36,7 +36,7 @@ public class BusDAO extends VehicleDAO<Bus,String> {
 
         String deleteBus = prop.getProperty("deleteBus");
 
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(deleteBus)) {
             preparedStatement.setString(1, bus.getLicensePlate());
             preparedStatement.execute();
@@ -51,7 +51,7 @@ public class BusDAO extends VehicleDAO<Bus,String> {
 
         String selectBus = prop.getProperty("selectBus");
         Bus bus = null;
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectBus)) {
             preparedStatement.setString(1,licensePlate);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -68,7 +68,7 @@ public class BusDAO extends VehicleDAO<Bus,String> {
     public List<Bus> selectAll() {
         List<Bus> allVehicles = new ArrayList<>();
         String query = prop.getProperty("selectAllBuses");
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             Bus vehicleToBeAdded = null;
@@ -88,7 +88,7 @@ public class BusDAO extends VehicleDAO<Bus,String> {
     public List<Bus> selectAll(Status status){
         String query = prop.getProperty("selectAllBusesByStatus");
         List<Bus> allVehicles = new ArrayList<>();
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, status.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -111,7 +111,7 @@ public class BusDAO extends VehicleDAO<Bus,String> {
     public void update(Bus bus, String licensePlate) {
 
         String query = prop.getProperty("updateBus");
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, bus.getLicensePlate());
