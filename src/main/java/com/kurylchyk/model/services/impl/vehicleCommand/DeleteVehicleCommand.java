@@ -19,6 +19,11 @@ public class DeleteVehicleCommand implements Command<Void> {
         this.vehicle = vehicle;
         vehicleDAO = VehicleDAOFactory.getVehicleDAO(vehicle.getVehicleType());
     }
+    DeleteVehicleCommand(Vehicle vehicle,VehicleDAO vehicleDAO){
+
+        this.vehicle = vehicle;
+        this.vehicleDAO  = vehicleDAO;
+    }
 
     @Override
     public Void execute() throws ParkingSystemException {

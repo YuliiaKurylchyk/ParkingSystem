@@ -9,12 +9,16 @@ import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 public class CountPresentVehiclesCommand implements Command<Integer> {
 
     private VehicleType vehicleType;
+    private VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
 
     public CountPresentVehiclesCommand(){}
 
     public CountPresentVehiclesCommand(VehicleType vehicleType){
         this.vehicleType = vehicleType;
     }
+
+
+
 
     @Override
     public Integer execute() throws ParkingSystemException {
@@ -23,7 +27,7 @@ public class CountPresentVehiclesCommand implements Command<Integer> {
             Integer count = VehicleDAOFactory.getVehicleDAO(vehicleType).countAllPresent();
             return count;
         }else {
-            return VehicleDataUtil.countAllPresent();
+            return vehicleDataUtil.countAllPresent();
         }
     }
 }

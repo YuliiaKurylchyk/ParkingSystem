@@ -13,18 +13,26 @@ public class CheckVehicleHasDeparturedCommand implements Command<Boolean> {
 
 
     private String licensePlate;
+    private VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
     private static final Logger logger = LogManager.getLogger(CheckVehicleHasDeparturedCommand.class);
 
     public CheckVehicleHasDeparturedCommand(String licensePlate) {
         this.licensePlate = licensePlate;
     }
 
+
+    CheckVehicleHasDeparturedCommand(String licensePlate,VehicleDataUtil vehicleDataUtil) {
+        this.licensePlate = licensePlate;
+        this.vehicleDataUtil = vehicleDataUtil;
+    }
+
+
     @Override
     public Boolean execute() throws ParkingSystemException {
 
         logger.debug("Checking vehicle status in database");
 
-        if (VehicleDataUtil.getStatus(licensePlate).equals(Status.PRESENT)) {
+        if (vehicleDataUtil.getStatus(licensePlate).equals(Status.PRESENT)) {
             throw new SuchVehiclePresentException("Such vehicle with license plate "
                     + licensePlate + " is already present");
         }

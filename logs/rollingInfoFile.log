@@ -20,3 +20,35 @@
 [DEBUG] 2020-07-12 18:56:17.086 [main] GetCustomerCommand - Customer 1 was retrieved from database
 [INFO ] 2020-07-12 18:56:17.191 [main] SaveCustomerCommand - customer Name Surname - +380936310258was successfully saved to database
 [INFO ] 2020-07-12 18:56:17.213 [main] UpdateCustomerCommand - Customer 12 was updated to Name Surname - +3809310922589
+[DEBUG] 2020-07-12 19:18:10.521 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:19:03.257 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:19:40.944 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:21:28.088 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:22:58.709 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:22:58.850 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:25:03.337 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:25:03.449 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 19:38:12.090 [main] ConnectCustomerToVehicleCommand - Setting customerID to vehicle
+[INFO ] 2020-07-12 19:54:48.936 [main] DeleteVehicleCommand - Vehicle Mercedes-Benz	Sprinter	CE 0240 IO	BUS
+Count of seats : 10
+ was deleted from database
+[DEBUG] 2020-07-12 20:24:32.015 [main] ConnectCustomerToVehicleCommand - Setting customerID to vehicle
+[INFO ] 2020-07-12 20:24:32.167 [main] DeleteVehicleCommand - Vehicle Mercedes-Benz	Sprinter	CE 0240 IO	BUS
+Count of seats : 10
+ was deleted from database
+[DEBUG] 2020-07-12 20:24:32.238 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 20:24:32.258 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 21:02:55.388 [main] GetVehicleCommand - Retrieving vehicle from database
+[DEBUG] 2020-07-12 21:04:36.590 [main] GetVehicleCommand - Retrieving vehicle from database
+[DEBUG] 2020-07-12 21:15:15.691 [main] GetVehicleCommand - Getting vehicle type by license plate
+[DEBUG] 2020-07-12 21:17:26.214 [main] GetVehicleCommand - Getting vehicle type by license plate
+[DEBUG] 2020-07-12 21:18:10.137 [main] ConnectCustomerToVehicleCommand - Setting customerID to vehicle
+[INFO ] 2020-07-12 21:18:10.257 [main] DeleteVehicleCommand - Vehicle Mercedes-Benz	Sprinter	CE 0240 IO	BUS
+Count of seats : 10
+ was deleted from database
+[DEBUG] 2020-07-12 21:18:10.340 [main] GetVehicleCommand - Retrieving vehicle from database
+[DEBUG] 2020-07-12 21:18:10.358 [main] GetVehicleCommand - Retrieving vehicle from database
+[DEBUG] 2020-07-12 21:18:10.373 [main] GetVehicleCommand - Getting vehicle type by license plate
+[DEBUG] 2020-07-12 21:18:10.389 [main] GetVehicleCommand - Getting vehicle type by license plate
+[DEBUG] 2020-07-12 21:18:10.405 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-12 21:18:10.420 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database

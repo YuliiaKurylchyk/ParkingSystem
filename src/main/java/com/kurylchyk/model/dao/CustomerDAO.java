@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
+public class CustomerDAO  implements DAO<Customer, Integer> {
+
 
     private Properties prop;
+    private Connector connector = new Connector();
 
     {
         prop = PropertyLoader.getPropValues(CustomerDAO.class, "queries/customerQueries.properties");
@@ -24,7 +26,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
         String query = prop.getProperty("selectCustomerID");
         Customer customer = null;
 
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -42,7 +44,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
         String query = prop.getProperty("selectCustomerPhoneNumber");
         Customer customer = null;
 
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, phoneNumber);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -61,7 +63,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
         List<Customer> allCustomers = new ArrayList<>();
         String query = prop.getProperty("selectAll");
 
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
 
@@ -81,7 +83,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
 
         String query = prop.getProperty("insertCustomer");
         Integer id = null;
-        try (Connection connection = Connector
+        try (Connection connection = connector
                 .getDataSource()
                 .getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -105,7 +107,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
     public void update(Customer customer, Integer id) {
 
         String query = prop.getProperty("updateCustomer");
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, customer.getName());
             preparedStatement.setString(2, customer.getSurname());
@@ -122,7 +124,7 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
 
         String query = prop.getProperty("deleteCustomer");
 
-        try (Connection connection = Connector.getDataSource().getConnection();
+        try (Connection connection = connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, customer.getCustomerID());
             preparedStatement.execute();

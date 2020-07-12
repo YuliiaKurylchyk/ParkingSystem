@@ -57,7 +57,9 @@ public class Connector {
         }
     }
 
-    public static DataSource getDataSource(){
+    public DataSource getDataSource(){
         return dataSource;
     }
+
+
 }

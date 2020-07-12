@@ -23,6 +23,11 @@ public class GetAllVehiclesCommand implements Command<List<Vehicle>> {
         vehicleDAO = VehicleDAOFactory.getVehicleDAO(typeOfVehicle);
     }
 
+    GetAllVehiclesCommand(Status status, VehicleType typeOfVehicle,VehicleDAO vehicleDAO) {
+        this.status = status;
+        this.vehicleDAO = vehicleDAO;
+    }
+
     @Override
     public List<Vehicle> execute() throws ParkingSystemException {
         List<Vehicle> allVehicles;

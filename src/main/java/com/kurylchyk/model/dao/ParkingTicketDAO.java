@@ -88,7 +88,8 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
     private ParkingTicket getParkingTicket(ResultSet resultSet) throws SQLException {
 
 
-        VehicleType vehicleType = VehicleDataUtil.getType(resultSet.getString("vehicle_id")).get();
+        VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
+        VehicleType vehicleType = vehicleDataUtil.getType(resultSet.getString("vehicle_id")).get();
         Vehicle currentVehicle = (Vehicle) VehicleDAOFactory.getVehicleDAO(vehicleType).select(resultSet.getString("vehicle_id")).get();
         Customer currentCustomer = customerDAO.select(resultSet.getInt("customer_id")).get();
         ParkingSlotDTO psi = new ParkingSlotDTO(SlotSize.valueOf(resultSet.getString("parking_slot_size")), resultSet.getInt("parking_slot_id"));

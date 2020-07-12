@@ -6,7 +6,8 @@ import org.junit.platform.suite.api.SelectPackages;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitPlatform.class)
-@SelectPackages("com.kurylchyk.model.services.impl.utilVehicle")
+@SelectPackages({"com.kurylchyk.model.services.impl.utilVehicle",
+        "com.kurylchyk.model.services.impl.vehicleCommand"})
 public class VehicleServiceTest {
 
 }

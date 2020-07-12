@@ -7,7 +7,7 @@ import com.kurylchyk.model.services.impl.Command;
 public class VehicleIsPresentCommand implements Command<Boolean> {
 
     private String licencePlate;
-
+    private VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
     public VehicleIsPresentCommand(String licencePlate){
         this.licencePlate = licencePlate;
     }
@@ -15,7 +15,7 @@ public class VehicleIsPresentCommand implements Command<Boolean> {
     @Override
     public Boolean execute() throws ParkingSystemException {
 
-       return VehicleDataUtil.isPresent(licencePlate);
+       return vehicleDataUtil.isPresent(licencePlate);
 
     }
 }

@@ -12,18 +12,24 @@ public class ConnectCustomerToVehicleCommand  implements Command<Void> {
 
     private Customer customer;
     private Vehicle vehicle;
+    private VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
     private static final Logger logger = LogManager.getLogger(ConnectCustomerToVehicleCommand.class);
 
     public ConnectCustomerToVehicleCommand(Vehicle vehicle, Customer customer){
         this.vehicle = vehicle;
         this.customer = customer;
-
     }
+    ConnectCustomerToVehicleCommand(Vehicle vehicle, Customer customer,VehicleDataUtil vehicleDataUtil){
+        this.vehicle = vehicle;
+        this.customer = customer;
+        this.vehicleDataUtil = vehicleDataUtil;
+    }
+
 
     @Override
     public Void execute() throws ParkingSystemException {
         logger.debug("Setting customerID to vehicle");
-        VehicleDataUtil.updateCustomerID(vehicle.getLicensePlate(),customer.getCustomerID());
+        vehicleDataUtil.updateCustomerID(vehicle.getLicensePlate(),customer.getCustomerID());
         return  null;
     }
 }
