@@ -1,4 +1,4 @@
-package com.kurylchyk.model.services.impl.parkingSlotDTOs;
+package com.kurylchyk.model.services.impl.parkingSlotDTO;
 
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 

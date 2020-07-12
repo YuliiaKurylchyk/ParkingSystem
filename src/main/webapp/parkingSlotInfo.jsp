@@ -25,11 +25,11 @@
                 <c:forEach var="slotPrice" items="${requestScope.slotPrices}">
                     <tr>
                         <td>
-                          <input  name="<c:out value='${slotPrice.slotSize}'/>" value="<c:out value='${slotPrice.slotSize}'/>" >
+                          <input  name="<c:out value='${slotPrice.key}'/>" value="<c:out value='${slotPrice.key}'/>" >
                         </td>
                         <td>
-                            <input type="number" placeholder="Price of ${slotPrice.slotSize}" name="priceOf${slotPrice.slotSize}"
-                                   value="${slotPrice.price}">
+                            <input type="number" placeholder="Price of ${slotPrice.value}" name="priceOf${slotPrice.key}"
+                                   value="${slotPrice.value}">
                         </td>
                     </tr>
                 </c:forEach>

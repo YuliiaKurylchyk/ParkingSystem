@@ -1,15 +1,15 @@
 package com.kurylchyk.model.services;
 
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ParkingSlotService {
 
@@ -25,14 +25,16 @@ public interface ParkingSlotService {
 
     void changeSlot(ParkingTicket parkingTicket, ParkingSlot parkingSlot) throws ParkingSystemException;
 
+    Integer countAvailableSlot(SlotSize slotSize) throws ParkingSystemException;
+
    void addSlot(SlotSize slotSize, SlotStatus slotStatus) throws ParkingSystemException;
 
    void deleteSlot(ParkingSlot parkingSlot) throws ParkingSystemException;
 
-   void updatePrice(List<ParkingSlotPriceDTO> prices) throws ParkingSystemException;
+   void updatePrice(Map<SlotSize,Integer> prices) throws ParkingSystemException;
 
     ParkingSlot updateStatus(ParkingSlot parkingSlot, SlotStatus slotStatus) throws ParkingSystemException;
 
-    List<ParkingSlotPriceDTO> getSlotsPrice() throws ParkingSystemException;
+    Map<SlotSize,Integer> getSlotsPrice() throws ParkingSystemException;
 
 }

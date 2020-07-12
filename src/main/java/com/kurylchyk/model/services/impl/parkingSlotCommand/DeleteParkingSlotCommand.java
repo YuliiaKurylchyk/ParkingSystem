@@ -9,16 +9,25 @@ import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class DeleteParkingSlot implements Command<Void> {
+public class DeleteParkingSlotCommand implements Command<Void> {
 
     private ParkingSlot parkingSlot;
-    private ParkingSlotDAO parkingSlotDAO = new ParkingSlotDAO();
-    private Logger logger = LogManager.getLogger(DeleteParkingSlot.class);
+    private ParkingSlotDAO parkingSlotDAO;
+    private Logger logger = LogManager.getLogger(DeleteParkingSlotCommand.class);
 
 
-    public DeleteParkingSlot(ParkingSlot parkingSlot){
+    public DeleteParkingSlotCommand(ParkingSlot parkingSlot){
+
         this.parkingSlot = parkingSlot;
+        parkingSlotDAO = new ParkingSlotDAO();
     }
+
+    DeleteParkingSlotCommand(ParkingSlot parkingSlot,ParkingSlotDAO parkingSlotDAO){
+
+        this.parkingSlot = parkingSlot;
+        this.parkingSlotDAO = parkingSlotDAO;
+    }
+
 
     @Override
     public Void execute() throws ParkingSystemException {

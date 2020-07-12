@@ -1,10 +1,9 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @WebServlet("/admin/*")
@@ -64,7 +64,7 @@ public class ParkingSlotAdminServlet extends HttpServlet {
 
     protected void showPage(HttpServletRequest req, HttpServletResponse resp)  {
         try {
-            List<ParkingSlotPriceDTO> slotPrices = parkingSlotService.getSlotsPrice();
+            Map<SlotSize,Integer> slotPrices = parkingSlotService.getSlotsPrice();
             System.out.println(slotPrices);
             req.setAttribute("slotPrices", slotPrices);
 
@@ -91,13 +91,13 @@ public class ParkingSlotAdminServlet extends HttpServlet {
 
     protected void doEditPrice(HttpServletRequest req, HttpServletResponse resp) {
 
-        List<ParkingSlotPriceDTO> prices = new ArrayList();
-        prices.add(new ParkingSlotPriceDTO(SlotSize.valueOf(req.getParameter("SMALL")),
-                Integer.parseInt(req.getParameter("priceOfSMALL"))));
-        prices.add(new ParkingSlotPriceDTO(SlotSize.valueOf(req.getParameter("MEDIUM")),
-                Integer.parseInt(req.getParameter("priceOfMEDIUM"))));
-        prices.add(new ParkingSlotPriceDTO(SlotSize.valueOf(req.getParameter("LARGE")),
-                Integer.parseInt(req.getParameter("priceOfLARGE"))));
+        Map<SlotSize,Integer> prices = new LinkedHashMap<>();
+        prices.put(SlotSize.valueOf(req.getParameter("SMALL")),
+                Integer.parseInt(req.getParameter("priceOfSMALL")));
+        prices.put(SlotSize.valueOf(req.getParameter("MEDIUM")),
+                Integer.parseInt(req.getParameter("priceOfMEDIUM")));
+        prices.put(SlotSize.valueOf(req.getParameter("LARGE")),
+                Integer.parseInt(req.getParameter("priceOfLARGE")));
 
         try {
             parkingSlotService.updatePrice(prices);

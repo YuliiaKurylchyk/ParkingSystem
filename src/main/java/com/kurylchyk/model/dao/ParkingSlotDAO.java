@@ -3,15 +3,11 @@ package com.kurylchyk.model.dao;
 import com.kurylchyk.model.domain.parkingSlots.*;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 
 public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, ParkingSlotDTO> {
@@ -111,29 +107,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
 
     }
 
-    /*
-    public SlotStatus getSlotStatus(ParkingSlotDTO parkingSlotIdentifier) {
 
-        String query = "SELECT SLOT_STATUS FROM PARKING_SLOTS WHERE PARKING_SLOT_ID = ? AND SIZE=?";
-        SlotStatus slotStatus = null;
-
-        try (Connection connection = Connector.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, parkingSlotIdentifier.getParkingSlotID());
-            preparedStatement.setString(2, parkingSlotIdentifier.getSlotSize().toString());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                slotStatus = slotStatus.valueOf(resultSet.getString("SLOT_STATUS"));
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return slotStatus;
-    }
-
-     */
 
     public List<ParkingSlot> selectAll(SlotSize slotSize) {
         List<ParkingSlot> allParkingSlots = new ArrayList<>();
@@ -171,6 +145,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         return allParkingSlots;
     }
 
+    /*
     public Integer getPrice(SlotSize slotSize) {
         String query = prop.getProperty("selectPrice");
         Integer price = null;
@@ -188,6 +163,8 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         return price;
     }
 
+     */
+
 
     public void updatePrice(SlotSize slotSize, Integer price) {
 
@@ -203,17 +180,17 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         }
     }
 
-/*
+
     public Integer countOfAvailable(SlotSize slotSize) {
         Integer count = null;
 
-        String query = "SELECT COUNT(*) as COUNT FROM PARKING_SLOTS WHERE slot_status = 'VACANT' AND size = ?";
+        String query = prop.getProperty("countAvailable");
         try (Connection connection = Connector.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, slotSize.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                count = resultSet.getInt("count");
+                count = resultSet.getInt("COUNT");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -221,11 +198,10 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         return count;
     }
 
- */
 
-    public List<ParkingSlotPriceDTO> getSlotsPrice() {
+    public Map<SlotSize,Integer> getSlotsPrice() {
 
-        List<ParkingSlotPriceDTO> list = new ArrayList<>();
+        Map<SlotSize,Integer> prices = new LinkedHashMap<>();
         String query = prop.getProperty("selectSlotsPrice");
         try (Connection connection = Connector.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
@@ -234,12 +210,12 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
             while (resultSet.next()) {
                 SlotSize slotSize = SlotSize.valueOf(resultSet.getString("size"));
                 Integer price = resultSet.getInt("price");
-                list.add(new ParkingSlotPriceDTO(slotSize, price));
+                prices.put(slotSize, price);
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return list;
+        return prices;
 
 
     }
@@ -268,7 +244,7 @@ public class ParkingSlotDAO extends Connector implements DAO<ParkingSlot, Parkin
         SlotSize sizeOfSlot = SlotSize.valueOf(resultSet.getString("size"));
         SlotStatus slotStatus = SlotStatus.valueOf(resultSet.getString("slot_status"));
         Integer parkingSlotID = resultSet.getInt("parking_slot_id");
-        Integer price = getPrice(sizeOfSlot);
+        Integer price = resultSet.getInt("price");
         parkingSlot = new ParkingSlot(parkingSlotID, sizeOfSlot, slotStatus, price);
         return parkingSlot;
     }

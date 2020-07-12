@@ -7,12 +7,12 @@ import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.ParkingSlotService;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.impl.parkingSlotCommand.*;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public class ParkingSlotServiceImpl implements ParkingSlotService {
 
@@ -25,7 +25,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     @Override
     public void deleteSlot(ParkingSlot parkingSlot) throws ParkingSystemException {
-        executor.execute(new DeleteParkingSlot(parkingSlot));
+        executor.execute(new DeleteParkingSlotCommand(parkingSlot));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     }
 
     @Override
-    public List<ParkingSlotPriceDTO> getSlotsPrice() throws ParkingSystemException {
+    public Map<SlotSize,Integer> getSlotsPrice() throws ParkingSystemException {
         return executor.execute(new GetSlotPriceCommand());
     }
 
@@ -62,6 +62,11 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     }
 
+    @Override
+    public Integer countAvailableSlot(SlotSize slotSize) throws ParkingSystemException {
+        return executor.execute(new CountAvailableSlotCommand(slotSize));
+    }
+
     public List<ParkingSlot> getAvailableSlots(SlotSize slotSize) throws ParkingSystemException {
 
         return executor.execute(new GetAvailableSlotsCommand(slotSize));
@@ -78,7 +83,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
         return availableSlots;
     }
 
-    public void updatePrice(List<ParkingSlotPriceDTO> prices) throws ParkingSystemException {
+    public void updatePrice(Map<SlotSize,Integer> prices) throws ParkingSystemException {
 
         executor.execute(new UpdatePriceCommand(prices));
 

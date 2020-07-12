@@ -12,7 +12,6 @@ public class DeleteCustomerCommand implements Command<Void> {
     private CustomerDAO customerDAO = new CustomerDAO();
     private Customer customer;
     private static final Logger logger = LogManager.getLogger(DeleteCustomerCommand.class);
-
     public DeleteCustomerCommand(Customer customer){
         this.customer = customer;
     }

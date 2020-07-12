@@ -1,10 +1,15 @@
 package com.kurylchyk.controller;
 
+import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.VehicleService;
+import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,16 +20,22 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+
 @WebServlet("/home/*")
 public class HomePageServlet extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger(HomePageServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        showHomePage(req, resp);
+       try {
+           showHomePage(req, resp);
+       }catch (Exception exception){
+           logger.error(exception);
+       }
     }
 
 
-    private void showHomePage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void showHomePage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ParkingSystemException {
 
         //   clearSession(req.getSession());
 
@@ -36,11 +47,11 @@ public class HomePageServlet extends HttpServlet {
         } catch(Exception exception){
             exception.printStackTrace();
         }
-        /*
-        req.setAttribute("smallSlots", new ParkingLotServiceImpl().getCountOfSlot(SlotSize.SMALL));
-        req.setAttribute("mediumSlots", new ParkingLotServiceImpl().getCountOfSlot(SlotSize.MEDIUM));
-        req.setAttribute("largeSlots", new ParkingLotServiceImpl().getCountOfSlot(SlotSize.LARGE));
-        */
+
+        req.setAttribute("smallSlots", new ParkingSlotServiceImpl().countAvailableSlot(SlotSize.SMALL));
+        req.setAttribute("mediumSlots", new ParkingSlotServiceImpl().countAvailableSlot(SlotSize.MEDIUM));
+        req.setAttribute("largeSlots", new ParkingSlotServiceImpl().countAvailableSlot(SlotSize.LARGE));
+
 
 
         req.getRequestDispatcher("/home.jsp").forward(req,resp);

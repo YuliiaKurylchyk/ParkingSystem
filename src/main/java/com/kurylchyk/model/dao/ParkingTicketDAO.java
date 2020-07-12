@@ -1,12 +1,11 @@
 package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.domain.customer.Customer;
-import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 
@@ -18,7 +17,6 @@ import java.util.*;
 public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, Integer> {
 
     private CustomerDAO customerDAO;
-    private VehicleDAO vehicleDAO;
     private ParkingSlotDAO parkingSlotDao;
     private Properties prop;
 
@@ -43,7 +41,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
             preparedStatement.setString(4, parkingTicket.getParkingSlot().getSizeOfSlot().toString());
             preparedStatement.setString(5, parkingTicket.getStatus().toString());
             preparedStatement.setObject(6, parkingTicket.getArrivalTime());
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 id = resultSet.getInt(1);
@@ -220,14 +218,7 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-
         return listOfTickets;
-
-
-    }
-
-    public boolean isPresent(Integer parkingTicketID) {
-        return select(parkingTicketID).isPresent();
     }
 
     public List<ParkingTicket> selectAll(Status status) {

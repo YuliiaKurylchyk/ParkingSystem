@@ -1,7 +1,7 @@
 package com.kurylchyk.controller;
 
 import com.kurylchyk.model.domain.customer.Customer;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;

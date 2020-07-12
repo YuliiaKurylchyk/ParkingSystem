@@ -1,12 +1,11 @@
 package com.kurylchyk.controller;
 
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.ParkingSlotService;
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotPriceDTO;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +44,7 @@ public class ParkingSlotServlet extends HttpServlet {
                     break;
                     //check if it is used somewhere
                 case "/edit":
-                    doEdit(req, resp);
+                   // doEdit(req, resp);
                     break;
                 case "/update":
                     //  doUpdate(req, resp);
@@ -138,17 +137,19 @@ public class ParkingSlotServlet extends HttpServlet {
 
     }
 
+    /*
     protected void doEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
-            List<ParkingSlotPriceDTO> allSlots = parkingLotService.getSlotsPrice();
+            Map<> allSlots = parkingLotService.getSlotsPrice();
             System.out.println(allSlots);
             req.setAttribute("allSlots", allSlots);
             req.getRequestDispatcher("/parkingSlotInfo.jsp").forward(req, resp);
         } catch (ParkingSystemException exception) {
             logger.error(exception);
         }
-
     }
+
+     */
 
 }

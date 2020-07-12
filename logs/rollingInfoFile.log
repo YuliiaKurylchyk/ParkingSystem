@@ -8,3 +8,39 @@
 [INFO ] 2020-07-12 02:46:31.952 [main] Payment - Calculation of the price
 [INFO ] 2020-07-12 02:46:31.954 [main] RemoveParkingTicketCommand - Parking ticket 1 was updated with departure time, status and cost
 [INFO ] 2020-07-12 02:46:31.997 [main] UpdateTicketCommand - Parking ticket 1 was updated
+[INFO ] 2020-07-12 13:13:35.375 [main] AddParkingSlotCommand - New SMALL_15 parking slot was added
+[INFO ] 2020-07-12 13:14:16.539 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:18:17.815 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:19:23.042 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:19:23.134 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:21:43.517 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:21:43.641 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:21:43.672 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:23:22.082 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:24:56.827 [main] CountAvailableSlotCommand - Counted available MEDIUM slots
+[INFO ] 2020-07-12 13:27:03.171 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:27:03.291 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:27:03.318 [main] CountAvailableSlotCommand - Counted available LARGE slots
+[INFO ] 2020-07-12 13:27:03.331 [main] CountAvailableSlotCommand - Counted available MEDIUM slots
+[INFO ] 2020-07-12 13:28:28.948 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:29:16.036 [main] AddParkingSlotCommand - New SMALL_15 parking slot was added
+[INFO ] 2020-07-12 13:29:16.138 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:29:16.171 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-12 13:29:16.190 [main] CountAvailableSlotCommand - Counted available LARGE slots
+[INFO ] 2020-07-12 13:29:16.200 [main] CountAvailableSlotCommand - Counted available MEDIUM slots
+[DEBUG] 2020-07-12 13:29:16.214 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
+[DEBUG] 2020-07-12 13:29:16.216 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
+[DEBUG] 2020-07-12 13:29:16.239 [main] ParkingSlotDefiner - Defining slot for TRUCK
+[DEBUG] 2020-07-12 13:29:16.247 [main] ParkingSlotDefiner - Defining slot for BUS
+[DEBUG] 2020-07-12 13:29:16.257 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-12 13:29:16.274 [main] ParkingSlotDefiner - Defining slot for TRUCK
+[DEBUG] 2020-07-12 13:29:16.283 [main] ParkingSlotDefiner - Defining slot for BUS
+[DEBUG] 2020-07-12 13:29:17.501 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-12 13:29:17.511 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-12 13:29:17.516 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-12 13:29:17.526 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-12 13:29:17.532 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-12 13:29:17.533 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
+[INFO ] 2020-07-12 13:43:24.442 [main] DeleteParkingSlotCommand - Parking slot MEDIUM_1 was deleted
+[INFO ] 2020-07-12 13:44:27.840 [main] DeleteParkingSlotCommand - Parking slot MEDIUM_1 was deleted
+[DEBUG] 2020-07-12 14:02:43.277 [main] GetParkingSlotCommand - Got parking slot from database

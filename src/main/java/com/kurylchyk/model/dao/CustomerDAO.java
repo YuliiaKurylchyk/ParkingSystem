@@ -131,23 +131,15 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
         }
     }
 
-    /*
-        public Integer countCustomersVehicle(Integer customerID) {
-            String query = "SELECT COUNT(*) AS COUNT FROM VEHICLES WHERE customer_id=?";
-            Integer count = null;
-            try(Connection connection = Connector.getDataSource().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, customerID);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if(resultSet.next()){
-                    count = resultSet.getInt("COUNT");
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            return count;
-        }
-    */
+
+    public boolean isPresent(Integer customerID) {
+        return select(customerID).isPresent();
+    }
+
+    public boolean isPresent(String phoneNumber) {
+        return select(phoneNumber).isPresent();
+    }
+
     private Customer getCustomer(ResultSet resultSet) throws SQLException {
         Integer customerID = resultSet.getInt("customer_id");
         String name = resultSet.getString("name");
@@ -165,13 +157,6 @@ public class CustomerDAO extends Connector implements DAO<Customer, Integer> {
     }
 
 
-    public boolean isPresent(Integer customerID) {
-        return select(customerID).isPresent();
-    }
-
-    public boolean isPresent(String phoneNumber) {
-        return select(phoneNumber).isPresent();
-    }
 
 
 }

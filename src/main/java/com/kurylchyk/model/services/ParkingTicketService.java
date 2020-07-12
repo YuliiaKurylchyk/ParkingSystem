@@ -5,7 +5,7 @@ import com.kurylchyk.model.domain.customer.Customer;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kurylchyk.model.services.impl.parkingSlotDTOs.ParkingSlotDTO;
+import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
