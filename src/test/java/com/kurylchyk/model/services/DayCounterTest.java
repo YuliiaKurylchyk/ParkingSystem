@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TimeCheckerTest {
+public class DayCounterTest {
 
 
     @Test
@@ -19,18 +19,18 @@ public class TimeCheckerTest {
         LocalDateTime departureTime = LocalDateTime.now();
         Long expectedNumberOfDays = 3L;
 
-        Long actualNumberOfDays = TimeChecker.getTotalDays(arrivalTime,departureTime);
+        Long actualNumberOfDays = DayCounter.getTotalDays(arrivalTime,departureTime);
 
         assertEquals(expectedNumberOfDays,actualNumberOfDays,()-> "Should have calculated");
     }
 
     @Test
-    @DisplayName("Should calculate as 1 full day not 0 days")
+    @DisplayName("Should calculate as 1 full day not 0 days ")
     public void  shouldCalculateAsOneFullDay() {
         LocalDateTime arrivalTime = LocalDateTime.now().minusHours(6);
         LocalDateTime departureTime = LocalDateTime.now();
         Long expectedNumberOfDays = 1L;
-        Long actualNumberOfDays = TimeChecker.getTotalDays(arrivalTime,departureTime);
+        Long actualNumberOfDays = DayCounter.getTotalDays(arrivalTime,departureTime);
         assertEquals(expectedNumberOfDays,actualNumberOfDays);
     }
 

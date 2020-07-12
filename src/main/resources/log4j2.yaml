@@ -54,6 +54,8 @@ Configuration:
         AppenderRef:
           - ref: logFileError
       - name: com.kurylchyk.model.dao.Connector
-          level: error
-          AppenderRef:
-            - ref: logFileError
+        AppenderRef:
+          - ref: logFileError
+            level: error
+          - ref: RollingInfoFile_Appender
+            level: debug

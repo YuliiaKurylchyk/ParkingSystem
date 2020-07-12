@@ -17,6 +17,11 @@ public class DeleteCustomerCommand implements Command<Void> {
         this.customer = customer;
     }
 
+    DeleteCustomerCommand(Customer customer,CustomerDAO customerDAO){
+        this.customer = customer;
+        this.customerDAO = customerDAO;
+    }
+
 
     @Override
     public Void execute() throws ParkingSystemException {

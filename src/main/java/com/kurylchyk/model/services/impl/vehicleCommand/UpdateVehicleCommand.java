@@ -6,7 +6,6 @@ import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.services.impl.CommandExecutor;
-import com.kurylchyk.model.services.impl.ticketCommand.UpdateVehicleInTicketCommand;
 import com.kurylchyk.model.services.impl.utilVehicle.VehicleCreator;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
@@ -33,11 +32,9 @@ public class UpdateVehicleCommand implements Command<Vehicle> {
 
         Vehicle vehicle = vehicleInfo.createVehicle();
         if(!vehicle.getLicensePlate().equals(currentLicensePlate)) {
-            boolean isPresent = executor.execute(new CheckVehicleInDatabaseCommand(vehicle.getLicensePlate()));
+            boolean isPresent = executor.execute(new VehicleIsPresentCommand(vehicle.getLicensePlate()));
             if (isPresent) {
                 throw new SuchVehiclePresentException("Vehicle with " + vehicle.getLicensePlate() + " is already present in database");
-            } else {
-                executor.execute(new UpdateVehicleInTicketCommand(vehicle, currentLicensePlate));
             }
         }
         vehicleDAO.update(vehicle, currentLicensePlate);

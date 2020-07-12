@@ -1,99 +1,10 @@
-[DEBUG] 2020-07-09 22:32:44.340 [main] CheckVehicleInDatabaseCommand - Checking whether vehicle is in database
-[DEBUG] 2020-07-09 22:37:24.380 [main] CheckVehicleInDatabaseCommand - Checking whether vehicle is in database
-[DEBUG] 2020-07-09 23:35:02.904 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380931092545
-[DEBUG] 2020-07-09 23:40:26.649 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380931092545
-[DEBUG] 2020-07-09 23:52:32.962 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380931092545
-[DEBUG] 2020-07-09 23:53:18.696 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380931092545
-[DEBUG] 2020-07-10 00:02:14.029 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 00:06:45.032 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 00:19:59.283 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 00:23:52.152 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 00:33:40.710 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 00:37:11.502 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 00:38:46.491 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 01:36:41.654 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380932545698
-[DEBUG] 2020-07-10 02:00:48.938 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380
-[DEBUG] 2020-07-10 12:19:04.016 [main] CreateCustomerCommand - Customer was created
-[DEBUG] 2020-07-10 12:38:11.790 [main] CreateCustomerCommand - Customer was created
-[DEBUG] 2020-07-10 13:14:46.345 [main] CreateParkingTicketCommand - New parking ticket was created
-[DEBUG] 2020-07-10 13:24:19.029 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:25:28.779 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:27:49.791 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:27:49.866 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:30:28.270 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:34:32.104 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:37:23.848 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:39:55.967 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:40:37.482 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:42:17.627 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:42:55.333 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:53:37.892 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:53:37.957 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
-[DEBUG] 2020-07-10 13:54:32.811 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:54:32.839 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:54:32.847 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:54:32.849 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:54:32.854 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:54:32.858 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:54:32.860 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:54:32.866 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:54:32.868 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:54:32.870 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
-[DEBUG] 2020-07-10 13:56:00.250 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:56:00.301 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:56:00.307 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:56:00.314 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:56:00.320 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:56:00.325 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:56:00.330 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:56:00.341 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:56:00.346 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:56:00.348 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
-[DEBUG] 2020-07-10 13:56:19.131 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:56:19.160 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:56:19.162 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 13:56:19.175 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:56:19.178 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:56:19.182 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:56:19.190 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 13:56:19.194 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 13:56:19.198 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 13:56:19.200 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
-[DEBUG] 2020-07-10 13:57:43.624 [main] CreateCustomerCommand - Customer was created
-[INFO ] 2020-07-10 15:07:29.578 [main] SaveCustomerCommand - customer nullwas successfully saved to database
-[INFO ] 2020-07-10 15:09:15.072 [main] SaveCustomerCommand - customer nullwas successfully saved to database
-[INFO ] 2020-07-10 15:12:02.959 [main] SaveCustomerCommand - customer Name Surname - +380936310258was successfully saved to database
-[DEBUG] 2020-07-10 17:32:48.606 [main] CreateCustomerCommand - Customer was created
-[INFO ] 2020-07-10 17:33:16.210 [main] SaveCustomerCommand - customer Name Surname - +380936310258was successfully saved to database
-[DEBUG] 2020-07-10 21:29:45.286 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 21:29:45.340 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
-[DEBUG] 2020-07-10 21:29:45.393 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 21:29:45.409 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 21:29:45.409 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 21:29:45.493 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 21:29:45.534 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 21:29:45.792 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 21:29:45.846 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 21:29:45.861 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 21:29:45.877 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 21:29:45.892 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 21:29:45.908 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 23:47:44.399 [main] CreateParkingTicketCommand - New parking ticket was created
-[DEBUG] 2020-07-10 23:48:45.769 [main] CreateParkingTicketCommand - New parking ticket was created
-[DEBUG] 2020-07-10 23:51:52.665 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-10 23:51:52.685 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
-[DEBUG] 2020-07-10 23:51:52.746 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 23:51:52.777 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 23:51:52.787 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 23:51:52.807 [main] ParkingSlotDefiner - Defining slot for TRUCK
-[DEBUG] 2020-07-10 23:51:52.835 [main] ParkingSlotDefiner - Defining slot for BUS
-[DEBUG] 2020-07-10 23:51:53.264 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 23:51:53.275 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 23:51:53.281 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 23:51:53.290 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 23:51:53.300 [main] ParkingSlotDefiner - Defining slot for CAR
-[DEBUG] 2020-07-10 23:51:53.304 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
-[DEBUG] 2020-07-11 00:06:48.839 [main] CreateCustomerCommand - Customer was created
-[DEBUG] 2020-07-11 00:09:42.980 [main] CreateCustomerCommand - Customer was created
-[DEBUG] 2020-07-11 00:12:03.054 [main] CreateCustomerCommand - Customer was created
-[DEBUG] 2020-07-11 00:12:03.163 [main] CreateCustomerCommand - Customer was created
+[DEBUG] 2020-07-12 02:46:31.598 [main] GetByCustomerCommand - Getting tickets by customer id 2
+[DEBUG] 2020-07-12 02:46:31.707 [main] GetByParkingSlotCommand - Getting ticket by parking slot information
+[DEBUG] 2020-07-12 02:46:31.754 [main] GetByVehicleCommand - Getting ticket by vehicle information
+[DEBUG] 2020-07-12 02:46:31.858 [main] GetByVehicleCommand - Getting ticket by vehicle information
+[DEBUG] 2020-07-12 02:46:31.877 [main] GetParkingTicketCommand - Getting parking ticket with ID 1
+[DEBUG] 2020-07-12 02:46:31.889 [main] GetParkingTicketCommand - Getting parking ticket with ID 124
+[INFO ] 2020-07-12 02:46:31.935 [main] DayCounter - Calculation the number of days
+[INFO ] 2020-07-12 02:46:31.952 [main] Payment - Calculation of the price
+[INFO ] 2020-07-12 02:46:31.954 [main] RemoveParkingTicketCommand - Parking ticket 1 was updated with departure time, status and cost
+[INFO ] 2020-07-12 02:46:31.997 [main] UpdateTicketCommand - Parking ticket 1 was updated

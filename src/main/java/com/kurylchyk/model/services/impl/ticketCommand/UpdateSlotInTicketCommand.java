@@ -12,13 +12,20 @@ public class UpdateSlotInTicketCommand  implements Command<Void> {
 
     private ParkingTicket parkingTicket;
     private ParkingSlot parkingSlot;
-    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private ParkingTicketDAO parkingTicketDAO;
     private static final Logger logger = LogManager.getLogger(UpdateSlotInTicketCommand.class);
 
 
     public UpdateSlotInTicketCommand(ParkingTicket parkingTicket,ParkingSlot parkingSlot){
         this.parkingTicket = parkingTicket;
         this.parkingSlot = parkingSlot;
+        parkingTicketDAO = new ParkingTicketDAO();
+    }
+
+    UpdateSlotInTicketCommand(ParkingTicket parkingTicket,ParkingSlot parkingSlot,ParkingTicketDAO parkingTicketDAO){
+        this.parkingTicket = parkingTicket;
+        this.parkingSlot = parkingSlot;
+        this.parkingTicketDAO = parkingTicketDAO;
     }
 
     @Override

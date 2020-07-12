@@ -201,20 +201,6 @@ public class ParkingTicketDAO extends Connector implements DAO<ParkingTicket, In
 
 
     }
-    public void updateVehicleID(Integer parkingTicketID, String vehicleID) {
-
-        String query = prop.getProperty("updateVehicleID");
-
-        try (Connection connection = Connector.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, vehicleID);
-            preparedStatement.setInt(2, parkingTicketID);
-            preparedStatement.execute();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-    }
 
     @Override
     public List<ParkingTicket> selectAll() {

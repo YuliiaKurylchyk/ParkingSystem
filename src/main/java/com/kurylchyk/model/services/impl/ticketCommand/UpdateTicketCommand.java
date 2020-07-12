@@ -9,13 +9,20 @@ import org.apache.logging.log4j.Logger;
 
 public class UpdateTicketCommand implements Command<ParkingTicket> {
 
-    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private ParkingTicketDAO parkingTicketDAO;
     private ParkingTicket parkingTicket;
     private static final Logger logger = LogManager.getLogger(UpdateTicketCommand.class);
 
 
     public UpdateTicketCommand(ParkingTicket parkingTicket){
         this.parkingTicket = parkingTicket;
+        parkingTicketDAO = new ParkingTicketDAO();
+
+    }
+
+    UpdateTicketCommand(ParkingTicket parkingTicket,ParkingTicketDAO parkingTicketDAO){
+        this.parkingTicket = parkingTicket;
+        this.parkingTicketDAO = parkingTicketDAO;
 
     }
 

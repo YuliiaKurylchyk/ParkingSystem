@@ -10,14 +10,20 @@ import org.apache.logging.log4j.Logger;
 
 public class GetParkingTicketCommand implements Command<ParkingTicket> {
 
-    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private ParkingTicketDAO parkingTicketDAO;
     private Integer parkingTicketID;
     private static final Logger logger  = LogManager.getLogger(GetParkingTicketCommand.class);
 
    public GetParkingTicketCommand(Integer parkingTicketID){
+
        this.parkingTicketID = parkingTicketID;
+       parkingTicketDAO = new ParkingTicketDAO();
     }
 
+    GetParkingTicketCommand(Integer parkingTicketID, ParkingTicketDAO parkingTicketDAO){
+       this.parkingTicketID = parkingTicketID;
+       this.parkingTicketDAO = parkingTicketDAO;
+    }
 
     @Override
     public ParkingTicket execute() throws NoSuchParkingTicketException {

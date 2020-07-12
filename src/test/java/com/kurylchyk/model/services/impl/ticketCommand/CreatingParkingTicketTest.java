@@ -10,9 +10,12 @@ import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.vehicles.Motorbike;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ParkingServiceTest {
+@DisplayName("Creating parking tickets")
+public class CreatingParkingTicketTest {
 
 
     @Test

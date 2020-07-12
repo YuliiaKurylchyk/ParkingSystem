@@ -13,11 +13,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DeleteTicketCompletely implements Command<Void> {
+
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
     private VehicleService vehicleService = ServiceFacade.forVehicle();
     private CustomerService customerService = ServiceFacade.forCustomer();
     private ParkingTicket parkingTicket;
     private static final Logger logger = LogManager.getLogger(DeleteTicketCompletely.class);
+
     public  DeleteTicketCompletely(ParkingTicket parkingTicket){
         this.parkingTicket = parkingTicket;
     }

@@ -7,9 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class TimeChecker {
+public class DayCounter {
 
-    private static final Logger logger= LogManager.getLogger(TimeChecker.class);
+    private static final Logger logger= LogManager.getLogger(DayCounter.class);
     public static Long getTotalDays(LocalDateTime arrivalTime,LocalDateTime departureTime){
 
         logger.info("Calculation the number of days");

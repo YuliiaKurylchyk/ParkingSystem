@@ -43,6 +43,7 @@ public class ParkingSlotServlet extends HttpServlet {
                 case "/get":
                     doGetParkingSlot(req, resp);
                     break;
+                    //check if it is used somewhere
                 case "/edit":
                     doEdit(req, resp);
                     break;

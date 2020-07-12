@@ -76,11 +76,6 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
     }
 
 
-    public ParkingTicket updateVehicleInfo(Vehicle vehicle, String currentLicensePlate)
-            throws ParkingSystemException {
-         return  executor.execute(new UpdateVehicleInTicketCommand(vehicle,currentLicensePlate));
-    }
-
     @Override
     public ParkingTicket remove(ParkingTicket parkingTicket) throws ParkingSystemException {
         return executor.execute(new RemoveParkingTicketCommand(parkingTicket));
@@ -97,9 +92,4 @@ public class ParkingTicketServiceImpl implements ParkingTicketService {
         executor.execute(new UpdateSlotInTicketCommand(parkingTicket,newParkingSlot));
     }
 
-
-    @Override
-    public boolean isPresent(Integer parkingTicketID) throws ParkingSystemException {
-       return executor.execute(new TicketIsPresentCommand(parkingTicketID));
-    }
 }

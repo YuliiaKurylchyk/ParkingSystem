@@ -31,5 +31,5 @@ public interface ParkingTicketService {
     ParkingTicket remove(ParkingTicket parkingTicket) throws ParkingSystemException;
     ParkingTicket deleteCompletely(ParkingTicket parkingTicket) throws ParkingSystemException;
     void updateParkingSlot(ParkingTicket parkingTicket,ParkingSlot newParkingSlot) throws ParkingSystemException;
-    boolean isPresent(Integer ParkingTicketID) throws ParkingSystemException;
+
 }

@@ -9,18 +9,26 @@ import org.apache.logging.log4j.Logger;
 
 public class GetByParkingSlotCommand implements Command<ParkingTicket> {
 
-    private ParkingSlotDTO identifier;
-    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private ParkingSlotDTO parkingSlotDTO;
+    private ParkingTicketDAO parkingTicketDAO;
     private static final Logger logger = LogManager.getLogger(GetByParkingSlotCommand.class);
 
     public GetByParkingSlotCommand(ParkingSlotDTO identifier) {
-        this.identifier = identifier;
+
+        this.parkingSlotDTO = identifier;
+        parkingTicketDAO = new ParkingTicketDAO();
+    }
+
+    GetByParkingSlotCommand(ParkingSlotDTO parkingSlotDTO,ParkingTicketDAO parkingTicketDAO) {
+
+        this.parkingSlotDTO = parkingSlotDTO;
+        this.parkingTicketDAO = parkingTicketDAO;
     }
 
     @Override
     public ParkingTicket execute() throws ParkingSystemException {
 
         logger.debug("Getting ticket by parking slot information");
-        return parkingTicketDAO.selectByParkingSlot(identifier).get();
+        return parkingTicketDAO.selectByParkingSlot(parkingSlotDTO).get();
     }
 }

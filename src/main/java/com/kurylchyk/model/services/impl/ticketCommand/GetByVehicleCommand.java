@@ -8,14 +8,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class GetByVehicleCommand implements Command<ParkingTicket> {
-    private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
+    private ParkingTicketDAO parkingTicketDAO;
     private String licensePlate;
 
     private static final Logger logger = LogManager.getLogger(GetByVehicleCommand.class);
+
     public GetByVehicleCommand(String licensePlate){
+
         this.licensePlate = licensePlate;
+        parkingTicketDAO = new ParkingTicketDAO();
     }
 
+    GetByVehicleCommand(String licensePlate,ParkingTicketDAO parkingTicketDAO){
+        this.licensePlate = licensePlate;
+        this.parkingTicketDAO = parkingTicketDAO;
+    }
     @Override
     public ParkingTicket execute() throws NoSuchParkingTicketException {
         logger.debug("Getting ticket by vehicle information");

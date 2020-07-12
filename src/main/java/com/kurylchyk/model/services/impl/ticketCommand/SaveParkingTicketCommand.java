@@ -20,6 +20,7 @@ public class SaveParkingTicketCommand implements Command<ParkingTicket> {
     private VehicleService vehicleService = ServiceFacade.forVehicle();
     private CustomerService customerService = ServiceFacade.forCustomer();
     private ParkingTicket parkingTicket;
+
     private static final Logger logger = LogManager.getLogger(SaveParkingTicketCommand.class);
 
     public SaveParkingTicketCommand(ParkingTicket parkingTicket) {

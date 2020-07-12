@@ -15,14 +15,32 @@ import java.util.List;
 public class VehicleServiceImpl implements VehicleService {
 
     private CommandExecutor executor = new CommandExecutor();
+
+    /*
     @Override
     public Vehicle create(VehicleCreator vehicleInfo)
             throws ParkingSystemException {
         Vehicle vehicle;
-        if (!executor.execute(new CheckVehicleInDatabaseCommand(vehicleInfo.getLicensePlate()))) {
+        if (!executor.execute(new CheckVehicleStatusInDB(vehicleInfo.getLicensePlate()))) {
             vehicle = vehicleInfo.createVehicle();
         } else {
             vehicle = getFromDB(vehicleInfo.getLicensePlate(), vehicleInfo.getVehicleType());
+        }
+        return vehicle;
+    }
+    */
+
+
+    @Override
+    public Vehicle create(VehicleCreator vehicleInfo)
+            throws ParkingSystemException {
+        Vehicle vehicle = null;
+        if (executor.execute(new VehicleIsPresentCommand(vehicleInfo.getLicensePlate()))) {
+            if (executor.execute(new CheckVehicleHasDeparturedCommand(vehicleInfo.getLicensePlate()))) {
+                vehicle = getFromDB(vehicleInfo.getLicensePlate(), vehicleInfo.getVehicleType());
+            }
+        } else {
+            vehicle = vehicleInfo.createVehicle();
         }
         return vehicle;
     }
@@ -30,8 +48,8 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public Vehicle find(String licensePlate) throws ParkingSystemException {
         VehicleType currentType = executor.execute(new GetVehicleTypeCommand(licensePlate));
-        Vehicle vehicle = getFromDB(licensePlate,currentType);
-        return  vehicle;
+        Vehicle vehicle = getFromDB(licensePlate, currentType);
+        return vehicle;
     }
 
     @Override
@@ -78,12 +96,12 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public List<Vehicle> getAll(Status status,VehicleType vehicleType)throws ParkingSystemException {
-        return executor.execute(new GetAllVehiclesCommand(status,vehicleType));
+    public List<Vehicle> getAll(Status status, VehicleType vehicleType) throws ParkingSystemException {
+        return executor.execute(new GetAllVehiclesCommand(status, vehicleType));
     }
 
     @Override
-    public void connectCustomerToVehicle(Vehicle vehicle, Customer customer) throws ParkingSystemException{
+    public void connectCustomerToVehicle(Vehicle vehicle, Customer customer) throws ParkingSystemException {
         executor.execute(new ConnectCustomerToVehicleCommand(vehicle, customer));
     }
 

@@ -4,63 +4,66 @@ import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.engine.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.SQLException;
 
 
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-//@RunWith(MockitoJUnitRunner.class)
+
 public class SavingCustomerTest {
 
-    @Mock
     CustomerDAO customerDAO = mock(CustomerDAO.class);
 
     @InjectMocks
     SaveCustomerCommand saveCustomerCommand;
 
-    private Customer customer;
+    @Rule
+    public MockitoRule rule= MockitoJUnit.rule();
+
+    Customer customer;
 
     @BeforeEach
-    public void setUp() throws Exception {
-
-        MockitoAnnotations.initMocks(this);
+    public void init(){
+        customer = new Customer();
+        customer.setName("Name");
+        customer.setSurname("Surname");
+        customer.setPhoneNumber("+380936310258");
     }
 
 
 
-
-    @Disabled
     @Test
-    public void shouldSaveCustomer() throws ParkingSystemException, SQLException {
+    @DisplayName("Saving customer testing")
+    public void shouldSaveCustomer() throws ParkingSystemException {
 
+        Integer expectedCustomerID = 1;
+        when(customerDAO.insert(any(Customer.class))).thenReturn(expectedCustomerID);
+        saveCustomerCommand = new SaveCustomerCommand(customer,customerDAO);
 
-        Customer customer = new Customer();
-        customer.setName("Name");
-        customer.setSurname("Surname");
-        customer.setPhoneNumber("+380936310258");
+        Customer savedCustomer = saveCustomerCommand.execute();
 
-        when(customerDAO.insert(anyObject())).thenReturn(1);
-        MockitoAnnotations.initMocks(this);
-        SaveCustomerCommand saveCustomerCommand = new SaveCustomerCommand(customer,customerDAO);
+        assertAll(
+                ()->assertSame(customer,savedCustomer,()->"Returned customer should be the same instance"),
+                ()->assertTrue(expectedCustomerID == savedCustomer.getCustomerID(),
+                        ()->"Returned customer should have custumer id")
+        );
 
-        customer = saveCustomerCommand.execute();
-
-        customer.setCustomerID(1);
-
-        Integer customerID = customer.getCustomerID();
-       assertTrue(1==customerID);
-
+        verify(customerDAO).insert(any(Customer.class));
     }
 
 }

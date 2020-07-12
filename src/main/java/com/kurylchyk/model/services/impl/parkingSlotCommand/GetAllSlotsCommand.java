@@ -20,6 +20,7 @@ public class GetAllSlotsCommand implements Command<List<ParkingSlot>> {
     public GetAllSlotsCommand(SlotSize slotSize) {
         this.slotSize = slotSize;
     }
+
     public  GetAllSlotsCommand(){}
 
     @Override

@@ -5,11 +5,12 @@ import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.services.Payment;
-import com.kurylchyk.model.services.TimeChecker;
+import com.kurylchyk.model.services.DayCounter;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
+import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,23 +19,34 @@ import java.time.LocalDateTime;
 
 public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
 
-    private ParkingTicketDAO parkingTicketDAO =  new ParkingTicketDAO();
+    private ParkingTicketDAO parkingTicketDAO;
+    ParkingSlotService parkingSlotService;
     private ParkingTicket parkingTicket;
     private static final Logger logger = LogManager.getLogger(RemoveParkingTicketCommand.class);
 
     public RemoveParkingTicketCommand(ParkingTicket parkingTicket){
+
         this.parkingTicket = parkingTicket;
+        parkingSlotService = ServiceFacade.forParkingSlot();
+        parkingTicketDAO = new ParkingTicketDAO();
+    }
+
+    RemoveParkingTicketCommand(ParkingTicket parkingTicket,
+                               ParkingTicketDAO parkingTicketDAO, ParkingSlotService parkingSlotService){
+
+        this.parkingTicket = parkingTicket;
+        this.parkingTicketDAO = parkingTicketDAO;
+        this.parkingSlotService = parkingSlotService;
     }
 
 
     @Override
     public ParkingTicket execute() throws ParkingSystemException {
-        ParkingSlotService parkingLotService = new ParkingSlotServiceImpl();
 
         parkingTicket.setDepartureTime(LocalDateTime.now());
         parkingTicket.setStatus(Status.LEFT);
         parkingTicket.setCost(countTheCost(parkingTicket));
-        parkingLotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);
+        parkingSlotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);
         parkingTicketDAO.update(parkingTicket,parkingTicket.getParkingTicketID());
         logger.info("Parking ticket "+parkingTicket.getParkingTicketID() +" was updated with departure time, status and cost");
         return  parkingTicket;
@@ -46,10 +58,7 @@ public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
         System.out.println("Price per day "+pricePerDay);
         parkingTicket.setDepartureTime(LocalDateTime.now());
 
-        System.out.println("TimeArrival " + parkingTicket.getArrivalTime());
-        System.out.println("TimeLeft " + parkingTicket.getDepartureTime());
-
-        BigDecimal cost = Payment.calculatePrice(TimeChecker.getTotalDays(parkingTicket.getArrivalTime(),
+        BigDecimal cost = Payment.calculatePrice(DayCounter.getTotalDays(parkingTicket.getArrivalTime(),
                 parkingTicket.getDepartureTime()), pricePerDay);
         return cost;
     }

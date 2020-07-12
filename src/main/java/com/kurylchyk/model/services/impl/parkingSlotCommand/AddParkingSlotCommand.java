@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class AddParkingSlotCommand implements Command<Void> {
 
-    private ParkingSlotDAO parkingSlotDAO = new ParkingSlotDAO();
+    private ParkingSlotDAO parkingSlotDAO;
     private SlotSize slotSize;
     private SlotStatus slotStatus;
     private Logger logger = LogManager.getLogger(AddParkingSlotCommand.class);
@@ -20,6 +20,13 @@ public class AddParkingSlotCommand implements Command<Void> {
     public AddParkingSlotCommand(SlotSize slotSize, SlotStatus slotStatus){
         this.slotSize =slotSize;
         this.slotStatus =slotStatus;
+        parkingSlotDAO = new ParkingSlotDAO();
+    }
+
+    AddParkingSlotCommand(SlotSize slotSize, SlotStatus slotStatus,ParkingSlotDAO parkingSlotDAO){
+        this.slotSize =slotSize;
+        this.slotStatus =slotStatus;
+        this.parkingSlotDAO = parkingSlotDAO;
     }
 
     @Override

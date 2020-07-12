@@ -32,20 +32,6 @@
                 <div class="menu_sign"><fmt:message key="createNew"/></div>
             </div>
         </a>
-        <!--
-               <a href="/home/remove">
-                    <div class="in_nav">
-                        <div class="menu_icon"><i class="fas fa-minus"></i></div>
-                        <div class="menu_sign">Delete parking ticket</div>
-                    </div>
-                </a>
-                <a href="/home/updating">
-                    <div class="in_nav">
-                        <div class="menu_icon"><i class="fas fa-pencil-alt"></i></div>
-                        <div class="menu_sign">Update</div>
-                    </div>
-                </a>
-                -->
         <a href="/searchPage.jsp">
             <div class="in_nav">
                 <div class="menu_icon"><i class="fas fa-search"></i></div>
@@ -77,12 +63,6 @@
             <div class="in_nav">
                 <div class="menu_icon"><i class="fas fa-user-friends"></i></div>
                 <div class="menu_sign">All slots</div>
-            </div>
-        </a>
-        <a href="/parkingSlot/edit">
-            <div class="in_nav">
-                <div class="menu_icon"><i class="fa fa-pencil" aria-hidden="true"></i></div>
-                <div class="menu_sign"><fmt:message key="editParkingSlot"/></div>
             </div>
         </a>
     </nav>
