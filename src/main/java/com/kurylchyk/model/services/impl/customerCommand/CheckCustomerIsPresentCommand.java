@@ -11,10 +11,16 @@ public class CheckCustomerIsPresentCommand implements Command<Boolean> {
     private String phoneNumber;
     private CustomerDAO customerDAO = new CustomerDAO();
     private static final Logger logger = LogManager.getLogger(CheckCustomerIsPresentCommand.class);
-    public CheckCustomerIsPresentCommand(String phoneNumber) {
+    public CheckCustomerIsPresentCommand(String phoneNumber)
+    {
         this.phoneNumber = phoneNumber;
     }
 
+    CheckCustomerIsPresentCommand(String phoneNumber,CustomerDAO customerDAO)
+    {
+        this.phoneNumber = phoneNumber;
+        this.customerDAO = customerDAO;
+    }
     @Override
     public Boolean execute() throws ParkingSystemException {
 

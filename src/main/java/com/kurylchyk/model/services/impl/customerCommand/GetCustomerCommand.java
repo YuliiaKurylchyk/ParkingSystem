@@ -24,6 +24,10 @@ public class GetCustomerCommand implements Command<Customer> {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setCustomerDAO(CustomerDAO customerDAO) {
+        this.customerDAO = customerDAO;
+    }
+
     @Override
     public Customer execute() throws ParkingSystemException {
         Customer customer = null;

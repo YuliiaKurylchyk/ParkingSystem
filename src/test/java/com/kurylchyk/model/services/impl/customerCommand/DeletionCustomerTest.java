@@ -2,12 +2,14 @@ package com.kurylchyk.model.services.impl.customerCommand;
 
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.domain.customer.Customer;
+import com.kurylchyk.model.exceptions.ParkingSystemException;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -18,19 +20,18 @@ public class DeletionCustomerTest {
 
 
     @Mock
-    CustomerDAO customerDAO = mock(CustomerDAO.class);
+    private CustomerDAO customerDAO;
 
     @InjectMocks
-    DeleteCustomerCommand command;
+    private DeleteCustomerCommand command;
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     private Customer customer;
 
     @BeforeEach
     public void init() {
 
+        MockitoAnnotations.initMocks(this);
         customer = Customer.newCustomer()
                 .setCustomerID(12)
                 .setName("Name")
@@ -41,14 +42,17 @@ public class DeletionCustomerTest {
 
     @Test
     @DisplayName("Should delete customer from database")
-    public void shouldUpdateCustomer() {
+    public void shouldUpdateCustomer() throws ParkingSystemException {
 
-        command = new DeleteCustomerCommand(customer,customerDAO);
+        command = new DeleteCustomerCommand(customer, customerDAO);
         doAnswer(
-                (cus)->{ assertSame(cus.getArguments()[0],customer);
-                    return null; }
+                (cus) -> {
+                    assertSame(cus.getArguments()[0], customer);
+                    return null;
+                }
         ).when(customerDAO).delete(customer);
 
+        command.execute();
         verify(customerDAO).delete(customer);
 
     }

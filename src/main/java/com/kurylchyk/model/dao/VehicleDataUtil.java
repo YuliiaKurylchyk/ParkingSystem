@@ -11,13 +11,13 @@ import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
 public class VehicleDataUtil extends Connector {
 
-    private static Properties prop;
+    private Properties prop;
 
-    static {
+     {
         prop =  PropertyLoader.getPropValues(VehicleDataUtil.class,"queries/vehicleQueries.properties");
     }
 
-    public static Optional<VehicleType> getType(String licensePlate){
+    public Optional<VehicleType> getType(String licensePlate){
 
         String query = prop.getProperty("vehicleType");
         VehicleType vehicleType = null;
@@ -36,7 +36,7 @@ public class VehicleDataUtil extends Connector {
 
     }
 
-    public static Boolean isPresent(String licensePlate) {
+    public  Boolean isPresent(String licensePlate) {
 
         Boolean isPresent = false;
 
@@ -57,7 +57,7 @@ public class VehicleDataUtil extends Connector {
 
     }
 
-    public static Status getStatus(String licensePlate){
+    public  Status getStatus(String licensePlate){
         String query = prop.getProperty("vehicleStatus");
         Status status = null;
         try (Connection connection = Connector.getDataSource().getConnection();
@@ -73,7 +73,7 @@ public class VehicleDataUtil extends Connector {
         return status;
     }
 
-    public static void updateCustomerID(String licensePlate, Integer customerID){
+    public void updateCustomerID(String licensePlate, Integer customerID){
 
         String query = prop.getProperty("vehicleCustomerID");
 
@@ -87,7 +87,7 @@ public class VehicleDataUtil extends Connector {
         }
     }
 
-    public static Integer countAllPresent(){
+    public  Integer countAllPresent(){
         String query = prop.getProperty("countAll");
         Integer count = 0;
         try(Connection connection = Connector.getDataSource().getConnection();

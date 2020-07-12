@@ -37,7 +37,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     @Override
     public Map<SlotSize,Integer> getSlotsPrice() throws ParkingSystemException {
-        return executor.execute(new GetSlotPriceCommand());
+        return executor.execute(new GetSlotPricesCommand());
     }
 
     @Override

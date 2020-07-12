@@ -18,10 +18,20 @@ public class GetAllSlotsCommand implements Command<List<ParkingSlot>> {
     private static Logger logger = LogManager.getLogger(GetAllCustomersCommand.class);
 
     public GetAllSlotsCommand(SlotSize slotSize) {
+
         this.slotSize = slotSize;
     }
 
-    public  GetAllSlotsCommand(){}
+    public  GetAllSlotsCommand(){
+
+    }
+
+    GetAllSlotsCommand(SlotSize slotSize,ParkingSlotDAO parkingSlotDAO) {
+
+        this.slotSize = slotSize;
+        this.parkingSlotDAO = parkingSlotDAO;
+    }
+
 
     @Override
     public List<ParkingSlot> execute() throws ParkingSystemException {

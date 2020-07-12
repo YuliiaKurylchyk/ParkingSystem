@@ -27,18 +27,17 @@ import static org.mockito.Mockito.*;
 
 public class SavingCustomerTest {
 
-    CustomerDAO customerDAO = mock(CustomerDAO.class);
+    @Mock
+    private CustomerDAO customerDAO;
 
     @InjectMocks
     SaveCustomerCommand saveCustomerCommand;
 
-    @Rule
-    public MockitoRule rule= MockitoJUnit.rule();
-
-    Customer customer;
+    private  Customer customer;
 
     @BeforeEach
     public void init(){
+        MockitoAnnotations.initMocks(this);
         customer = new Customer();
         customer.setName("Name");
         customer.setSurname("Surname");

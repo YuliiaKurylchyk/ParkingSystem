@@ -13,11 +13,21 @@ import java.util.List;
 public class GetAvailableSlotsCommand implements Command<List<ParkingSlot>> {
 
     private SlotSize slotSize;
-    private ParkingSlotDAO parkingSlotDAO = new ParkingSlotDAO();
+    private ParkingSlotDAO parkingSlotDAO;
     private static final Logger logger = LogManager.getLogger(GetAvailableSlotsCommand.class);
 
     public GetAvailableSlotsCommand(SlotSize slotSize){
+
         this.slotSize = slotSize;
+        parkingSlotDAO = new ParkingSlotDAO();
+
+    }
+
+    GetAvailableSlotsCommand(SlotSize slotSize,ParkingSlotDAO parkingSlotDAO){
+
+        this.slotSize = slotSize;
+        this.parkingSlotDAO = parkingSlotDAO;
+
     }
 
     @Override
