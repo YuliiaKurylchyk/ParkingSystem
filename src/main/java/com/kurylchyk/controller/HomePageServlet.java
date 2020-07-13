@@ -3,6 +3,7 @@ package com.kurylchyk.controller;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
+import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.VehicleService;
 import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
@@ -24,9 +25,13 @@ import java.time.LocalDateTime;
 @WebServlet("/home/*")
 public class HomePageServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(HomePageServlet.class);
+    private VehicleService vehicleService =ServiceFacade.forVehicle();
+    private ParkingTicketService parkingTicketService = ServiceFacade.forParkingTicket();
+    private ParkingSlotService parkingSlotService = ServiceFacade.forParkingSlot();
+
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
        try {
            showHomePage(req, resp);
        }catch (Exception exception){
@@ -35,24 +40,18 @@ public class HomePageServlet extends HttpServlet {
     }
 
 
-    private void showHomePage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ParkingSystemException {
-
-        //   clearSession(req.getSession());
+    private void showHomePage(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, ParkingSystemException {
 
         try {
             setLanguage(req);
             getVehicleInfo(req);
             getParkingTicketInfo(req);
+            getParkingSlotInfo(req);
 
         } catch(Exception exception){
             exception.printStackTrace();
         }
-
-        req.setAttribute("smallSlots", new ParkingSlotServiceImpl().countAvailableSlot(SlotSize.SMALL));
-        req.setAttribute("mediumSlots", new ParkingSlotServiceImpl().countAvailableSlot(SlotSize.MEDIUM));
-        req.setAttribute("largeSlots", new ParkingSlotServiceImpl().countAvailableSlot(SlotSize.LARGE));
-
-
 
         req.getRequestDispatcher("/home.jsp").forward(req,resp);
     }
@@ -60,7 +59,6 @@ public class HomePageServlet extends HttpServlet {
 
     protected void getVehicleInfo(HttpServletRequest req) throws Exception {
 
-        VehicleService vehicleService = new ServiceFacade().forVehicle();
 
         Integer numberOfBikes = vehicleService.countAllPresent(VehicleType.MOTORBIKE);
         Integer numberOfCars = vehicleService.countAllPresent(VehicleType.CAR);
@@ -77,7 +75,7 @@ public class HomePageServlet extends HttpServlet {
 
     protected void getParkingTicketInfo(HttpServletRequest req) throws Exception {
 
-        ParkingTicketService  parkingTicketService = new ServiceFacade().forParkingTicket();
+
 
         Integer countOfTodayEntities = parkingTicketService.getAllInDate(LocalDateTime.now()).size();
         Integer countOfAllLeft = parkingTicketService.getAll(Status.LEFT).size();
@@ -85,6 +83,13 @@ public class HomePageServlet extends HttpServlet {
         req.setAttribute("countOfTodayEntities", countOfTodayEntities);
         req.setAttribute("countOfAllPresent", countOfAllPresent);
         req.setAttribute("countOfAllLeft", countOfAllLeft);
+    }
+
+    protected  void getParkingSlotInfo(HttpServletRequest req) throws ParkingSystemException {
+
+        req.setAttribute("smallSlots", parkingSlotService.countAvailableSlot(SlotSize.SMALL));
+        req.setAttribute("mediumSlots", parkingSlotService.countAvailableSlot(SlotSize.MEDIUM));
+        req.setAttribute("largeSlots", parkingSlotService.countAvailableSlot(SlotSize.LARGE));
     }
 
     protected void setLanguage(HttpServletRequest req){
@@ -99,30 +104,5 @@ public class HomePageServlet extends HttpServlet {
         }
     }
 
-/*
-
-    private void clearSession(HttpSession session) {
-
-        System.out.println("in clear session!!!!!");
-        if (session.getAttribute("currentTicket") != null) {
-            session.removeAttribute("currentTicket");
-        }
-        if(session.getAttribute("action")!=null){
-            session.removeAttribute("action");
-        }
-
-        if (session.getAttribute("vehicle") != null) {
-            session.removeAttribute("vehicle");
-        }
-
-        if (session.getAttribute("customer") != null) {
-            session.removeAttribute("customer");
-        }
-        if (session.getAttribute("appropriateTickets") != null) {
-            session.removeAttribute("appropriateTickets");
-        }
-    }
-
- */
 
 }

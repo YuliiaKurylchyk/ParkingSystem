@@ -1,6 +1,7 @@
 package com.kurylchyk.controller;
 
 
+import com.kurylchyk.controller.utils.VehicleCreatorFactory;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.services.VehicleService;
@@ -135,9 +136,6 @@ public class VehicleServlet extends HttpServlet {
         String vehicleStatus = req.getParameter("status");
         VehicleType vehicleType = VehicleType.valueOf(req.getParameter("vehicleType"));
 
-
-        System.out.println(vehicleStatus);
-        System.out.println(vehicleType);
         List<Vehicle> allVehicles;
         try {
             if (vehicleStatus.equalsIgnoreCase("ALL")) {

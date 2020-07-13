@@ -137,19 +137,5 @@ public class ParkingSlotServlet extends HttpServlet {
 
     }
 
-    /*
-    protected void doEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        try {
-            Map<> allSlots = parkingLotService.getSlotsPrice();
-            System.out.println(allSlots);
-            req.setAttribute("allSlots", allSlots);
-            req.getRequestDispatcher("/parkingSlotInfo.jsp").forward(req, resp);
-        } catch (ParkingSystemException exception) {
-            logger.error(exception);
-        }
-    }
-
-     */
 
 }

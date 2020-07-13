@@ -1,4 +1,4 @@
-package com.kurylchyk.controller;
+package com.kurylchyk.controller.utils;
 
 import com.kurylchyk.model.services.impl.utilVehicle.*;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
@@ -11,7 +11,7 @@ public class VehicleCreatorFactory {
     public static VehicleCreator getVehicleInformation(HttpServletRequest req){
         String make = req.getParameter("make");
         String model = req.getParameter("model");
-        String licensePlate = req.getParameter("licensePlate");
+        String licensePlate = req.getParameter("licensePlate").toUpperCase();
         VehicleType vehicleType = VehicleType.valueOf(req.getParameter("typeOfVehicle"));
         VehicleCreator vehicleInfo = null;
 

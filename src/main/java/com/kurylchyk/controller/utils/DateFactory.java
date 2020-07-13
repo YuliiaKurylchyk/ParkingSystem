@@ -1,4 +1,4 @@
-package com.kurylchyk.controller;
+package com.kurylchyk.controller.utils;
 
 import java.time.LocalDateTime;
 

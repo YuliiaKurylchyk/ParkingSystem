@@ -111,7 +111,7 @@
         <p><input placeholder="<fmt:message key="licensePlate"/>" name="licensePlate" required
                   value="${sessionScope.vehicle.licensePlate}"
                   class="vehicleInput"
-                  pattern="^[A-Za-z]{2} [0-9]{4} [A-Za-z]{2}$|^[0-9]{3}-[0-9]{2}[A-Za-z]{2}$">
+                  pattern="^[A-Z]{2} [0-9]{4} [A-Z]{2}$|^[0-9]{3}-[0-9]{2}[A-Z]{2}$">
 
 
 <c:if test="${sessionScope.vehicle==null || sessionScope.vehicle!=null && sessionScope.vehicle.vehicleType=='CAR' }">

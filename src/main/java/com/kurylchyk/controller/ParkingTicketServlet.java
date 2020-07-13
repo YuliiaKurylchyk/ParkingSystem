@@ -1,5 +1,6 @@
 package com.kurylchyk.controller;
 
+import com.kurylchyk.controller.utils.DateFactory;
 import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
@@ -123,6 +124,7 @@ public class ParkingTicketServlet extends HttpServlet {
 
         req.getRequestDispatcher("/parkingTicketInfo.jsp").forward(req, resp);
     }
+
 
     protected void doShow(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -260,7 +262,6 @@ public class ParkingTicketServlet extends HttpServlet {
 
     protected void doDeleteCompletely(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
 
         Integer parkingTicketID = Integer.parseInt(req.getParameter("parkingTicketID"));
 
