@@ -25,6 +25,13 @@ public class ChangeParkingSlotCommand implements Command<Void> {
         this.parkingSlot = parkingSlot;
     }
 
+    ChangeParkingSlotCommand(ParkingTicket parkingTicket, ParkingSlot parkingSlot,ParkingSlotService parkingSlotService,ParkingTicketService parkingTicketService) {
+        this.parkingTicket = parkingTicket;
+        this.parkingSlot = parkingSlot;
+        this.parkingSlotService = parkingSlotService;
+        this.parkingTicketService = parkingTicketService;
+    }
+
     @Override
     public Void execute() throws ParkingSystemException {
         parkingSlotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);

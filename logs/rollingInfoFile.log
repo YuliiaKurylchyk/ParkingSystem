@@ -64,3 +64,80 @@ Count of seats : null
 [INFO ] 2020-07-13 03:38:59.796 [main] UpdateVehicleCommand - Vehicle(BO 4292 PO) was updated to Mercedes-Benz	Sprinter	BO 4292 PO	BUS
 Count of seats : null
 
+[DEBUG] 2020-07-13 10:28:15.821 [main] CreateCustomerCommand - Customer was created
+[DEBUG] 2020-07-13 10:28:15.931 [main] CreateCustomerCommand - Customer was created
+[DEBUG] 2020-07-13 10:28:17.306 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380989102589
+[DEBUG] 2020-07-13 10:28:17.353 [main] CheckCustomerIsPresentCommand - Checking is customer is present in database by +380931092456
+[INFO ] 2020-07-13 10:28:17.384 [main] DeleteCustomerCommand - Customer Name Surname - +3809310922589 was deleted from database
+[DEBUG] 2020-07-13 10:28:17.431 [main] GetAllCustomersCommand - Getting all customers from database
+[DEBUG] 2020-07-13 10:28:17.524 [main] GetCustomerCommand - Customer 1 was retrieved from database
+[DEBUG] 2020-07-13 10:28:17.743 [main] GetCustomerCommand - Customer 1 was retrieved from database
+[INFO ] 2020-07-13 10:28:17.853 [main] SaveCustomerCommand - customer Name Surname - +380936310258was successfully saved to database
+[INFO ] 2020-07-13 10:28:17.868 [main] UpdateCustomerCommand - Customer 12 was updated to Name Surname - +3809310922589
+[INFO ] 2020-07-13 10:28:53.583 [main] DayCounter - Calculation the number of days
+[INFO ] 2020-07-13 10:28:53.693 [main] DayCounter - Calculation the number of days
+[INFO ] 2020-07-13 10:29:17.898 [main] AddParkingSlotCommand - New SMALL_15 parking slot was added
+[INFO ] 2020-07-13 10:29:18.054 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-13 10:29:18.085 [main] CountAvailableSlotCommand - Counted available SMALL slots
+[INFO ] 2020-07-13 10:29:18.116 [main] CountAvailableSlotCommand - Counted available LARGE slots
+[INFO ] 2020-07-13 10:29:18.163 [main] CountAvailableSlotCommand - Counted available MEDIUM slots
+[INFO ] 2020-07-13 10:29:18.179 [main] DeleteParkingSlotCommand - Parking slot MEDIUM_1 was deleted
+[DEBUG] 2020-07-13 10:29:18.554 [main] GetAllCustomersCommand - Getting all SMALL slots
+[DEBUG] 2020-07-13 10:29:18.601 [main] GetAllCustomersCommand - Getting all null slots
+[DEBUG] 2020-07-13 10:29:18.710 [main] GetAvailableSlotsCommand - Getting available slots
+[DEBUG] 2020-07-13 10:29:18.726 [main] GetAvailableSlotsCommand - Getting available slots
+[DEBUG] 2020-07-13 10:29:18.741 [main] GetAvailableSlotsCommand - Getting available slots
+[DEBUG] 2020-07-13 10:29:18.835 [main] GetParkingSlotCommand - Got parking slot from database
+[DEBUG] 2020-07-13 10:29:18.851 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
+[DEBUG] 2020-07-13 10:29:18.851 [main] DefineParkingSlotCommand - Defined SMALL size for vehicle
+[DEBUG] 2020-07-13 10:29:18.866 [main] ParkingSlotDefiner - Defining slot for TRUCK
+[DEBUG] 2020-07-13 10:29:18.882 [main] ParkingSlotDefiner - Defining slot for BUS
+[DEBUG] 2020-07-13 10:29:18.898 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-13 10:29:18.929 [main] ParkingSlotDefiner - Defining slot for TRUCK
+[DEBUG] 2020-07-13 10:29:18.929 [main] ParkingSlotDefiner - Defining slot for BUS
+[DEBUG] 2020-07-13 10:29:19.148 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-13 10:29:19.148 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-13 10:29:19.163 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-13 10:29:19.163 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-13 10:29:19.179 [main] ParkingSlotDefiner - Defining slot for CAR
+[DEBUG] 2020-07-13 10:29:19.179 [main] ParkingSlotDefiner - Defining slot for MOTORBIKE
+[INFO ] 2020-07-13 10:29:19.195 [main] UpdatePriceCommand - Prices were updated
+[INFO ] 2020-07-13 10:29:19.210 [main] UpdateSlotStatusCommand - Status of parking slot MEDIUM_1 was changed to OCCUPIED
+[INFO ] 2020-07-13 10:29:19.226 [main] UpdateSlotStatusCommand - Status of parking slot MEDIUM_1 was changed to VACANT
+[DEBUG] 2020-07-13 10:29:44.873 [main] CreateParkingTicketCommand - New parking ticket was created
+[DEBUG] 2020-07-13 10:29:45.498 [main] GetByCustomerCommand - Getting tickets by customer id 456
+[DEBUG] 2020-07-13 10:29:45.545 [main] GetByCustomerCommand - Getting tickets by customer id 2
+[DEBUG] 2020-07-13 10:29:45.560 [main] GetByParkingSlotCommand - Getting ticket by parking slot information
+[DEBUG] 2020-07-13 10:29:45.607 [main] GetByVehicleCommand - Getting ticket by vehicle information
+[DEBUG] 2020-07-13 10:29:45.810 [main] GetByVehicleCommand - Getting ticket by vehicle information
+[DEBUG] 2020-07-13 10:29:45.842 [main] GetParkingTicketCommand - Getting parking ticket with ID 1
+[DEBUG] 2020-07-13 10:29:45.842 [main] GetParkingTicketCommand - Getting parking ticket with ID 124
+[INFO ] 2020-07-13 10:29:45.920 [main] DayCounter - Calculation the number of days
+[INFO ] 2020-07-13 10:29:45.935 [main] Payment - Calculation of the price
+[INFO ] 2020-07-13 10:29:45.935 [main] RemoveParkingTicketCommand - Parking ticket 1 was updated with departure time, status and cost
+[INFO ] 2020-07-13 10:29:46.014 [main] UpdateTicketCommand - Parking ticket 1 was updated
+[INFO ] 2020-07-13 10:30:11.575 [main] Payment - Calculation of the price
+[INFO ] 2020-07-13 10:30:11.794 [main] Payment - Calculation of the price
+[INFO ] 2020-07-13 10:30:11.841 [main] Payment - Calculation of the price
+[INFO ] 2020-07-13 10:30:11.872 [main] Payment - Calculation of the price
+[INFO ] 2020-07-13 10:30:11.919 [main] Payment - Calculation of the price
+[DEBUG] 2020-07-13 10:30:51.945 [main] ConnectCustomerToVehicleCommand - Setting customerID to vehicle
+[INFO ] 2020-07-13 10:30:52.866 [main] DeleteVehicleCommand - Vehicle Mercedes-Benz	Sprinter	CE 0240 IO	BUS
+Count of seats : 10
+ was deleted from database
+[DEBUG] 2020-07-13 10:30:53.241 [main] GetVehicleCommand - Retrieving vehicle from database
+[DEBUG] 2020-07-13 10:30:53.257 [main] GetVehicleCommand - Retrieving vehicle from database
+[DEBUG] 2020-07-13 10:30:53.304 [main] GetVehicleCommand - Getting vehicle type by license plate
+[DEBUG] 2020-07-13 10:30:53.382 [main] GetVehicleCommand - Getting vehicle type by license plate
+[INFO ] 2020-07-13 10:30:53.413 [main] SaveVehicleCommand - Vehicle Mercedes-Benz	E350	AK 4293 IK	CAR
+Car size : EXCLUSIVE_CAR
+ was successfully saved to database
+[INFO ] 2020-07-13 10:30:53.445 [main] UpdateVehicleCommand - Vehicle(BO 4292 PO) was updated to Mercedes-Benz	Sprinter	BO 4292 PO	BUS
+Count of seats : null
+
+[DEBUG] 2020-07-13 10:30:53.491 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[DEBUG] 2020-07-13 10:30:53.523 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[INFO ] 2020-07-13 11:47:23.534 [main] ChangeParkingSlotCommand - New parking slot SMALL_1 was set to parking ticket null
+[INFO ] 2020-07-13 11:49:22.662 [main] ChangeParkingSlotCommand - New parking slot SMALL_1 was set to parking ticket null
+[INFO ] 2020-07-13 11:51:46.826 [main] ChangeParkingSlotCommand - New parking slot SMALL_1 was set to parking ticket null
+[INFO ] 2020-07-13 11:52:29.566 [main] ChangeParkingSlotCommand - New parking slot SMALL_1 was set to parking ticket null
