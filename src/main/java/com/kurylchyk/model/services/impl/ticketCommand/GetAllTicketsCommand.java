@@ -20,6 +20,13 @@ public class GetAllTicketsCommand implements Command<List<ParkingTicket>> {
         this.status = status;
     }
 
+    GetAllTicketsCommand(Status status,ParkingTicketDAO parkingTicketDAO){
+
+        this.status = status;
+        this.parkingTicketDAO = parkingTicketDAO;
+    }
+
+
     @Override
     public List<ParkingTicket> execute() throws ParkingSystemException {
         List<ParkingTicket> allTickets;

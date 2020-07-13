@@ -25,6 +25,13 @@ public class GetInDateCommand implements Command<List<ParkingTicket>> {
         this.status = status;
     }
 
+    GetInDateCommand(LocalDateTime localDateTime,Status status,ParkingTicketDAO parkingTicketDAO){
+        this.localDateTime  = localDateTime;
+        this.status = status;
+        this.parkingTicketDAO = parkingTicketDAO;
+    }
+
+
     @Override
     public List<ParkingTicket> execute() throws ParkingSystemException {
         List<ParkingTicket> allTickets;
