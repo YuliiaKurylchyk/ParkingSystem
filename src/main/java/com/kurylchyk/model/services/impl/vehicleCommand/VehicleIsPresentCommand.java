@@ -9,9 +9,15 @@ public class VehicleIsPresentCommand implements Command<Boolean> {
     private String licencePlate;
     private VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
     public VehicleIsPresentCommand(String licencePlate){
+
         this.licencePlate = licencePlate;
     }
 
+    VehicleIsPresentCommand(String licencePlate,VehicleDataUtil vehicleDataUtil){
+
+        this.licencePlate = licencePlate;
+        this.vehicleDataUtil = vehicleDataUtil;
+    }
     @Override
     public Boolean execute() throws ParkingSystemException {
 

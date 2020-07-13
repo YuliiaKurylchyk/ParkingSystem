@@ -19,6 +19,12 @@ public class SaveVehicleCommand implements Command<Void> {
         vehicleDAO = VehicleDAOFactory.getVehicleDAO(vehicle.getVehicleType());
     }
 
+    SaveVehicleCommand(Vehicle vehicle,VehicleDAO vehicleDAO){
+
+        this.vehicle = vehicle;
+        this.vehicleDAO = vehicleDAO;
+    }
+
     @Override
     public Void execute() throws ParkingSystemException {
         vehicleDAO.insert(vehicle);

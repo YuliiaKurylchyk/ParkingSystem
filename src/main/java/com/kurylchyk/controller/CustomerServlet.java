@@ -118,8 +118,10 @@ public class CustomerServlet extends HttpServlet {
         String surname = req.getParameter("surname");
         String phoneNumber = req.getParameter("phoneNumber");
 
+
         try {
-            Customer customer = customerService.create(customerID, name, surname, phoneNumber);
+            Customer customer = Customer.newCustomer().setCustomerID(customerID)
+                    .setName(name).setSurname(surname).setPhoneNumber(phoneNumber).buildCustomer();
             customerService.update(customer);
             req.setAttribute("customerID", customerID);
             req.getRequestDispatcher("/parkingTicket/showByCustomer").forward(req, resp);

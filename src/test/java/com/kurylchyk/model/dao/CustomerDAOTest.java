@@ -45,7 +45,8 @@ public class CustomerDAOTest {
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
         doNothing().when(mockPreparedStatement).setString(anyInt(), anyString());
         doNothing().when(mockPreparedStatement).setInt(anyInt(),anyInt());
-        when(mockPreparedStatement.execute()).thenReturn(true);
+
+
         when(mockResultSet.getInt("customer_id")).thenReturn(customerWithID.getCustomerID());
         when(mockResultSet.getString("name")).thenReturn(customerWithID.getName());
         when(mockResultSet.getString("surname")).thenReturn(customerWithID.getSurname());
@@ -112,7 +113,7 @@ public class CustomerDAOTest {
     }
 
     @Test
-    @DisplayName("Should insert  customer from database")
+    @DisplayName("Should insert  customer to database")
     public void shouldInsertToDatabase() throws SQLException {
 
         Integer expectedID = 14;
@@ -135,16 +136,17 @@ public class CustomerDAOTest {
 
     @Test
     @DisplayName("Should update customer")
-    public void shouldUpdateCustomer(){
-
+    public void shouldUpdateCustomer() throws SQLException {
+        when(mockPreparedStatement.execute()).thenReturn(true);
         customerDAO.update(customerWithoutID,customerWithID.getCustomerID());
 
     }
 
     @Test
     @DisplayName("Should delete customer")
-    public void shouldDeleteCustomer(){
+    public void shouldDeleteCustomer() throws SQLException {
 
+        when(mockPreparedStatement.execute()).thenReturn(true);
         customerDAO.delete(customerWithID);
     }
 

@@ -134,6 +134,10 @@ public class VehicleServlet extends HttpServlet {
 
         String vehicleStatus = req.getParameter("status");
         VehicleType vehicleType = VehicleType.valueOf(req.getParameter("vehicleType"));
+
+
+        System.out.println(vehicleStatus);
+        System.out.println(vehicleType);
         List<Vehicle> allVehicles;
         try {
             if (vehicleStatus.equalsIgnoreCase("ALL")) {

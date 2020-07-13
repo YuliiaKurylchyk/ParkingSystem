@@ -52,3 +52,15 @@ Count of seats : 10
 [DEBUG] 2020-07-12 21:18:10.389 [main] GetVehicleCommand - Getting vehicle type by license plate
 [DEBUG] 2020-07-12 21:18:10.405 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
 [DEBUG] 2020-07-12 21:18:10.420 [main] CheckVehicleHasDeparturedCommand - Checking vehicle status in database
+[INFO ] 2020-07-13 03:26:37.446 [main] SaveVehicleCommand - Vehicle Mercedes-Benz	E350	AK 4293 IK	CAR
+Car size : EXCLUSIVE_CAR
+ was successfully saved to database
+[INFO ] 2020-07-13 03:26:56.754 [main] SaveVehicleCommand - Vehicle Mercedes-Benz	E350	AK 4293 IK	CAR
+Car size : EXCLUSIVE_CAR
+ was successfully saved to database
+[INFO ] 2020-07-13 03:38:14.798 [main] UpdateVehicleCommand - Vehicle(BO 4292 PO) was updated to Mercedes-Benz	Sprinter	BO 4292 PO	BUS
+Count of seats : null
+
+[INFO ] 2020-07-13 03:38:59.796 [main] UpdateVehicleCommand - Vehicle(BO 4292 PO) was updated to Mercedes-Benz	Sprinter	BO 4292 PO	BUS
+Count of seats : null
+

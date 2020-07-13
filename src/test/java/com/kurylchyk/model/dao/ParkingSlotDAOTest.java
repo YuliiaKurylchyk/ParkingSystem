@@ -17,8 +17,6 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 public class ParkingSlotDAOTest {
-
-
     @Mock
     Connector connector;
     @Mock
@@ -55,9 +53,6 @@ public class ParkingSlotDAOTest {
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
         doNothing().when(mockPreparedStatement).setString(anyInt(), anyString());
         doNothing().when(mockPreparedStatement).setInt(anyInt(), anyInt());
-        when(mockPreparedStatement.execute()).thenReturn(true);
-        when(mockConnection.createStatement()).thenReturn(mockStatement);
-        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
 
         when(mockResultSet.getString("size")).thenReturn(parkingSlot.getSizeOfSlot().toString());
         when(mockResultSet.getString("slot_status")).thenReturn(parkingSlot.getStatus().toString());
@@ -74,7 +69,6 @@ public class ParkingSlotDAOTest {
         ParkingSlot selectedSlot = parkingSlotDAO.select(parkingSlotDTO).get();
 
         assertAll(
-
                 () -> assertNotNull(selectedSlot),
                 () -> assertEquals(parkingSlot, selectedSlot)
         );
@@ -103,14 +97,16 @@ public class ParkingSlotDAOTest {
 
     @Test
     @DisplayName("Should update parking slot")
-    public void shouldUpdateParkingSlot() {
+    public void shouldUpdateParkingSlot() throws SQLException {
 
+        when(mockPreparedStatement.execute()).thenReturn(true);
         parkingSlotDAO.update(parkingSlot, parkingSlotDTO);
     }
 
     @Test
     @DisplayName("Should delete customer")
-    public void shouldDeleteParkingSlot() {
+    public void shouldDeleteParkingSlot() throws SQLException {
+        when(mockPreparedStatement.execute()).thenReturn(true);
         parkingSlotDAO.delete(parkingSlot);
     }
 
@@ -121,6 +117,8 @@ public class ParkingSlotDAOTest {
         @Test
         @DisplayName("Should select all parking slots")
         public void shouldSelectAll() throws SQLException {
+            when(mockConnection.createStatement()).thenReturn(mockStatement);
+            when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
 
             when(mockResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
             List<ParkingSlot> allParkingSlots = parkingSlotDAO.selectAll();
@@ -161,6 +159,9 @@ public class ParkingSlotDAOTest {
         @Test
         @DisplayName("should get slots prices")
         public void shouldGetSlotPrices() throws SQLException {
+
+            when(mockConnection.createStatement()).thenReturn(mockStatement);
+            when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
 
             when(mockResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(true).thenReturn(false);
             when(mockResultSet.getString("size")).thenReturn("SMALL").thenReturn("MEDIUM").thenReturn("LARGE");

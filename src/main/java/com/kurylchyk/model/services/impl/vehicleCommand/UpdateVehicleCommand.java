@@ -27,6 +27,13 @@ public class UpdateVehicleCommand implements Command<Vehicle> {
         vehicleDAO = VehicleDAOFactory.getVehicleDAO(vehicleInfo.getVehicleType());
     }
 
+    UpdateVehicleCommand(VehicleCreator vehicleInfo, String licencePlate,VehicleDAO vehicleDAO) {
+
+        this.vehicleInfo = vehicleInfo;
+        this.currentLicensePlate = licencePlate;
+       this.vehicleDAO = vehicleDAO;
+    }
+
     @Override
     public Vehicle execute() throws ParkingSystemException {
 

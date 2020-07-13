@@ -1,5 +1,6 @@
 package com.kurylchyk.model.dao;
 
+import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
@@ -18,16 +19,20 @@ public class ParkingTicketDAO implements DAO<ParkingTicket, Integer> {
 
 
 
-    private Connector connector = new Connector();
+    private Connector connector;
+    private VehicleDataUtil vehicleDataUtil;
     private CustomerDAO customerDAO;
-    private ParkingSlotDAO parkingSlotDao;
+    private ParkingSlotDAO parkingSlotDAO;
+    private VehicleDAO vehicleDAO;
     private Properties prop;
 
     {
+
         prop = PropertyLoader.getPropValues(ParkingTicketDAO.class,"queries/ticketQueries.properties");
         customerDAO = new CustomerDAO();
-        parkingSlotDao = new ParkingSlotDAO();
-
+        parkingSlotDAO = new ParkingSlotDAO();
+        vehicleDataUtil = new VehicleDataUtil();
+        connector = new Connector();
     }
 
     @Override
@@ -87,35 +92,6 @@ public class ParkingTicketDAO implements DAO<ParkingTicket, Integer> {
         }
         return Optional.ofNullable(parkingTicket);
     }
-
-    private ParkingTicket getParkingTicket(ResultSet resultSet) throws SQLException {
-
-
-        VehicleDataUtil vehicleDataUtil = new VehicleDataUtil();
-        VehicleType vehicleType = vehicleDataUtil.getType(resultSet.getString("vehicle_id")).get();
-        Vehicle currentVehicle = (Vehicle) VehicleDAOFactory.getVehicleDAO(vehicleType).select(resultSet.getString("vehicle_id")).get();
-        Customer currentCustomer = customerDAO.select(resultSet.getInt("customer_id")).get();
-        ParkingSlotDTO psi = new ParkingSlotDTO(SlotSize.valueOf(resultSet.getString("parking_slot_size")), resultSet.getInt("parking_slot_id"));
-        ParkingSlot currentParkingSlot = parkingSlotDao.select(psi).get();
-        Integer parkingTicketID = resultSet.getInt("parking_ticket_id");
-        Status status = Status.valueOf(resultSet.getString("status").toUpperCase());
-        LocalDateTime arrivalTime = resultSet.getObject("from_time", LocalDateTime.class);
-        LocalDateTime leftTime = resultSet.getObject("to_time", LocalDateTime.class);
-        BigDecimal cost = resultSet.getBigDecimal("cost");
-
-        ParkingTicket parkingTicket = ParkingTicket.newParkingTicket()
-                .withParkingTicketID(parkingTicketID)
-                .withVehicle(currentVehicle)
-                .withCustomer(currentCustomer)
-                .withParkingSlot(currentParkingSlot)
-                .withArrivalTime(arrivalTime)
-                .withDepartureTime(leftTime)
-                .withStatus(status)
-                .withCost(cost)
-                .buildTicket();
-        return parkingTicket;
-    }
-
 
     public Optional<ParkingTicket> selectByVehicleID(String vehicleID) {
 
@@ -291,6 +267,54 @@ public class ParkingTicketDAO implements DAO<ParkingTicket, Integer> {
         return listOfTickets;
     }
 
+
+
+    private ParkingTicket getParkingTicket(ResultSet resultSet) throws SQLException {
+
+        Vehicle currentVehicle = getVehicle(resultSet);
+
+        Customer currentCustomer = getCustomer(resultSet);
+
+        ParkingSlot currentParkingSlot = getParkingSlot(resultSet);
+
+        Integer parkingTicketID = resultSet.getInt("parking_ticket_id");
+
+        Status status = Status.valueOf(resultSet.getString("status").toUpperCase());
+        LocalDateTime arrivalTime = resultSet.getObject("from_time", LocalDateTime.class);
+        LocalDateTime leftTime = resultSet.getObject("to_time", LocalDateTime.class);
+        BigDecimal cost = resultSet.getBigDecimal("cost");
+
+        ParkingTicket parkingTicket = ParkingTicket.newParkingTicket()
+                .withParkingTicketID(parkingTicketID)
+                .withVehicle(currentVehicle)
+                .withCustomer(currentCustomer)
+                .withParkingSlot(currentParkingSlot)
+                .withArrivalTime(arrivalTime)
+                .withDepartureTime(leftTime)
+                .withStatus(status)
+                .withCost(cost)
+                .buildTicket();
+
+        return parkingTicket;
+    }
+
+    private Vehicle getVehicle(ResultSet resultSet) throws SQLException {
+
+
+        VehicleType vehicleType = vehicleDataUtil.getType(resultSet.getString("vehicle_id")).get();
+        vehicleDAO = VehicleDAOFactory.getVehicleDAO(vehicleType);
+        return  (Vehicle) vehicleDAO.select(resultSet.getString("vehicle_id")).get();
+    }
+
+    private ParkingSlot getParkingSlot(ResultSet resultSet) throws SQLException {
+        ParkingSlotDTO psi = new ParkingSlotDTO(SlotSize.valueOf(resultSet.getString("parking_slot_size")), resultSet.getInt("parking_slot_id"));
+        return parkingSlotDAO.select(psi).get();
+
+    }
+
+    private Customer getCustomer(ResultSet resultSet) throws SQLException {
+        return customerDAO.select(resultSet.getInt("customer_id")).get();
+    }
 
 }
 
