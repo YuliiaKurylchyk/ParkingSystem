@@ -7,32 +7,25 @@ import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
+import org.mockito.MockitoAnnotations;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Should get ticket by parking slot information")
 public class GettingByParkingSlotTest {
 
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
+    ParkingTicketDAO parkingTicketDAO;
 
     @InjectMocks
     GetByParkingSlotCommand command;
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     private ParkingSlotDTO parkingSlotDTO;
     private ParkingTicket  parkingTicket;
@@ -40,6 +33,7 @@ public class GettingByParkingSlotTest {
 
     @BeforeEach
     public void init() {
+        MockitoAnnotations.initMocks(this);
         parkingSlotDTO = new ParkingSlotDTO(SlotSize.SMALL, 12);
         parkingTicket = new ParkingTicket();
         expectedParkingSlot=    new ParkingSlot(parkingSlotDTO.getParkingSlotID(),

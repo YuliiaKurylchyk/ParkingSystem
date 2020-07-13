@@ -1,19 +1,15 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
-import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.VehicleDataUtil;
-import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.exceptions.SuchVehiclePresentException;
-import com.kurylchyk.model.services.impl.customerCommand.CheckCustomerIsPresentCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,7 +50,6 @@ public class VehicleHasDeparturedTest {
     @DisplayName("Should state that vehicle is present on parking lot)")
     public void shouldBePresent()  {
         command = new CheckVehicleHasDeparturedCommand(licensePlateOfPresentVehicle,vehicleDataUtil);
-
 
         assertThrows(SuchVehiclePresentException.class,()->command.execute());
         verify(vehicleDataUtil).getStatus(licensePlateOfPresentVehicle);

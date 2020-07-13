@@ -1,24 +1,18 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
 import com.kurylchyk.model.dao.ParkingTicketDAO;
-import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
-import com.kurylchyk.model.domain.vehicles.Motorbike;
-import com.kurylchyk.model.domain.vehicles.Vehicle;
-import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.services.impl.vehicleCommand.GetAllVehiclesCommand;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,17 +27,15 @@ public class GetAllTicketsTest {
     @InjectMocks
     private GetAllTicketsCommand command;
 
-    private Status expectedStatus = Status.PRESENT;
+    private static Status expectedStatus = Status.PRESENT;
 
-    private List<ParkingTicket> expectedListOfAllTickets;
+    private static List<ParkingTicket> expectedListOfAllTickets;
 
-    private List<ParkingTicket> expectedListWithAppropriateStatus;
+    private static List<ParkingTicket> expectedListWithAppropriateStatus;
 
-    @BeforeEach
-    public void init() {
 
-        MockitoAnnotations.initMocks(this);
-
+    @BeforeAll
+    public static void initAll(){
         expectedListOfAllTickets = new ArrayList<>(
                 asList(
                         ParkingTicket.newParkingTicket().withStatus(expectedStatus).buildTicket(),
@@ -57,7 +49,12 @@ public class GetAllTicketsTest {
                         ParkingTicket.newParkingTicket().withStatus(expectedStatus).buildTicket()
                 ));
 
+    }
 
+    @BeforeEach
+    public void init() {
+
+        MockitoAnnotations.initMocks(this);
 
         when(parkingTicketDAO.selectAll(Status.PRESENT)).thenReturn(expectedListWithAppropriateStatus);
         when(parkingTicketDAO.selectAll()).thenReturn(expectedListOfAllTickets);

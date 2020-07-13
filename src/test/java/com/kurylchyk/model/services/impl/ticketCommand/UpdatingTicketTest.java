@@ -11,29 +11,21 @@ import com.kurylchyk.model.domain.vehicles.Car;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
+import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class UpdatingTicketTest {
 
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
-
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
+    ParkingTicketDAO parkingTicketDAO;
 
     @InjectMocks
     UpdateTicketCommand command;
@@ -42,6 +34,8 @@ public class UpdatingTicketTest {
 
     @BeforeEach
     public void init() {
+
+        MockitoAnnotations.initMocks(this);
         Customer customer = Customer.newCustomer()
                 .setCustomerID(1).setName("Name")
                 .setSurname("Surname").setPhoneNumber("+38093104694").buildCustomer();

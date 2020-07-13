@@ -11,15 +11,13 @@ import com.kurylchyk.model.domain.vehicles.Motorbike;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.ParkingSlotService;
-import org.junit.Rule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
+import org.mockito.MockitoAnnotations;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,32 +25,27 @@ import static org.mockito.Mockito.*;
 
 public class RemovingTicketTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    @Mock
+    ParkingTicketDAO parkingTicketDAO;
 
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
-
-    @Mock
-    ParkingSlotService parkingSlotService = mock(ParkingSlotService.class);
+    ParkingSlotService parkingSlotService;
 
     @InjectMocks
     RemoveParkingTicketCommand command;
 
-    private ParkingTicket parkingTicket;
-    private Customer customer;
-    private Vehicle vehicle;
-    private ParkingSlot parkingSlot;
-    private BigDecimal expectedPrice;
 
-    private ParkingSlot changeStatus(ParkingSlot parkingSlot){
 
-        parkingSlot.setStatus(SlotStatus.VACANT);
-        return parkingSlot;
-    }
+    private static ParkingTicket parkingTicket;
+    private static Customer customer;
+    private static Vehicle vehicle;
+    private static ParkingSlot parkingSlot;
+    private static BigDecimal expectedPrice;
 
-    @BeforeEach
-    public void init(){
+
+    @BeforeAll
+    public static void initAll(){
+
         customer = Customer.newCustomer()
                 .setCustomerID(1).setName("Name")
                 .setSurname("Surname").setPhoneNumber("+380931092894").buildCustomer();
@@ -70,6 +63,13 @@ public class RemovingTicketTest {
                 .withArrivalTime(LocalDateTime.now().minusDays(5))
                 .buildTicket();
     }
+
+
+
+    @BeforeEach
+    public void init(){
+        MockitoAnnotations.initMocks(this);}
+
 
 
     @Test
@@ -101,4 +101,9 @@ public class RemovingTicketTest {
 
     }
 
+    private ParkingSlot changeStatus(ParkingSlot parkingSlot){
+
+        parkingSlot.setStatus(SlotStatus.VACANT);
+        return parkingSlot;
+    }
 }

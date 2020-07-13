@@ -10,11 +10,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -23,7 +22,7 @@ public class GettingTicketTest {
 
 
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
+    ParkingTicketDAO parkingTicketDAO;
 
     @InjectMocks
     GetParkingTicketCommand parkingTicketCommand;
@@ -32,10 +31,12 @@ public class GettingTicketTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     ParkingTicket expectedParkingTicket;
-    Integer expectedParkingTicketID = 1;
+    Integer expectedParkingTicketID;
 
     @BeforeEach
     public void initParkingTicket() {
+        MockitoAnnotations.initMocks(this);
+        expectedParkingTicketID=1;
         expectedParkingTicket = new ParkingTicket();
         expectedParkingTicket.setParkingTicketID(expectedParkingTicketID);
     }
@@ -64,7 +65,7 @@ public class GettingTicketTest {
 
     @Test
     @DisplayName("Should throw exception")
-    public void shouldThrowException() throws NoSuchParkingTicketException {
+    public void shouldThrowException() {
 
         Integer wrongParkingTicketID = 124;
         parkingTicketCommand = new GetParkingTicketCommand(wrongParkingTicketID,parkingTicketDAO);

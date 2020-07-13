@@ -6,9 +6,7 @@ import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.vehicles.Motorbike;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 
@@ -20,11 +18,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Parking ticket builder under test")
 public class ParkingTicketBuilderTest {
 
-    Vehicle expectedVehicle = new Motorbike("Harley Davidson", "Iron 883", "AK 2492 OP");
-    Customer expectedCustomer = Customer.newCustomer().setName("Name").setSurname("surname")
-            .setPhoneNumber("+380934125789").buildCustomer();
-    ParkingSlot expectedParkingSlot = new ParkingSlot(1, SlotSize.SMALL, SlotStatus.VACANT);
-    ParkingTicket parkingTicket;
+
+    private static Vehicle expectedVehicle;
+    private static Customer expectedCustomer;
+    private static ParkingSlot expectedParkingSlot;
+
+    private ParkingTicket parkingTicket;
+    @BeforeAll
+    public static void initAll(){
+
+        expectedVehicle = new Motorbike("Harley Davidson", "Iron 883", "AK 2492 OP");
+        expectedCustomer = Customer.newCustomer().setName("Name").setSurname("surname")
+                .setPhoneNumber("+380934125789").buildCustomer();
+        expectedParkingSlot = new ParkingSlot(1, SlotSize.SMALL, SlotStatus.VACANT);
+    }
 
     @Test
     @DisplayName("Should contain only vehicle information")

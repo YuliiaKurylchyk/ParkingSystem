@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@DisplayName("Setting customer_id to vehicle in db")
 public class ConnectCustomerToVehicleTest {
 
     @Mock
@@ -40,11 +41,14 @@ public class ConnectCustomerToVehicleTest {
         vehicle = new Motorbike("Harley Davidson", "Iron 883", "AK 2301 IO");
         customer = Customer.newCustomer().setCustomerID(1).setName("Name").setSurname("Surname").setPhoneNumber("+380931092546").buildCustomer();
 
+    }
 
-        doAnswer(new Answer<Void>() {
+    @Test
+    @DisplayName("Should initialize customer id in vehicle table in database")
+    public void shouldConnectCustomerToVehicle() throws ParkingSystemException {
 
-            public Void answer(InvocationOnMock invocation) {
-                Object[] arguments = invocation.getArguments();
+        doAnswer((args)->{
+                Object[] arguments = args.getArguments();
                 if (arguments != null && arguments.length == 2 && arguments[0] != null && arguments[1] != null) {
                     String licensePlate = (String) arguments[0];
                     Integer customerID = (Integer) arguments[1];
@@ -54,16 +58,11 @@ public class ConnectCustomerToVehicleTest {
                     );
                 }
                 return null;
-            }
-        }).when(vehicleDataUtil).updateCustomerID(vehicle.getLicensePlate(), customer.getCustomerID());
-    }
-
-    @Test
-    @DisplayName("Should initialize customer id in vehicle table in database")
-    public void shouldConnectCustomerToVehicle() throws ParkingSystemException {
+            }).when(vehicleDataUtil).updateCustomerID(vehicle.getLicensePlate(), customer.getCustomerID());
 
         command = new ConnectCustomerToVehicleCommand(vehicle,customer,vehicleDataUtil);
         command.execute();
+
         verify(vehicleDataUtil).updateCustomerID(vehicle.getLicensePlate(),customer.getCustomerID());
 
     }

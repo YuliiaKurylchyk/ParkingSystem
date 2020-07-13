@@ -1,10 +1,7 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
-import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
-import com.kurylchyk.model.domain.vehicles.Bus;
-import com.kurylchyk.model.domain.vehicles.Car;
 import com.kurylchyk.model.domain.vehicles.Motorbike;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
@@ -15,14 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
+@DisplayName("Getting all vehicles")
 public class GettingAllVehiclesTest {
 
     @Mock
@@ -32,7 +29,6 @@ public class GettingAllVehiclesTest {
     private GetAllVehiclesCommand command;
 
     private VehicleType expectedVehicleType = VehicleType.MOTORBIKE;
-
     private  List<Vehicle> vehiclesWithPresentStatus;
     private  List<Vehicle> allVehicles;
 

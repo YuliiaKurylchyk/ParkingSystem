@@ -3,14 +3,10 @@ package com.kurylchyk.model.services;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-
 import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DayCounterTest {
-
 
     @Test
     @DisplayName("Should calculate proper count of days")

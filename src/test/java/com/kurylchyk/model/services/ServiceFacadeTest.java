@@ -4,12 +4,10 @@ package com.kurylchyk.model.services;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Testing  facade class")
 public class ServiceFacadeTest {
-
 
 
     @Test

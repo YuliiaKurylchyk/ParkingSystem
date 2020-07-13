@@ -1,7 +1,6 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
-
 import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
@@ -45,10 +44,15 @@ public class AddingNewSlotTest {
         ParkingSlot createdParkingSlot =  new ParkingSlot(lastID+1, slotSize, slotStatus);
         doAnswer(
                 (args) -> {
-                    assertEquals(args.getArguments()[0],createdParkingSlot);
+                    if(args.getArguments().length==1 && args.getArguments()[0]!=null) {
+                        ParkingSlot ps =(ParkingSlot) args.getArguments()[0];
+                        assertEquals(ps, createdParkingSlot);
+                    }
                     return  null;
                 }).when(parkingSlotDAO).insert(createdParkingSlot);
         command.execute();
+
+        verify(parkingSlotDAO).getLastID(Matchers.any(SlotSize.class));
     }
 
 

@@ -1,23 +1,15 @@
 package com.kurylchyk.model.dao;
 
-import com.kurylchyk.model.services.impl.vehicleCommand.ConnectCustomerToVehicleCommand;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.engine.User;
 
-import java.io.File;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.sql.SQLException;
-
 
 
 public class Connector {
@@ -44,15 +36,13 @@ public class Connector {
     }
     private static void createDataBase(){
         try {
-          //  File file = new File(
-            //        ClassLoader.getSystemClassLoader().getResource(database.properties).getFile());
-
 
             ScriptRunner sr = new ScriptRunner(dataSource.getConnection());
-            Reader reader = new BufferedReader(new FileReader("D:\\Інфа з диску С\\NewCourse\\thisProject\\ParkingSystem\\src\\main\\resources\\database.sql"));
+            InputStream inputStream = Connector.class.getClassLoader().getResourceAsStream("database.sql");
+            Reader reader = new InputStreamReader(inputStream);
             sr.runScript(reader);
             logger.info("Reading data base from file");
-        }catch (SQLException | IOException  exception){
+        }catch (SQLException  exception){
             logger.error(exception);
         }
     }

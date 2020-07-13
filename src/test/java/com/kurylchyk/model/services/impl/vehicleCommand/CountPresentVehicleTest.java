@@ -4,7 +4,6 @@ import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.sun.deploy.uitoolkit.impl.awt.AWTDragHelper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +46,7 @@ public class CountPresentVehicleTest {
     @Test
     @DisplayName("Should count vehicle with appropriate type only")
     public void shouldCountWithType() throws ParkingSystemException {
+
         when(vehicleDAO.countAllPresent()).thenReturn(expectedCountOfBuses);
         command = new CountPresentVehiclesCommand(vehicleType,vehicleDAO,vehicleDataUtil);
 

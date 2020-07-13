@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: admin
-  Date: 05.05.2020
-  Time: 16:11
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -42,7 +36,7 @@
                   <c:if test="${requestScope.customer!=null}">value="${requestScope.customer.surname}"> </c:if>
         </p>
 
-        <p><input placeholder="<fmt:message key="phoneNumber"/>" type="tel" pattern="^+380[0-9]{9}$" name="phoneNumber" required
+        <p><input placeholder="<fmt:message key="phoneNumber"/>(+380...)" type="tel" pattern="^+380[0-9]{9}$" name="phoneNumber" required
                   <c:if test="${requestScope.customer!=null}">value="${requestScope.customer.phoneNumber}"</c:if>>
         </p>
 

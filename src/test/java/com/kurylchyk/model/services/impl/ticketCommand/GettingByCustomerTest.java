@@ -3,22 +3,16 @@ package com.kurylchyk.model.services.impl.ticketCommand;
 
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.domain.customer.Customer;
-
 import java.util.ArrayList;
 import java.util.List;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
-import java.util.Optional;
-
+import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -26,13 +20,11 @@ import static org.mockito.Mockito.*;
 public class GettingByCustomerTest {
 
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
+    ParkingTicketDAO parkingTicketDAO;
 
     @InjectMocks
     GetByCustomerCommand command;
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     private Customer expectedCustomer;
     private ParkingTicket parkingTicket;
@@ -40,6 +32,7 @@ public class GettingByCustomerTest {
 
     @BeforeEach
     public void init() {
+        MockitoAnnotations.initMocks(this);
         expectedCustomer = Customer.newCustomer()
                 .setCustomerID(2)
                 .setName("Name")

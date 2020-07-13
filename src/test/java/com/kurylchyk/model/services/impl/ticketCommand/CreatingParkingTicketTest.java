@@ -6,11 +6,9 @@ import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
-
 import com.kurylchyk.model.domain.vehicles.Motorbike;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +17,7 @@ public class CreatingParkingTicketTest {
 
 
     @Test
+    @DisplayName("Should create parking ticket")
     public void shouldCreateParkingTicket() throws ParkingSystemException {
 
         Vehicle vehicle = new  Motorbike("Harley Davidson","Iron 883","AA 3329 KO");
@@ -28,7 +27,6 @@ public class CreatingParkingTicketTest {
         customer.setSurname(("Surname"));
         customer.setPhoneNumber("phoneNumber");
         ParkingSlot parkingSlot = new ParkingSlot(1, SlotSize.SMALL, SlotStatus.VACANT);
-
         CreateParkingTicketCommand creteCommand = new CreateParkingTicketCommand(vehicle,customer,parkingSlot);
 
         ParkingTicket parkingTicket = creteCommand.execute();

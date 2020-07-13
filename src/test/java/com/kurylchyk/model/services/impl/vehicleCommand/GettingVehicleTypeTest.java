@@ -32,8 +32,6 @@ public class GettingVehicleTypeTest {
     private String wrongLicensePlate;
 
 
-
-
     @BeforeEach
     public void init(){
         MockitoAnnotations.initMocks(this);
@@ -41,11 +39,9 @@ public class GettingVehicleTypeTest {
         wrongLicensePlate = "CE 2032 OL";
         when(vehicleDataUtil.getType(vehicle.getLicensePlate()))
                 .thenReturn(Optional.ofNullable(vehicle.getVehicleType()));
-
         when(vehicleDataUtil.getType(wrongLicensePlate))
                 .thenReturn(Optional.ofNullable(null));
     }
-
 
     @Test
     @DisplayName("Should get type of vehicle")
@@ -68,10 +64,8 @@ public class GettingVehicleTypeTest {
     @DisplayName("Should NOT get type, but throw an exception")
     public void shouldNotGetType() {
 
-
         command = new GetVehicleTypeCommand(wrongLicensePlate,vehicleDataUtil);
         assertThrows(NoSuchVehicleFoundException.class,()->command.execute());
-
         verify(vehicleDataUtil).getType(wrongLicensePlate);
 
     }

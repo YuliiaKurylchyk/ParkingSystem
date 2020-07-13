@@ -84,9 +84,7 @@ public class VehicleDataUtilTest {
         public void shouldBePresent() throws SQLException {
 
             doNothing().when(mockPreparedStatement).setString(1, correctLicensePlate);
-
             Boolean result = vehicleDataUtil.isPresent(correctLicensePlate);
-
             assertTrue(result);
         }
 
@@ -101,9 +99,7 @@ public class VehicleDataUtilTest {
 
             assertFalse(result);
         }
-
     }
-
 
     @Test
     @DisplayName("Should return status of vehicle by license plate")

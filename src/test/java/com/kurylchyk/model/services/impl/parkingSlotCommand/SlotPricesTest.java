@@ -1,20 +1,14 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
-
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
-
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,7 +24,6 @@ public class SlotPricesTest {
     private UpdatePriceCommand updateCommand;
 
     private GetSlotPricesCommand getCommand;
-
 
     private Map<SlotSize, Integer> prices;
 
@@ -52,23 +45,17 @@ public class SlotPricesTest {
         updateCommand = new UpdatePriceCommand(prices, parkingSlotDAO);
 
         doAnswer(
-                new Answer() {
-                    @Override
-                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                        SlotSize expectedSlotSize = (SlotSize) invocationOnMock.getArguments()[0];
-                        Integer expectedPrice = (Integer) invocationOnMock.getArguments()[1];
+                (args)->{
+                        SlotSize expectedSlotSize = (SlotSize) args.getArguments()[0];
+                        Integer expectedPrice = (Integer)args.getArguments()[1];
                         assertAll(
                                 () -> assertNotNull(expectedSlotSize),
                                 () -> assertNotNull(expectedPrice));
                         return null;
-                    }
-                }).when(parkingSlotDAO).updatePrice(Matchers.any(SlotSize.class), Matchers.anyInt());
+                    }).when(parkingSlotDAO).updatePrice(Matchers.any(SlotSize.class), Matchers.anyInt());
         updateCommand.execute();
-
         verify(parkingSlotDAO, times(3)).updatePrice(Matchers.any(SlotSize.class), anyInt());
-
     }
-
 
     @Test
     @DisplayName("Should get prices from database")

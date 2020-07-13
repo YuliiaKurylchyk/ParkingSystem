@@ -10,3 +10,15 @@
 [ERROR] 2020-07-13 17:02:47.016 ParkingTicketServlet:96 - null 
 [ERROR] 2020-07-13 17:09:11.970 ParkingTicketServlet:96 - null 
 [ERROR] 2020-07-13 17:28:33.238 ParkingTicketServlet:96 - null 
+[ERROR] 2020-07-13 20:28:13.919 CustomerServlet:109 - null 
+[ERROR] 2020-07-13 20:28:15.091 ParkingTicketServlet:96 - null 
+[ERROR] 2020-07-13 20:28:15.481 VehicleServlet:74 - null 
+[ERROR] 2020-07-13 20:30:25.554 CustomerServlet:109 - null 
+[ERROR] 2020-07-13 20:30:26.222 ParkingTicketServlet:96 - null 
+[ERROR] 2020-07-13 20:30:26.400 VehicleServlet:74 - null 
+[ERROR] 2020-07-13 20:31:00.334 CustomerServlet:109 - null 
+[ERROR] 2020-07-13 20:31:00.931 ParkingTicketServlet:96 - null 
+[ERROR] 2020-07-13 20:31:01.087 VehicleServlet:74 - null 
+[ERROR] 2020-07-13 20:32:42.075 CustomerServlet:109 - null 
+[ERROR] 2020-07-13 20:32:42.590 ParkingTicketServlet:96 - null 
+[ERROR] 2020-07-13 20:32:42.846 VehicleServlet:74 - null 

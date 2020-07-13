@@ -1,23 +1,19 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
-import com.kurylchyk.model.dao.ParkingSlotDAO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.sun.deploy.uitoolkit.impl.awt.AWTDragHelper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.mockito.MockitoAnnotations;
-
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
@@ -31,15 +27,13 @@ public class GetInDateTicketTest {
     @InjectMocks
     GetInDateCommand command;
 
-    private LocalDateTime expectedDay = LocalDateTime.now();
-    private Status expectedStatus = Status.PRESENT;
-    private List<ParkingTicket> expectedListInAppropriateDay;
+    private static LocalDateTime expectedDay = LocalDateTime.now();
+    private static Status expectedStatus = Status.PRESENT;
+    private static List<ParkingTicket> expectedListInAppropriateDay;
+    private static List<ParkingTicket> expectedListInAppropriateDayAndStatus;
 
-    private List<ParkingTicket> expectedListInAppropriateDayAndStatus;
-
-    @BeforeEach
-    public void init() {
-        MockitoAnnotations.initMocks(this);
+    @BeforeAll
+    public static void initAll(){
         expectedListInAppropriateDay = new ArrayList<>(
                 asList(
                         ParkingTicket.newParkingTicket().withArrivalTime(expectedDay).buildTicket(),
@@ -52,6 +46,12 @@ public class GetInDateTicketTest {
                         ParkingTicket.newParkingTicket().withArrivalTime(expectedDay).withStatus(expectedStatus).buildTicket(),
                         ParkingTicket.newParkingTicket().withArrivalTime(expectedDay).withStatus(expectedStatus).buildTicket()
                 ));
+    }
+
+
+    @BeforeEach
+    public void init() {
+        MockitoAnnotations.initMocks(this);
 
         when(parkingTicketDAO.selectInDate(expectedDay)).thenReturn(expectedListInAppropriateDay);
         when(parkingTicketDAO.selectInDateAndStatus(expectedDay,expectedStatus)).thenReturn(expectedListInAppropriateDayAndStatus);

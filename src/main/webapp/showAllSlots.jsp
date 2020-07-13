@@ -85,6 +85,16 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <c:if test="${param.info!=null}">
+    <div id="containerButton">
+        <div style="float:left;">
+            <a href="/">
+                <button type="button" value="" name="BackToMenu">Back home</button>
+            </a>
+        </div>
+    </div>
+    </c:if>
 </div>
 </body>
 </html>

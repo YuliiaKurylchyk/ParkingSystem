@@ -5,7 +5,6 @@ import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,6 +40,7 @@ public class GettingSlotTest {
     @Test
     @DisplayName("Should get parking slot from data base")
     public void shouldAddNewSlot() throws ParkingSystemException {
+
         command = new GetParkingSlotCommand(parkingSlotDTO,parkingSlotDAO);
         when(parkingSlotDAO.select(parkingSlotDTO)).thenReturn(Optional.ofNullable(expectedSlot));
         ParkingSlot selectedSlot =  command.execute();

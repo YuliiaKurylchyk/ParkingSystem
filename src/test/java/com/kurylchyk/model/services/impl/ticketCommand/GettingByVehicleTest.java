@@ -5,17 +5,13 @@ import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.vehicles.Motorbike;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.exceptions.NoSuchParkingTicketException;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-
+import org.mockito.MockitoAnnotations;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -23,19 +19,18 @@ import static org.mockito.Mockito.*;
 public class GettingByVehicleTest {
 
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
+    ParkingTicketDAO parkingTicketDAO;
 
     @InjectMocks
     GetByVehicleCommand command;
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     private ParkingTicket expectedParkingTicket;
     private Vehicle givenVehicle;
 
     @BeforeEach
     public void initParkingTicket() {
+        MockitoAnnotations.initMocks(this);
         expectedParkingTicket = new ParkingTicket();
         givenVehicle = new Motorbike("Harley Davidson", "Iron 883","AA 4292 IA");
         expectedParkingTicket.setVehicle(givenVehicle);

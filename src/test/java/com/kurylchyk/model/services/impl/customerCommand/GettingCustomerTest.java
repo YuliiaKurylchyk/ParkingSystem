@@ -4,22 +4,18 @@ import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GettingCustomerTest {
 
+@DisplayName("Getting customer test")
+public class GettingCustomerTest {
 
     @Mock
     private CustomerDAO customerDAO;
@@ -28,25 +24,33 @@ public class GettingCustomerTest {
     private GetCustomerCommand command;
 
 
-    private Customer customer;
-    private Integer customerID;
-    private String customerPhoneNumber;
-    private Integer notExistedID;
-    private String notExistedPhoneNumber;
 
-    @BeforeEach
-    public void init(){
+    private static Customer customer;
+    private static Integer customerID;
+    private static String customerPhoneNumber;
+    private static Integer notExistedID;
+    private static String notExistedPhoneNumber;
+
+    @BeforeAll
+    public static void initAll(){
         customerID  =1;
         customerPhoneNumber = "+380963545786";
         notExistedID = 234;
         notExistedPhoneNumber = "+380931025879";
 
-        MockitoAnnotations.initMocks(this);
         customer = Customer.newCustomer()
                 .setCustomerID(customerID)
                 .setName("Name")
                 .setSurname("Surname")
                 .setPhoneNumber(customerPhoneNumber).buildCustomer();
+
+    }
+
+    @BeforeEach
+    public void init(){
+
+
+        MockitoAnnotations.initMocks(this);
 
         when(customerDAO.select(customerID)).thenReturn(Optional.ofNullable(customer));
         when(customerDAO.select(customerPhoneNumber)).thenReturn(Optional.ofNullable(customer));
@@ -78,7 +82,7 @@ public class GettingCustomerTest {
 
         @Test
         @DisplayName("Should  NOT get customer by id")
-        public void shouldNotGetCustomerByID() throws ParkingSystemException {
+        public void shouldNotGetCustomerByID()  {
             command = new GetCustomerCommand(notExistedID);
             command.setCustomerDAO(customerDAO);
 

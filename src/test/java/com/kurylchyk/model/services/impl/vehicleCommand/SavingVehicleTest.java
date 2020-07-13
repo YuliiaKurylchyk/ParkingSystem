@@ -1,13 +1,10 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
-import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
-import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.domain.vehicles.Car;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.services.impl.customerCommand.SaveCustomerCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +44,6 @@ public class SavingVehicleTest {
         command = new SaveVehicleCommand(vehicle,vehicleDAO);
 
         command.execute();
-
 
         verify(vehicleDAO).insert(vehicle);
     }

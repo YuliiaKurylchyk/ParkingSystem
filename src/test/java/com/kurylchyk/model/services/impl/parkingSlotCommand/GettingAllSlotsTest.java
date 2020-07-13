@@ -21,8 +21,6 @@ import static org.mockito.Mockito.*;
 
 public class GettingAllSlotsTest {
 
-
-
     @Mock
     private ParkingSlotDAO parkingSlotDAO;
 

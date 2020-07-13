@@ -7,7 +7,6 @@ h1, h3 {
     text-align: center;
 }
 
-
 nav {
     display: block;
     background-color: #FFFFFF;
@@ -17,9 +16,21 @@ nav {
     box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
 #smallContainer{
+    margin-top:10%;
+}
 
+#priceContainer{
+
+    border: 1px solid deepskyblue;
+    width: 80%;
     float:left;
-    width:90%;
+}
+
+.smallButtons{
+    float:left;
+    width:20%;
+    margin-left: 25%;
+    margin-top: 2%;
 }
 
 button {
@@ -75,18 +86,13 @@ button:hover {
 }
 
 #selectContainer {
-    margin:auto;
+    margin-left: 20%;
     width: 60%;
     padding:3%;
 
 }
-select {
-    width: 30%;
-    height: 30px;
-}
 
 table {
-
     background-color: white;
     border: 2px solid #74D3DC;
     color: black;

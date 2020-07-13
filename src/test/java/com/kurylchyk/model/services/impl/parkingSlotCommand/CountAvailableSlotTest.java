@@ -1,14 +1,9 @@
 package com.kurylchyk.model.services.impl.parkingSlotCommand;
 
 import com.kurylchyk.model.dao.ParkingSlotDAO;
-import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
-import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,20 +21,24 @@ public class CountAvailableSlotTest {
     @InjectMocks
     private CountAvailableSlotCommand command;
 
-    private SlotSize slotSize;
-    private Integer expectedSmallSlots;
-    private Integer expectedMediumSlots;
-    private Integer expectedLargeSlots;
+    private static SlotSize slotSize;
+    private static Integer expectedSmallSlots;
+    private static Integer expectedMediumSlots;
+    private static Integer expectedLargeSlots;
 
+
+
+    @BeforeAll
+    public static void initAll(){
+        expectedSmallSlots = 15;
+        expectedMediumSlots = 20;
+        expectedLargeSlots = 40;
+        slotSize = SlotSize.SMALL;
+    }
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.initMocks(this);
-        slotSize = SlotSize.SMALL;
-        expectedSmallSlots = 15;
-        expectedMediumSlots = 20;
-        expectedLargeSlots = 40;
-
     }
 
     @Test

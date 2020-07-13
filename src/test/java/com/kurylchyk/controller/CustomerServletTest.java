@@ -2,29 +2,24 @@ package com.kurylchyk.controller;
 
 import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.exceptions.NoSuchCustomerFoundException;
-import com.kurylchyk.model.exceptions.NoSuchVehicleFoundException;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.CustomerService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
-
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 

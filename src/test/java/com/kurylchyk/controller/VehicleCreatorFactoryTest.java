@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import javax.servlet.http.HttpServletRequest;
@@ -25,15 +24,11 @@ public class VehicleCreatorFactoryTest {
     HttpServletRequest request;
 
 
-    @InjectMocks
-    VehicleCreatorFactory vehicleCreatorFactory;
-
     @BeforeEach
     public void init() {
         MockitoAnnotations.initMocks(this);
 
     }
-
 
     @Test
     @DisplayName("Should define motorbike creator with appropriate data")

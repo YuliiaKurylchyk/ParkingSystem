@@ -11,8 +11,8 @@
 </head>
 <h1>Parking slots price</h1>
 <h3 style="color:cadetblue;"><c:out value="${requestScope.saved}"></c:out></h3>
-<nav>
-    <div style="width: 90%">
+<nav style="width: 34%">
+    <div style="float: left">
         <form method="POST" action="/admin/editPrice">
             <table>
                 <thead>
@@ -25,47 +25,52 @@
                 <c:forEach var="slotPrice" items="${requestScope.slotPrices}">
                     <tr>
                         <td>
-                          <input  name="<c:out value='${slotPrice.key}'/>" value="<c:out value='${slotPrice.key}'/>" >
+                            <input name="<c:out value='${slotPrice.key}'/>" value="<c:out value='${slotPrice.key}'/>">
                         </td>
                         <td>
-                            <input type="number" placeholder="Price of ${slotPrice.value}" name="priceOf${slotPrice.key}"
+                            <input type="number" placeholder="Price of ${slotPrice.key}"
+                                   name="priceOf${slotPrice.key}"
                                    value="${slotPrice.value}">
                         </td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
-            <a href="" style="float:left;width:30%;margin-left: 5%;margin-top: 2%">
-                <button type="submit" value="" name="Save">Save</button>
-            </a>
+            <div >
+                <a href="" class="smallButtons" style="  margin-left: 35%;">
+                    <button type="submit" value="" name="Save">Save</button>
+                </a>
+            </div>
         </form>
     </div>
-
-    <div id="smallContainer" style="float:left;width: 90%">
-
-        <h5>Add new slot</h5>
+        <div style="float: left;border: 2px solid deepskyblue;margin-top: 3%">
         <form action="/admin/addSlot" action="POST">
-            <select name="newSlotSize" required ="required">
+
+            <div style="float: left;">
+            <select name="newSlotSize" required="required" style="width: 50%">
                 <option value="" disabled selected>Choose appropriate slot</option>
                 <option value="SMALL"> SMALL</option>
                 <option value="MEDIUM"> MEDIUM</option>
                 <option value="LARGE"> LARGE</option>
             </select>
 
-            <select name="newSlotStatus" required="required">
+            <select name="newSlotStatus" required="required" style="width: 50%;margin-top: 3%">
                 <option value="" disabled selected>Choose appropriate status</option>
                 <option value="VACANT"> VACANT</option>
                 <option value="OCCUPIED"> OCCUPIED</option>
-
             </select>
+            </div>
 
-            <button type="submit" name="addNewParkingSlot">Add new parking slot</button>
-
+            <div style="float: left;width: 100%">
+            <a href="" class="smallButtons" style="  margin-left: 25%;float: left">
+                <button type="submit" value="" name="AddNewSlot">Add new slot</button>
+            </a>
+            </div>
         </form>
     </div>
 </nav>
 
-<div id="container" style="width: 70%;float: right">
+<div id="container" style="width: 60%;float: right">
     <table>
         <thead>
         <tr>
@@ -100,10 +105,9 @@
 
 </div>
 
+<div style="float:left;width: 20%;margin-top: 5%">
 
-<div style="float:left">
-
-    <a href="/home" style="float: left;width:30%;margin-left: 25%;margin-top: 2%">
+    <a href="/home" style="float: left;margin-left: 35%;">
         <button type="button" value="" name="BackToMenu">Back to menu</button>
     </a>
 

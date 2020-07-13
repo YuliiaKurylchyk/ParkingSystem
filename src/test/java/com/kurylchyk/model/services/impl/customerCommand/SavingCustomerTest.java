@@ -4,34 +4,25 @@ import com.kurylchyk.model.domain.customer.Customer;
 import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import java.sql.SQLException;
-
-
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 
+
+@DisplayName("Saving customer to db test")
 public class SavingCustomerTest {
 
     @Mock
     private CustomerDAO customerDAO;
 
     @InjectMocks
-    SaveCustomerCommand saveCustomerCommand;
+    private SaveCustomerCommand saveCustomerCommand;
 
     private  Customer customer;
 
@@ -47,7 +38,7 @@ public class SavingCustomerTest {
 
 
     @Test
-    @DisplayName("Saving customer testing")
+    @DisplayName("Saving customer test")
     public void shouldSaveCustomer() throws ParkingSystemException {
 
         Integer expectedCustomerID = 1;
@@ -59,7 +50,7 @@ public class SavingCustomerTest {
         assertAll(
                 ()->assertSame(customer,savedCustomer,()->"Returned customer should be the same instance"),
                 ()->assertTrue(expectedCustomerID == savedCustomer.getCustomerID(),
-                        ()->"Returned customer should have custumer id")
+                        ()->"Returned customer should have customer id")
         );
 
         verify(customerDAO).insert(any(Customer.class));

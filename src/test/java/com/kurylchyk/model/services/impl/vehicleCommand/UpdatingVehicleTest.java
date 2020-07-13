@@ -1,14 +1,9 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
 
-import com.kurylchyk.model.dao.CustomerDAO;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
-import com.kurylchyk.model.domain.customer.Customer;
-import com.kurylchyk.model.domain.parkingSlots.ParkingSlot;
-import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.vehicles.Bus;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
-import com.kurylchyk.model.services.impl.customerCommand.UpdateCustomerCommand;
 import com.kurylchyk.model.services.impl.utilVehicle.BusCreator;
 import com.kurylchyk.model.services.impl.utilVehicle.VehicleCreator;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -51,10 +45,8 @@ public class UpdatingVehicleTest {
 
 
         command = new UpdateVehicleCommand(vehicleCreator,vehicle.getLicensePlate(),vehicleDAO);
-        doAnswer(new Answer<Void>() {
-
-            public Void answer(InvocationOnMock invocation) {
-                Object[] arguments = invocation.getArguments();
+        doAnswer( (args)-> {
+                Object[] arguments = args.getArguments();
                 if (arguments != null && arguments.length == 2 && arguments[0] != null && arguments[1] != null) {
                     Vehicle v = (Vehicle) arguments[0];
                     String lp = (String) arguments[1];
@@ -65,8 +57,7 @@ public class UpdatingVehicleTest {
                     );
                 }
                 return null;
-            }
-        }).when(vehicleDAO).update(vehicle,vehicle.getLicensePlate());
+            }).when(vehicleDAO).update(vehicle,vehicle.getLicensePlate());
 
         command.execute();
         verify(vehicleDAO).update(vehicle,vehicle.getLicensePlate());

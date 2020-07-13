@@ -1,6 +1,5 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.domain.customer.Customer;
@@ -12,29 +11,21 @@ import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.domain.vehicles.Car;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.mockito.stubbing.Answer;
-
+import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
-
 import static org.mockito.Mockito.*;
 
 @DisplayName("Should update parking ticket with new parking slot")
 public class UpdatingSlotInTicketTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
-    ParkingTicketDAO parkingTicketDAO = mock(ParkingTicketDAO.class);
+    ParkingTicketDAO parkingTicketDAO;
 
     @InjectMocks
     UpdateSlotInTicketCommand command;
@@ -44,6 +35,8 @@ public class UpdatingSlotInTicketTest {
 
     @BeforeEach
     public void init() {
+        MockitoAnnotations.initMocks(this);
+
         Customer customer = Customer.newCustomer()
                 .setCustomerID(1).setName("Name")
                 .setSurname("Surname").setPhoneNumber("+38093104694").buildCustomer();
@@ -70,18 +63,15 @@ public class UpdatingSlotInTicketTest {
         newParkingSlot = new ParkingSlot(4, SlotSize.MEDIUM, SlotStatus.VACANT);
         command = new UpdateSlotInTicketCommand(parkingTicket, newParkingSlot, parkingTicketDAO);
 
-        doAnswer(new Answer<Void>() {
-
-            public Void answer(InvocationOnMock invocation) {
-                Object[] arguments = invocation.getArguments();
-                if (arguments != null && arguments.length > 1 && arguments[0] != null && arguments[1] != null) {
+        doAnswer((args)-> {
+                Object[] arguments = args.getArguments();
+                if (arguments != null && arguments.length == 2 && arguments[0] != null && arguments[1] != null) {
                     ParkingTicket pk = (ParkingTicket) arguments[0];
                     ParkingSlot ps = (ParkingSlot) arguments[1];
                     pk.setParkingSlot(ps);
                 }
                 return null;
-            }
-        }).when(parkingTicketDAO).updateParkingSlotID(parkingTicket, newParkingSlot);
+            }).when(parkingTicketDAO).updateParkingSlotID(parkingTicket, newParkingSlot);
 
     }
 }

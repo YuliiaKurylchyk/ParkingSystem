@@ -61,8 +61,8 @@
 
         <a href="/parkingSlot/showAll?slotSize=ALL">
             <div class="in_nav">
-                <div class="menu_icon"><i class="fas fa-user-friends"></i></div>
-                <div class="menu_sign">All slots</div>
+                <div class="menu_icon"><i class="fa fa-globe" aria-hidden="true"></i></div>
+                <div class="menu_sign"><fmt:message key="allSlots"/></div>
             </div>
         </a>
     </nav>

@@ -43,9 +43,7 @@ input {
     border: 1px solid #aaaaaa;
 }
 
-.vehicleInput:invalid{
-    border: 2px dashed red;
-}
+
 
 #busAdditional,
 #carAdditional,

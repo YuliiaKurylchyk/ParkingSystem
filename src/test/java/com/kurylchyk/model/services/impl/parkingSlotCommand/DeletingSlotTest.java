@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -26,7 +25,6 @@ public class DeletingSlotTest {
     @InjectMocks
     private DeleteParkingSlotCommand command;
 
-
     private ParkingSlot parkingSlot;
 
     @BeforeEach
@@ -37,7 +35,6 @@ public class DeletingSlotTest {
                 SlotSize.MEDIUM,
                 SlotStatus.VACANT,
                 25);
-
     }
 
     @Test

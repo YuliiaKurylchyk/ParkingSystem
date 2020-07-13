@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 
 public class ParkingSlotDefinitionTest {
+
     @Nested
     @DisplayName("Should define small slot")
     class SmallSlotTest {
@@ -27,7 +28,6 @@ public class ParkingSlotDefinitionTest {
 
             SlotSize currentSlotSize = ParkingSlotDefiner.defineSlotSize(miniCar);
             assertEquals(SlotSize.SMALL, currentSlotSize);
-
         }
 
         @Test

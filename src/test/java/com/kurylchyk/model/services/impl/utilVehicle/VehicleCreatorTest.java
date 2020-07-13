@@ -1,6 +1,5 @@
 package com.kurylchyk.model.services.impl.utilVehicle;
 
-
 import com.kurylchyk.model.domain.vehicles.Bus;
 import com.kurylchyk.model.domain.vehicles.Car;
 import com.kurylchyk.model.domain.vehicles.Motorbike;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @DisplayName("Test of creating appropriate vehicles type")
 public class VehicleCreatorTest {

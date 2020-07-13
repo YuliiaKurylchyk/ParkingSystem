@@ -92,6 +92,7 @@ public class ParkingSlotDAOTest {
                 () -> assertNotNull(parkingSlotDTO),
                 () -> assertEquals(parkingSlotDTO.getParkingSlotID(), parkingSlot.getParkingSlotID()),
                 () -> assertEquals(parkingSlotDTO.getSlotSize(), parkingSlot.getSizeOfSlot()));
+
     }
 
 

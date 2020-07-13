@@ -119,6 +119,15 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <div id="containerButton">
+        <div style="float:left;">
+            <a href="/">
+                <button type="button" value="" name="BackToMenu"><fmt:message key="backToHome"/></button>
+            </a>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
