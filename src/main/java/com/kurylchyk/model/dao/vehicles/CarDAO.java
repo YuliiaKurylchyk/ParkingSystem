@@ -2,15 +2,11 @@ package com.kurylchyk.model.dao.vehicles;
 
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.domain.vehicles.Car;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.kurylchyk.model.dao.Connector;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
-
 import java.sql.*;
 
 public class CarDAO extends VehicleDAO<Car, String> {
@@ -138,8 +134,6 @@ public class CarDAO extends VehicleDAO<Car, String> {
 
     protected Car getVehicle(ResultSet resultSet) throws SQLException {
 
-        System.out.println("In get car dao");
-       // VehicleType typeOfVehicle = VehicleType.valueOf(resultSet.getString("type"));
         String make = resultSet.getString("make");
         String model = resultSet.getString("model");
         String licensePlate = resultSet.getString("license_plate");

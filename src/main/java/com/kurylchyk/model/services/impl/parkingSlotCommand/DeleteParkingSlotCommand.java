@@ -9,6 +9,9 @@ import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Deletes not occupied slots
+ */
 public class DeleteParkingSlotCommand implements Command<Void> {
 
     private ParkingSlot parkingSlot;

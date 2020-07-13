@@ -6,6 +6,13 @@ import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Checks if customer is present in db
+ * or not by phone number
+ *
+ */
+
+
 public class CheckCustomerIsPresentCommand implements Command<Boolean> {
 
     private String phoneNumber;

@@ -5,7 +5,7 @@ import com.kurylchyk.model.exceptions.ParkingSystemException;
 
 import java.util.List;
 
-//add get All
+
 public interface CustomerService {
 
     Customer create(String name,String surname,String phoneNumber) throws ParkingSystemException;
@@ -15,7 +15,6 @@ public interface CustomerService {
     Customer saveToDB(Customer customer) throws ParkingSystemException;
     void update(Customer customer) throws ParkingSystemException;
     List<Customer> getAll() throws ParkingSystemException;
-    //викликати з deleteTicketCommand
     void deleteCompletely(Customer customer) throws ParkingSystemException;
     boolean isPresent(String phoneNumber) throws ParkingSystemException;
 

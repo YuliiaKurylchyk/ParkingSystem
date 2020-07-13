@@ -13,6 +13,11 @@ import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+/**
+ * Saves parking ticket and appropriate information about it
+ * (vehicle,customer) to db
+ */
 public class SaveParkingTicketCommand implements Command<ParkingTicket> {
 
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
@@ -27,16 +32,30 @@ public class SaveParkingTicketCommand implements Command<ParkingTicket> {
         this.parkingTicket = parkingTicket;
     }
 
+    SaveParkingTicketCommand(ParkingTicket parkingTicket,ParkingTicketDAO parkingTicketDAO,
+                             ParkingSlotService parkingSlotService, VehicleService vehicleService,
+                             CustomerService customerService) {
+        this.parkingTicket = parkingTicket;
+        this.parkingLotService = parkingSlotService;
+        this.parkingTicketDAO = parkingTicketDAO;
+        this.vehicleService = vehicleService;
+        this.customerService = customerService;
+    }
+
 
     @Override
     public ParkingTicket execute() throws ParkingSystemException {
 
         vehicleService.saveToDB(parkingTicket.getVehicle());
+
         parkingLotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.OCCUPIED);
+
         Customer customer = customerService.saveToDB(parkingTicket.getCustomer());
         vehicleService.connectCustomerToVehicle(parkingTicket.getVehicle(), customer);
+
         Integer parkingTicketID = parkingTicketDAO.insert(parkingTicket);
         parkingTicket.setParkingTicketID(parkingTicketID);
+
         logger.info("Parking ticket with ID " + parkingTicketID + " was created and saved to database");
         return parkingTicket;
     }

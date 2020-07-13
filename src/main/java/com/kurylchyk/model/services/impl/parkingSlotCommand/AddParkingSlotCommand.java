@@ -9,6 +9,11 @@ import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Adds new parking slot.
+ *
+ */
+
 public class AddParkingSlotCommand implements Command<Void> {
 
     private ParkingSlotDAO parkingSlotDAO;
@@ -29,6 +34,14 @@ public class AddParkingSlotCommand implements Command<Void> {
         this.parkingSlotDAO = parkingSlotDAO;
     }
 
+    /**
+     *
+     * Firstly takes the last id of appropriate slot size
+     * to define id of new parking slot
+     * then inserts new parking slot
+     * @return
+     * @throws ParkingSystemException
+     */
     @Override
     public Void execute() throws ParkingSystemException {
         Integer lastID = parkingSlotDAO.getLastID(slotSize);

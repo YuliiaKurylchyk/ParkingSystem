@@ -8,6 +8,9 @@ import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Updates slot information in parking ticket
+ */
 public class UpdateSlotInTicketCommand  implements Command<Void> {
 
     private ParkingTicket parkingTicket;

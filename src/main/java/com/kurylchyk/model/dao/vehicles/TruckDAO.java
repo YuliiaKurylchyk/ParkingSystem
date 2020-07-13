@@ -1,6 +1,5 @@
 package com.kurylchyk.model.dao.vehicles;
 
-import com.kurylchyk.model.dao.Connector;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.domain.vehicles.Truck;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
@@ -123,7 +122,7 @@ public class TruckDAO extends VehicleDAO<Truck, String> {
 
     protected Truck getVehicle(ResultSet resultSet) throws SQLException {
 
-        //VehicleType typeOfVehicle = VehicleType.valueOf(resultSet.getString("type"));
+
         String make = resultSet.getString("make");
         String model = resultSet.getString("model");
         String licensePlate = resultSet.getString("license_plate");

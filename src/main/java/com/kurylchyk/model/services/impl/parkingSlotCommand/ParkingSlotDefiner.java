@@ -7,6 +7,10 @@ import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Class that defines appropriate slot for vehicle
+ *
+ */
 
 public class ParkingSlotDefiner {
 

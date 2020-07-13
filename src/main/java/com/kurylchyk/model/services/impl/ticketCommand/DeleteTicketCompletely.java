@@ -12,6 +12,11 @@ import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Deletes ticket completely  and appropriate
+ * information about customer and vehicle from database.
+ */
+
 public class DeleteTicketCompletely implements Command<Void> {
 
     private ParkingTicketDAO parkingTicketDAO = new ParkingTicketDAO();
@@ -22,6 +27,15 @@ public class DeleteTicketCompletely implements Command<Void> {
 
     public  DeleteTicketCompletely(ParkingTicket parkingTicket){
         this.parkingTicket = parkingTicket;
+    }
+
+
+    DeleteTicketCompletely(ParkingTicket parkingTicket,ParkingTicketDAO parkingTicketDAO,
+                           VehicleService vehicleService,CustomerService customerService){
+        this.parkingTicket = parkingTicket;
+        this.vehicleService = vehicleService;
+        this.customerService = customerService;
+        this.parkingTicketDAO = parkingTicketDAO;
     }
 
     @Override

@@ -11,6 +11,9 @@ import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Updates parking ticket with new parking slot
+ */
 public class ChangeParkingSlotCommand implements Command<Void> {
 
 
@@ -32,6 +35,13 @@ public class ChangeParkingSlotCommand implements Command<Void> {
         this.parkingTicketService = parkingTicketService;
     }
 
+    /**
+     * Firstly it sets current parking slot to VACANT
+     * Then desired one to OCCUPIED
+     * and updates parking tikcet
+     * @return
+     * @throws ParkingSystemException
+     */
     @Override
     public Void execute() throws ParkingSystemException {
         parkingSlotService.updateStatus(parkingTicket.getParkingSlot(), SlotStatus.VACANT);

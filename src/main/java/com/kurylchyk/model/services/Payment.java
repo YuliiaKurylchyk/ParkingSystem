@@ -5,6 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
+/**
+ * Calculate the price using  count of days and price pre day
+ */
+
 public class Payment {
 
     private static final Logger logger = LogManager.getLogger(Payment.class);

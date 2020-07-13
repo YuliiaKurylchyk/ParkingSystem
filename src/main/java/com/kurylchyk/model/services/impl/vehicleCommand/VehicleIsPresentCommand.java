@@ -4,6 +4,9 @@ import com.kurylchyk.model.dao.VehicleDataUtil;
 import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.impl.Command;
 
+/**
+ * Checks if there is information about vehicle in db
+ */
 public class VehicleIsPresentCommand implements Command<Boolean> {
 
     private String licencePlate;

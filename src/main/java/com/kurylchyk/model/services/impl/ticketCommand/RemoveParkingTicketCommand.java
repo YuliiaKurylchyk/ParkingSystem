@@ -17,6 +17,13 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Updating information about parking ticket
+ * when vehicle is leaving.
+ * Departure time and cost are calculated here
+ * and status is set to LEFT
+ */
+
 public class RemoveParkingTicketCommand implements Command<ParkingTicket> {
 
     private ParkingTicketDAO parkingTicketDAO;

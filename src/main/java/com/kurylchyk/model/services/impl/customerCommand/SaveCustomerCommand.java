@@ -7,6 +7,7 @@ import com.kurylchyk.model.dao.CustomerDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 public class SaveCustomerCommand implements Command<Customer> {
 
     private CustomerDAO customerDAO;

@@ -3,6 +3,10 @@ package com.kurylchyk.model.services.impl.utilVehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 
+/**
+ * Used to identify appropriate vehicle type
+ * and create this vehicle
+ */
 public abstract class VehicleCreator {
 
     protected  String model;

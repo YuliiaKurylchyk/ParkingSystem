@@ -1,8 +1,6 @@
 package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.domain.customer.Customer;
-
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

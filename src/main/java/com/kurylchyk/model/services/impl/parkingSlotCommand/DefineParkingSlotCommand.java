@@ -7,6 +7,10 @@ import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+/**
+ * Defines parking slot for the vehicle
+ */
 public class DefineParkingSlotCommand implements Command<SlotSize> {
 
     private Vehicle vehicle;

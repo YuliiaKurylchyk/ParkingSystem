@@ -6,6 +6,9 @@ import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Creates customer using Builder
+ */
 
 public class CreateCustomerCommand  implements Command<Customer> {
 

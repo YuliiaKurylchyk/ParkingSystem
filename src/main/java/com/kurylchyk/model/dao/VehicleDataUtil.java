@@ -1,7 +1,6 @@
 package com.kurylchyk.model.dao;
 
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
-
 import java.sql.*;
 import java.util.Optional;
 import java.util.Properties;

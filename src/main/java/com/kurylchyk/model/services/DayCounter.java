@@ -7,6 +7,10 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Calculate the number of days spent on parking lot
+ *
+ */
 public class DayCounter {
 
     private static final Logger logger= LogManager.getLogger(DayCounter.class);

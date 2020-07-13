@@ -9,6 +9,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+/**
+ * Check if vehicle's parking ticket
+ * has status 'LEFT'
+ */
 public class CheckVehicleHasDeparturedCommand implements Command<Boolean> {
 
 

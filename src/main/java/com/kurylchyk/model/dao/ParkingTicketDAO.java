@@ -9,7 +9,6 @@ import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
-
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;

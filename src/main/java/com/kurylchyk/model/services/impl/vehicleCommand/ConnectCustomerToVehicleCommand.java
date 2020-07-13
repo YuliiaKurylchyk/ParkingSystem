@@ -8,6 +8,10 @@ import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Updates column customer_id in vehicle table
+ *
+ */
 public class ConnectCustomerToVehicleCommand  implements Command<Void> {
 
     private Customer customer;

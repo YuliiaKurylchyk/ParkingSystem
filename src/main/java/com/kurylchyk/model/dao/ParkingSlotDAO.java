@@ -4,8 +4,6 @@ import com.kurylchyk.model.domain.parkingSlots.*;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotStatus;
 import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
-
-
 import java.sql.*;
 import java.util.*;
 

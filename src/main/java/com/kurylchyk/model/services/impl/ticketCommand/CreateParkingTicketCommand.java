@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 
+/**
+ * Creates parking ticket with Builder
+ */
 public class CreateParkingTicketCommand implements Command<ParkingTicket> {
     private Vehicle vehicle;
     private Customer customer;

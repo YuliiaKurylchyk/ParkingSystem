@@ -9,6 +9,11 @@ import com.kurylchyk.model.dao.CustomerDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Gets customer from database
+ * by phone number or customer id
+ */
+
 public class GetCustomerCommand implements Command<Customer> {
     private CustomerDAO customerDAO = new CustomerDAO();
     private Integer customerID;
@@ -24,7 +29,7 @@ public class GetCustomerCommand implements Command<Customer> {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setCustomerDAO(CustomerDAO customerDAO) {
+     void setCustomerDAO(CustomerDAO customerDAO) {
         this.customerDAO = customerDAO;
     }
 
