@@ -8,7 +8,6 @@ import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.services.impl.customerCommand.GetAllCustomersCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 
 public class GetAllSlotsCommand implements Command<List<ParkingSlot>> {

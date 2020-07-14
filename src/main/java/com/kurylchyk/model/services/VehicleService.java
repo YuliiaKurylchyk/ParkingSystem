@@ -22,7 +22,6 @@ public interface VehicleService {
 
     Vehicle update(VehicleCreator vehicleInfo, String licencePlate) throws ParkingSystemException;
 
-    //мб цього не треба// просто викликати в delete ticket
     Vehicle deleteCompletely(Vehicle vehicle) throws ParkingSystemException;
 
     boolean isPresent(String licencePlate) throws ParkingSystemException;

@@ -10,7 +10,6 @@ import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,13 +40,6 @@ public class ParkingSlotServlet extends HttpServlet {
                     break;
                 case "/get":
                     doGetParkingSlot(req, resp);
-                    break;
-                    //check if it is used somewhere
-                case "/edit":
-                   // doEdit(req, resp);
-                    break;
-                case "/update":
-                    //  doUpdate(req, resp);
                     break;
                 case "/showAll":
                     doShowAll(req, resp);

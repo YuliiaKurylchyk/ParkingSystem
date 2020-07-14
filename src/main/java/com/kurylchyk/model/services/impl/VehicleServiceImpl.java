@@ -16,20 +16,6 @@ public class VehicleServiceImpl implements VehicleService {
 
     private CommandExecutor executor = new CommandExecutor();
 
-    /*
-    @Override
-    public Vehicle create(VehicleCreator vehicleInfo)
-            throws ParkingSystemException {
-        Vehicle vehicle;
-        if (!executor.execute(new CheckVehicleStatusInDB(vehicleInfo.getLicensePlate()))) {
-            vehicle = vehicleInfo.createVehicle();
-        } else {
-            vehicle = getFromDB(vehicleInfo.getLicensePlate(), vehicleInfo.getVehicleType());
-        }
-        return vehicle;
-    }
-    */
-
 
     @Override
     public Vehicle create(VehicleCreator vehicleInfo)

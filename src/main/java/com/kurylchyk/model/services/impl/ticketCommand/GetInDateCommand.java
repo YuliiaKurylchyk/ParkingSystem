@@ -7,7 +7,6 @@ import com.kurylchyk.model.services.impl.Command;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

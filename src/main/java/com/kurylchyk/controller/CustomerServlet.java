@@ -6,7 +6,6 @@ import com.kurylchyk.model.services.CustomerService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

@@ -6,7 +6,6 @@ import com.kurylchyk.model.exceptions.ParkingSystemException;
 import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.ParkingTicketService;
 import com.kurylchyk.model.services.VehicleService;
-import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
 import org.apache.logging.log4j.LogManager;

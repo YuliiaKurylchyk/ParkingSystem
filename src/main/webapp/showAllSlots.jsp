@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<h1 style="color: deepskyblue">The list slots</h1>
+<h1 style="color: deepskyblue">The list of parking slots</h1>
 
 <c:if test="${sessionScope.vehicle==null && requestScope.change==null}">
 <div id="selectContainer">

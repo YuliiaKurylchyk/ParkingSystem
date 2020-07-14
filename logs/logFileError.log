@@ -25,3 +25,6 @@
 [ERROR] 2020-07-14 02:25:51.206 CustomerServlet:109 - null 
 [ERROR] 2020-07-14 02:25:51.800 ParkingTicketServlet:96 - null 
 [ERROR] 2020-07-14 02:25:51.972 VehicleServlet:74 - null 
+[ERROR] 2020-07-14 10:21:43.996 CustomerServlet:109 - null 
+[ERROR] 2020-07-14 10:21:45.580 ParkingTicketServlet:96 - null 
+[ERROR] 2020-07-14 10:21:45.966 VehicleServlet:74 - null 

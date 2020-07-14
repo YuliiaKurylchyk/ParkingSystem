@@ -3,7 +3,6 @@ package com.kurylchyk.controller.utils;
 import com.kurylchyk.model.services.impl.utilVehicle.*;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.CarSize;
 import com.kurylchyk.model.domain.vehicles.vehicleEnum.VehicleType;
-
 import javax.servlet.http.HttpServletRequest;
 
 public class VehicleCreatorFactory {

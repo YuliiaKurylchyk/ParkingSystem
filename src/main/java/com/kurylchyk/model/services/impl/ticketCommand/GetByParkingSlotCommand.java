@@ -1,4 +1,5 @@
 package com.kurylchyk.model.services.impl.ticketCommand;
+
 import com.kurylchyk.model.services.impl.parkingSlotDTO.ParkingSlotDTO;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;

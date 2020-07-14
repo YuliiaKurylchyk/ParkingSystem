@@ -8,7 +8,6 @@ import com.kurylchyk.model.services.ParkingSlotService;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,7 +64,6 @@ public class ParkingSlotAdminServlet extends HttpServlet {
     protected void showPage(HttpServletRequest req, HttpServletResponse resp)  {
         try {
             Map<SlotSize,Integer> slotPrices = parkingSlotService.getSlotsPrice();
-            System.out.println(slotPrices);
             req.setAttribute("slotPrices", slotPrices);
 
             List<ParkingSlot> allSlots = parkingSlotService.getAll();

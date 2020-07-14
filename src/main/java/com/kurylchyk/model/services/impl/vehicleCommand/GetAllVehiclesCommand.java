@@ -1,4 +1,5 @@
 package com.kurylchyk.model.services.impl.vehicleCommand;
+
 import com.kurylchyk.model.dao.VehicleDAOFactory;
 import com.kurylchyk.model.dao.vehicles.VehicleDAO;
 import com.kurylchyk.model.exceptions.ParkingSystemException;

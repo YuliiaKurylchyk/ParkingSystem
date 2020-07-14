@@ -8,9 +8,6 @@ import com.kurylchyk.model.domain.customer.Customer;
 import java.util.List;
 
 
-//подивтись чи використовуэться isPresent()
-//в gETcUSTOMER COMMAND  э пошук по айды, подивитись чи вын десь використовуэться
-//робити customer dto v update
 
 public class CustomerServiceImpl implements CustomerService {
 

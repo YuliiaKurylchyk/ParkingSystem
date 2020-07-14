@@ -8,7 +8,6 @@ import com.kurylchyk.model.services.Payment;
 import com.kurylchyk.model.services.DayCounter;
 import com.kurylchyk.model.dao.ParkingTicketDAO;
 import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
-import com.kurylchyk.model.services.impl.ParkingSlotServiceImpl;
 import com.kurylchyk.model.domain.parkingTicket.ticketEnum.Status;
 import com.kurylchyk.model.services.impl.ServiceFacade;
 import org.apache.logging.log4j.LogManager;

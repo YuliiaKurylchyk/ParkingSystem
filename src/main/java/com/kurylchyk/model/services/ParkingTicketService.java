@@ -13,8 +13,6 @@ import com.kurylchyk.model.domain.parkingTicket.ParkingTicket;
 import com.kurylchyk.model.domain.vehicles.Vehicle;
 
 
-//make it business exception
-//make some of them void
 public interface ParkingTicketService {
 
     List<ParkingTicket> getAllTickets() throws ParkingSystemException;

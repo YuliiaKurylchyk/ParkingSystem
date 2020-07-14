@@ -7,7 +7,6 @@ import com.kurylchyk.model.domain.parkingSlots.slotEnum.SlotSize;
 import com.kurylchyk.model.services.impl.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 
 public class GetAvailableSlotsCommand implements Command<List<ParkingSlot>> {

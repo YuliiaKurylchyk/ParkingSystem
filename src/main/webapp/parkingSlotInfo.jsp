@@ -9,7 +9,7 @@
     </style>
 
 </head>
-<h1>Parking slots price</h1>
+<h1>Parking slots information</h1>
 <h3 style="color:cadetblue;"><c:out value="${requestScope.saved}"></c:out></h3>
 <nav style="width: 34%">
     <div style="float: left">
@@ -43,7 +43,8 @@
             </div>
         </form>
     </div>
-        <div style="float: left;border: 2px solid deepskyblue;margin-top: 3%">
+        <div style="float: left;border: 2px solid #00c3ff; margin-top: 3%;margin-left: 2% ;padding:1%;">
+            <h5 style="text-align: center">Add new parking slot</h5>
         <form action="/admin/addSlot" action="POST">
 
             <div style="float: left;">
@@ -62,15 +63,15 @@
             </div>
 
             <div style="float: left;width: 100%">
-            <a href="" class="smallButtons" style="  margin-left: 25%;float: left">
-                <button type="submit" value="" name="AddNewSlot">Add new slot</button>
+            <a href="" class="smallButtons" style="margin-left: 30%">
+                <button type="submit" value="" name="AddNewSlot">Add</button>
             </a>
             </div>
         </form>
     </div>
 </nav>
 
-<div id="container" style="width: 60%;float: right">
+<div id="container" style="width: 65%;float: right">
     <table>
         <thead>
         <tr>
