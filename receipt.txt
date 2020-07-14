@@ -1,5 +1,0 @@
-The vehicle: Volvo	CXF-341	GK 2361 IO
-Place ¹MEDIUM
-Data and time : 2020-06-15T22:40:39.352
-Customer: Indra Trikru - 0980915879
-Status: PRESENT
